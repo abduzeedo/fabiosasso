@@ -1,0 +1,260 @@
+body {
+    padding: 0 ;
+    margin: 0;
+    font-size: 12px;
+    line-height: 18px;
+    color: #404040;
+    font-family: "Avenir", sans-serif;
+}
+body.night{
+    color: #fff;
+    background: #111;
+}
+
+
+a {
+    text-decoration: none;
+    color: #404040;
+}
+body.night a{
+    color: #fff;
+}
+
+.animate {
+    opacity: 0;
+}
+
+section.home {
+    max-width:1140px;
+    min-height: 100vh;
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns:33.3% auto;
+}
+
+.cover_image {
+    position: relative;
+    overflow: hidden;
+    background: #eee;
+}
+body.night .cover_image{
+    background: #ccc;
+}
+/* Grid  */
+.col1{
+    grid-column: 1;
+    position: relative;
+    padding: 48px 0;
+    z-index: 1000;
+}
+.col2{
+    grid-column: 2;
+    position: relative;
+    padding: 48px 0;
+    z-index: 10;
+}
+.me {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+    height: 90%;
+    width: auto;
+    opacity: 0;
+    /* -webkit-filter: grayscale(1); */
+}
+
+.body {
+    margin-top: 24px;
+    columns: 2;
+    column-gap: 48px;
+}
+
+.col {
+    padding: 48px 0;
+}
+
+.col-4-12 {
+    overflow-x: visible;
+}
+
+h2 {
+    font-family: "brandon-grotesque", "Avenir", sans-serif;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+}
+
+blockquote {
+    font-size: 40px;
+    line-height: 56px;
+    z-index: 100;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 150%;
+    z-index: 100;
+    margin-top: 25vh;
+    font-family: "brandon-grotesque", "Avenir", sans-serif;
+}
+
+blockquote a {
+    border-bottom: 5px solid #404040;
+}
+.night blockquote a {
+    border-bottom: 5px solid #fff;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 48px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    line-height: 24px;
+}
+
+.connect_icons {
+    display: flex;
+    position: absolute;
+    bottom: 48px;
+}
+
+.connect_icons li, .connect_icons li a{
+    margin-right: 16px;
+}
+.connect_icons li a{
+    display:block;
+    width:20px;
+    height:20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.connect_icons img {
+    display: none;
+   
+}
+.intro {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.stage {
+    max-width: 1140px;
+    height: 1800px;
+    margin: 0 auto;
+    background: rgbs(0, 0, 0, .2);
+    position: relative;
+    z-index: 1;
+}
+
+.stage li {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    opacity: 0;
+    background: rgba(0, 0, 0, 1);
+}
+.night .stage li{
+    background: #fff;
+}
+.c1 {
+    left: 0;
+}
+
+.c2 {
+    left: 33.3%;
+}
+
+.c3 {
+    left: 62.6%;
+}
+
+.c4 {
+    left: 68.8%;
+}
+
+.c5 {
+    right: 0;
+}
+@media only screen and (min-width: 768px) and (max-width: 1188px){
+    section{
+        margin: 0 24px !important;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 960px){
+    blockquote{
+        margin-top: 12vh;
+        font-size: 32px;
+        line-height: 38px;
+    }
+}
+
+
+@media only screen and (max-width:767px) {
+    .body {
+        font-size: 14px;
+        line-height: 22px;
+        padding: 0 24px;
+    }
+    h2 {
+        font-size: 18px;
+        margin-left: 24px;
+    }
+    section.home{
+        display: block;
+    }
+    blockquote {
+        position: relative;
+        margin: 56px 24px 0 24px !important;
+        font-size: 32px;
+        line-height: 42px;
+        width: auto;
+    }
+    .body {
+        margin-top: 32px;
+        columns: 1;
+    }
+    .body p {
+        margin-bottom: 32px;
+    }
+    .cover_image {
+        margin: -200px 0px 0 0px;
+        height: 400px;
+    }
+    .me {
+        right: -10%;
+        height: 80%;
+    }
+    .connect_icons {
+        position: relative;
+        margin: 32px 0 0 24px;
+        bottom: auto;
+    }
+    .bottom {
+       display: none;
+    }
+    .c2 {
+        left: 16px;
+    }
+    .c3 {
+        left: auto;
+        right: 16px;
+    }
+    .c4 {
+        right: 0;
+        left: auto;
+    }
+    .c5 {
+        right: 0;
+        display:none;
+    }
+}
