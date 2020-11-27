@@ -4,8 +4,8 @@ body {
     font-size: 14px;
     line-height: 20px;
     color: #111;
-    font-family: "basic-sans", sans-serif;
-    font-weight: 300;
+    font-family: ff-real-text-pro, sans-serif;
+    font-weight: 200;
 }
 body.night{
     color: #fff;
@@ -15,7 +15,7 @@ body.night{
 a {
     text-decoration: none;
     color: #111111;
-    font-weight: bold;
+    font-weight: 500;
     cursor: pointer;
 }
 body.night a{
@@ -41,14 +41,14 @@ section.grid-body{
 }
 .logo{
     grid-column: 1 / span 2;
-    font-weight: bold;
+    font-weight: 500;
     text-transform: uppercase;
     font-size: 16px;
 }
 .menu{
     grid-column: 3 / span 4;
     grid-row: 2;
-    font-weight: bold;
+    font-weight: 500;
     font-size: calc(24px + (110 - 24) * ((100vw - 300px) / (1600 - 300)));
     line-height: 100%;
     letter-spacing: -0.02em;
@@ -75,7 +75,7 @@ section.grid-body{
 .connect_icons{
     grid-column: 1 / span 1;
     align-self: end;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 14px;
     line-height: 32px;
 }
