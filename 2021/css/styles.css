@@ -4,7 +4,8 @@ body {
     font-size: 14px;
     line-height: 20px;
     color: #111;
-    font-family: "Helvetica Neue", sans-serif;
+    font-family: "basic-sans", sans-serif;
+    font-weight: 300;
 }
 body.night{
     color: #fff;
