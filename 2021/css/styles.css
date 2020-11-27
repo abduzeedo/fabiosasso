@@ -107,6 +107,8 @@ section.grid-body{
     section.grid-body{
        grid-template-columns: repeat(1,100fr);
        grid-template-rows: 72px auto auto 48px;
+       grid-column-gap: 16px;
+       margin: 32px 16px;
        
     }
     .logo{
@@ -123,6 +125,7 @@ section.grid-body{
         grid-column: 1;
         grid-row: 3;
         align-self: end;
+        column-gap: 16px;
         font-size: calc(12px + (18 - 12) * ((100vw - 300px) / (1600 - 300)));
     }
     .connect{
