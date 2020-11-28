@@ -47,7 +47,8 @@ section.grid-body{
     text-transform: uppercase;
     font-size: 16px;
 }
-.menu{
+.menu,
+h1.title{
     grid-column: 3 / span 4;
     grid-row: 2;
     font-weight: 500;
@@ -55,6 +56,22 @@ section.grid-body{
     line-height: 100%;
     letter-spacing: -0.02em;
     align-self: end;
+    overflow: hidden;
+    width: calc((100vw / 12) * 5);
+}
+h1.title{
+    font-size: calc(24px + (64 - 24) * ((100vw - 300px) / (1600 - 300)));
+    align-self: start;
+    grid-row: 1;
+    position: relative;
+    margin-top: 0px;
+    height:100px;
+    overflow: hidden;
+    pointer-events: none;
+}
+h1.title span{
+    position: absolute;
+    opacity: 0;
 }
 .copy, 
 .connect{
@@ -115,11 +132,17 @@ section.grid-body{
         grid-column: 1;
         grid-row: 1;
     }
-    .menu{
+    .menu,
+    h1.title{
         grid-column: 1;
         grid-row: 2;
         align-self: center;
         font-size: calc(48px + (110 - 48) * ((100vw - 300px) / (1600 - 300)));
+        overflow: inherit;
+    }
+    h1.title{
+        align-self: start;
+        font-size: calc(32px + (72 - 32) * ((100vw - 300px) / (1600 - 300)));
     }
     .copy, .connect{
         grid-column: 1;
