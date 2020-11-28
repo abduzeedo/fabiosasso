@@ -73,6 +73,16 @@ h1.title span{
     position: absolute;
     opacity: 0;
 }
+.cover{
+    grid-column: 3 / span 6;
+    grid-row: 1 / span 2;
+    align-self: end;
+    pointer-events: none;
+}
+.cover img{
+    width: 100%;
+    height: auto;
+}
 .copy, 
 .connect{
     grid-column: 9 / span 4;
@@ -143,6 +153,10 @@ h1.title span{
     h1.title{
         align-self: start;
         font-size: calc(32px + (72 - 32) * ((100vw - 300px) / (1600 - 300)));
+    }
+    .cover {
+        grid-column: 1 / span all;
+        grid-row: 2;
     }
     .copy, .connect{
         grid-column: 1;

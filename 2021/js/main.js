@@ -5,15 +5,33 @@ document.addEventListener('DOMContentLoaded', function (event) {
   ///animateSite();
   //changeTheme();
   navigation()
+  hideNavigation()
+  showNavigation()
+  hideItem(".cover img")
   document.getElementsByClassName('logo')[0].onclick = function () {
     showNavigation()
   }
 })
-
+//
+// Resize Window for Responsive Design
+//
 window.onresize = function (e) {
   resizeHeight()
   //resizeTitle();
 }
+//
+// BackButton - Disable it
+//
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event)
+{
+  history.pushState(null, document.title, location.href);
+  hideTitle()
+  showNavigation()
+});
+//
+// Navigation
+//
 function navigation() {
   // Titles
   mTitle = document.getElementsByTagName('h1')[0].getElementsByTagName('span')
@@ -30,44 +48,38 @@ function navigation() {
       hideTitle()
       hideNavigation()
       v = this.getAttribute('index')
-      animateTitle('.t' + v)
+      showTitle('.t' + v)
+      showCover('.cover img')
     }
   }
 }
-function animateTitle(item) {
-  gsap.fromTo(
-    item,
-    {
-      opacity: 0,
-      x: -300,
-    },
-    {
-      x: 0,
-      opacity: 1,
-      ease: 'elastic.out(0.9, 0.85)',
-      duration: 0.6,
-    },
-  )
-}
+//
+// Hide Navigation
+//
 function hideNavigation() {
   document.querySelectorAll('.menu li').forEach((item) => {
     item.style.opacity = 0
   })
 }
+//
+// Show Navigation
+//
 function showNavigation() {
   // Hide titles
-  hideTitle()
+  hideItem("h1 span")
+  // Hide cover image
+  hideItem(".cover img")
   // Stagger Menu entrance
   gsap.fromTo(
     '.menu li',
     {
-      x:-1000,
+      x:-600,
       opacity: 0,
     },
     {
       x: 0,
       opacity: 1,
-      ease: 'elastic.out(0.9, 0.85)',
+      ease: 'elastic.out(0.9, 1)',
       duration: 0.6,
       stagger: {
         // wrap advanced options in an object
@@ -77,11 +89,62 @@ function showNavigation() {
     },
   )
 }
+//
+// Animate titles
+//
+function showTitle(item) {
+    gsap.fromTo(
+      item,
+      {
+        opacity: 0,
+        x: -600,
+      },
+      {
+        x: 0,
+        opacity: 1,
+        ease: 'elastic.out(0.9, 1)',
+        duration: 0.6,
+      },
+    )
+  }
+//
+// Hide Titles
+//
 function hideTitle() {
   document.querySelectorAll('h1 span').forEach((item) => {
     item.style.opacity = 0
   })
 }
+//
+// Hide Any Item * just use the tag/class/id
+//
+function hideItem(item) {
+    document.querySelectorAll(item).forEach((item) => {
+      item.style.opacity = 0
+    })
+  }
+//
+// Animate cover image
+//
+function showCover(item) {
+    gsap.fromTo(
+      item,
+      {
+       opacity: 0,
+        y: 0
+      },
+      {
+        y: 0,
+        opacity: 1,
+        // ease: 'elastic.out(0.9, 1)',
+        delay:0.4,
+        duration: 1.2
+      },
+    )
+  }
+//
+// Resize the Window Height
+//
 function resizeHeight() {
   var h =
     window.innerHeight ||
@@ -90,7 +153,9 @@ function resizeHeight() {
   document.getElementsByClassName('home')[0].style.height = h - 64 + 'px'
   document.getElementsByClassName('grid-body')[0].style.height = h + 'px'
 }
-
+//
+// Change Theme
+//
 function changeTheme() {
   console.log(hr)
   if (hr > 9 && hr < 11) {
@@ -103,7 +168,9 @@ function changeTheme() {
     document.getElementsByTagName('body')[0].classList.add('night')
   }
 }
-
+//
+// Old Intro
+//
 function animateSite() {
   gsap.fromTo(
     '.intro li',
