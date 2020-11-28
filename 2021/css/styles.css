@@ -68,6 +68,7 @@ h1.title{
     height:100px;
     overflow: hidden;
     pointer-events: none;
+    z-index: 100;
 }
 h1.title span{
     position: absolute;
@@ -78,10 +79,17 @@ h1.title span{
     grid-row: 1 / span 2;
     align-self: end;
     pointer-events: none;
+    overflow: hidden;
+    width: calc(100% + 32px);
+    height: 40vh;
+    position: relative;
+    z-index: 0;
 }
 .cover img{
-    width: calc(100% + 32px);
+    width: calc(100%);
     height: auto;
+    position: absolute;
+    bottom: 0;
 }
 .copy, 
 .connect{
@@ -157,6 +165,7 @@ h1.title span{
     .cover {
         grid-column: 1 / span all;
         grid-row: 2;
+        width: calc(100%);
     }
     .copy, .connect{
         grid-column: 1;

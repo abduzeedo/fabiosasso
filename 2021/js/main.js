@@ -49,7 +49,7 @@ function navigation() {
       hideNavigation()
       v = this.getAttribute('index')
       showTitle('.t' + v)
-      showCover('.cover img')
+      showCover('.cover img.i' + v)
     }
   }
 }
