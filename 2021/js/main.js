@@ -162,7 +162,7 @@ function showCover(item) {
 //   }
   // Source of the new image coming from the array
   //downloadingImage.src = 'images/' + coverImages[item]
-  cover.style.background = "url(images/" + coverImages[item] + ") center bottom"
+  cover.style.background = "url(images/" + coverImages[item] + ") center center"
   cover.style.backgroundSize = "cover"
   // GSAP animation for the image
   gsap.fromTo(

@@ -139,6 +139,9 @@ h1.title span{
 .grid5{
     grid-column: 11;
 }
+/* 
+Mobile Design */
+
 @media only screen and (max-width:640px) {
     section.home,
     section.grid-body{
@@ -146,7 +149,6 @@ h1.title span{
        grid-template-rows: 48px 50vh auto 48px;
        grid-column-gap: 16px;
        margin: 32px 16px;
-       
     }
     .logo{
         grid-column: 1;
@@ -168,11 +170,11 @@ h1.title span{
         grid-column: 1 / span all;
         grid-row: 2;
         align-self: center;
+        height: 40vh;
         position: absolute;
-        top: 110px;
-        width: calc(100%);
-        margin-left: -16px;
-        transform: translateY(0px);
+        top:92px;
+        left: 0px;
+        background: #ccc;
     }
     .copy, .connect{
         grid-column: 1;
