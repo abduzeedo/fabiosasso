@@ -1,13 +1,18 @@
 var hr = new Date().getHours()
+var navigationOn = true
+var coverImages = [
+  'abdz_home.png',
+  'calmaria_front.png',
+  'google_logo.png',
+  'urbano_image.png',
+]
 document.addEventListener('DOMContentLoaded', function (event) {
   sMobile = false
   resizeHeight()
-  ///animateSite();
-  //changeTheme();
   navigation()
   hideNavigation()
   showNavigation()
-  hideItem(".cover img")
+  hideItem('.cover img')
   document.getElementsByClassName('logo')[0].onclick = function () {
     showNavigation()
   }
@@ -22,13 +27,13 @@ window.onresize = function (e) {
 //
 // BackButton - Disable it
 //
-history.pushState(null, document.title, location.href);
-window.addEventListener('popstate', function (event)
-{
-  history.pushState(null, document.title, location.href);
+history.pushState(null, document.title, location.href)
+window.addEventListener('popstate', function (event) {
+  history.pushState(null, document.title, location.href)
+  location.href = location.href + '?p=back'
   hideTitle()
   showNavigation()
-});
+})
 //
 // Navigation
 //
@@ -45,11 +50,12 @@ function navigation() {
     mTitle[1].classList.add = 't' + i
     // Loop
     mMenu[i].onclick = function (n) {
-      hideTitle()
-      hideNavigation()
       v = this.getAttribute('index')
+      //   hideTitle()
+      hideNavigation()
+      hideItem('h1 span')
       showTitle('.t' + v)
-      showCover('.cover img.i' + v)
+      showCover(v)
     }
   }
 }
@@ -59,6 +65,7 @@ function navigation() {
 function hideNavigation() {
   document.querySelectorAll('.menu li').forEach((item) => {
     item.style.opacity = 0
+    item.style.display = 'none'
   })
 }
 //
@@ -66,14 +73,22 @@ function hideNavigation() {
 //
 function showNavigation() {
   // Hide titles
-  hideItem("h1 span")
+  hideItem('h1 span')
   // Hide cover image
-  hideItem(".cover img")
+  hideItem('.cover img')
+  // Hide the cover parent with display none
+  document.querySelectorAll('.cover').forEach((item) => {
+    item.style.display = 'none'
+  })
+  // Show the LIs for the navigation with display block
+  document.querySelectorAll('.menu li').forEach((item) => {
+    item.style.display = 'block'
+  })
   // Stagger Menu entrance
   gsap.fromTo(
     '.menu li',
     {
-      x:-600,
+      x: -300,
       opacity: 0,
     },
     {
@@ -81,10 +96,12 @@ function showNavigation() {
       opacity: 1,
       ease: 'elastic.out(0.9, 1)',
       duration: 0.6,
+      onComplete: function () {
+        //
+      },
       stagger: {
         // wrap advanced options in an object
         each: 0.1,
-        
       },
     },
   )
@@ -93,22 +110,23 @@ function showNavigation() {
 // Animate titles
 //
 function showTitle(item) {
-    gsap.fromTo(
-      item,
-      {
-        opacity: 0,
-        x: -600,
-      },
-      {
-        x: 0,
-        opacity: 1,
-        ease: 'elastic.out(0.9, 1)',
-        duration: 0.6,
-      },
-    )
-  }
+  gsap.fromTo(
+    item,
+    {
+      opacity: 0,
+      x: -150,
+    },
+    {
+      x: 0,
+      opacity: 1,
+      ease: 'elastic.out(0.9, 1)',
+      duration: 0.6,
+    },
+  )
+}
 //
 // Hide Titles
+// NOT USED
 //
 function hideTitle() {
   document.querySelectorAll('h1 span').forEach((item) => {
@@ -119,29 +137,47 @@ function hideTitle() {
 // Hide Any Item * just use the tag/class/id
 //
 function hideItem(item) {
-    document.querySelectorAll(item).forEach((item) => {
-      item.style.opacity = 0
-    })
-  }
+  gsap.to(item, {
+    duration: 0,
+    opacity: 0,
+    onComplete: function () {
+      //item.style.display = "none"
+    },
+  })
+}
 //
 // Animate cover image
 //
 function showCover(item) {
-    gsap.fromTo(
-      item,
-      {
-       opacity: 0,
-        y: 0
-      },
-      {
-        y: 0,
-        opacity: 1,
-        // ease: 'elastic.out(0.9, 1)',
-        delay:0.4,
-        duration: 1.2
-      },
-    )
-  }
+  var cover = document.getElementsByClassName('cover')[0]
+  // Show the parent that was display none;
+  document.querySelectorAll('.cover').forEach((item) => {
+    item.style.display = 'block'
+  })
+  // Load a new image
+//   var image = document.images[0]
+//   var downloadingImage = new Image()
+//   downloadingImage.onload = function () {
+//     image.src = this.src
+//   }
+  // Source of the new image coming from the array
+  //downloadingImage.src = 'images/' + coverImages[item]
+  cover.style.background = "url(images/" + coverImages[item] + ") center bottom"
+  cover.style.backgroundSize = "cover"
+  // GSAP animation for the image
+  gsap.fromTo(
+    '.cover',
+    {
+      opacity: 0,
+    },
+    {
+      opacity: 1,
+      // ease: 'elastic.out(0.9, 1)',
+      delay: 0.2,
+      duration: 1.2,
+    },
+  )
+}
 //
 // Resize the Window Height
 //
@@ -150,7 +186,7 @@ function resizeHeight() {
     window.innerHeight ||
     document.documentElement.clientHeight ||
     document.body.clientHeight
-  document.getElementsByClassName('home')[0].style.height = h - 64 + 'px'
+  document.getElementsByClassName('home')[0].style.minHeight = h - 64 + 'px'
   document.getElementsByClassName('grid-body')[0].style.height = h + 'px'
 }
 //
@@ -167,147 +203,4 @@ function changeTheme() {
   if (hr >= 0 && hr <= 5) {
     document.getElementsByTagName('body')[0].classList.add('night')
   }
-}
-//
-// Old Intro
-//
-function animateSite() {
-  gsap.fromTo(
-    '.intro li',
-    {
-      y: -2000,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 0.5,
-      duration: 2,
-      stagger: {
-        // wrap advanced options in an object
-        each: 0.1,
-        from: -30000,
-        ease: 'elastic.out(1, 0.5)',
-        repeat: 0, // Repeats immediately, not waiting for the other staggered animations to finish
-      },
-    },
-  )
-
-  gsap.fromTo(
-    '.intro li',
-    {
-      opacity: 0.5,
-    },
-    {
-      opacity: 0,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 2.2,
-    },
-  )
-
-  gsap.fromTo(
-    '.cover_image',
-    {
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 1,
-      duration: 0.2,
-    },
-  )
-
-  gsap.fromTo(
-    'h2',
-    {
-      y: 66,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 1.4,
-      duration: 0.6,
-    },
-  )
-  gsap.fromTo(
-    'blockquote',
-    {
-      y: 66,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 1.66,
-      duration: 0.6,
-    },
-  )
-
-  gsap.fromTo(
-    '.body',
-    {
-      y: 66,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 1.6,
-      duration: 0.6,
-    },
-  )
-
-  gsap.fromTo(
-    '.bottom',
-    {
-      y: 66,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 1.9,
-      duration: 0.6,
-    },
-  )
-
-  gsap.fromTo(
-    '.home li',
-    {
-      y: 33,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 2,
-      duration: 0.6,
-      stagger: {
-        each: 0.05,
-      },
-    },
-    0.03,
-  )
-
-  gsap.fromTo(
-    '.me',
-    {
-      y: 66,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      ease: 'elastic.out(1, 0.5)',
-      delay: 1.2,
-      duration: 0.8,
-    },
-  )
 }

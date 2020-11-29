@@ -80,16 +80,14 @@ h1.title span{
     align-self: end;
     pointer-events: none;
     overflow: hidden;
-    width: calc(100% + 32px);
-    height: 40vh;
     position: relative;
-    z-index: 0;
+    z-index: 0;  
+    background-size: cover;
+    transform: translateY(32px);
 }
 .cover img{
     width: calc(100%);
     height: auto;
-    position: absolute;
-    bottom: 0;
 }
 .copy, 
 .connect{
@@ -133,15 +131,19 @@ h1.title span{
 }
 .grid3{
     grid-column: 9;
+    transform: translateX(-32px);
 }
 .grid4{
+    grid-column: 9;
+}
+.grid5{
     grid-column: 11;
 }
 @media only screen and (max-width:640px) {
     section.home,
     section.grid-body{
        grid-template-columns: repeat(1,100fr);
-       grid-template-rows: 72px auto auto 48px;
+       grid-template-rows: 48px 50vh auto 48px;
        grid-column-gap: 16px;
        margin: 32px 16px;
        
@@ -162,10 +164,15 @@ h1.title span{
         align-self: start;
         font-size: calc(32px + (72 - 32) * ((100vw - 300px) / (1600 - 300)));
     }
-    .cover {
+    .cover{
         grid-column: 1 / span all;
         grid-row: 2;
+        align-self: center;
+        position: absolute;
+        top: 110px;
         width: calc(100%);
+        margin-left: -16px;
+        transform: translateY(0px);
     }
     .copy, .connect{
         grid-column: 1;
