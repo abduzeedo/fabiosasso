@@ -1,5 +1,7 @@
 var hr = new Date().getHours()
 var navigationOn = true
+var distanceX = -100
+var firstLoad = true
 var coverImages = [
   'abdz_home.png',
   'calmaria_front.png',
@@ -12,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   navigation()
   hideNavigation()
   showNavigation()
-  hideItem('.cover img')
+  //hideItem('.cover img')
   document.getElementsByClassName('logo')[0].onclick = function () {
     showNavigation()
   }
@@ -75,11 +77,14 @@ function showNavigation() {
   // Hide titles
   hideItem('h1 span')
   // Hide cover image
-  hideItem('.cover img')
+  //hideItem('.cover img')
   // Hide the cover parent with display none
-  document.querySelectorAll('.cover').forEach((item) => {
-    item.style.display = 'none'
-  })
+  if (!firstLoad) {
+    document.querySelectorAll('.cover').forEach((item) => {
+      item.style.display = 'none'
+    })
+  }
+  firstLoad = false
   // Show the LIs for the navigation with display block
   document.querySelectorAll('.menu li').forEach((item) => {
     item.style.display = 'block'
@@ -88,14 +93,14 @@ function showNavigation() {
   gsap.fromTo(
     '.menu li',
     {
-      x: -300,
+      x: distanceX,
       opacity: 0,
     },
     {
       x: 0,
       opacity: 1,
       ease: 'elastic.out(0.9, 1)',
-      duration: 0.6,
+      duration: 0.9,
       onComplete: function () {
         //
       },
@@ -114,13 +119,13 @@ function showTitle(item) {
     item,
     {
       opacity: 0,
-      x: -150,
+      x: distanceX / 2,
     },
     {
       x: 0,
       opacity: 1,
       ease: 'elastic.out(0.9, 1)',
-      duration: 0.6,
+      duration: 0.9,
     },
   )
 }
@@ -155,15 +160,15 @@ function showCover(item) {
     item.style.display = 'block'
   })
   // Load a new image
-//   var image = document.images[0]
-//   var downloadingImage = new Image()
-//   downloadingImage.onload = function () {
-//     image.src = this.src
-//   }
+  //   var image = document.images[0]
+  //   var downloadingImage = new Image()
+  //   downloadingImage.onload = function () {
+  //     image.src = this.src
+  //   }
   // Source of the new image coming from the array
   //downloadingImage.src = 'images/' + coverImages[item]
-  cover.style.background = "url(images/" + coverImages[item] + ") center center"
-  cover.style.backgroundSize = "cover"
+  cover.style.background = 'url(images/' + coverImages[item] + ') center center'
+  cover.style.backgroundSize = 'cover'
   // GSAP animation for the image
   gsap.fromTo(
     '.cover',
