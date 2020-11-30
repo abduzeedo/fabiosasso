@@ -148,8 +148,8 @@ and (orientation : portrait) {
     section.home,
     section.grid-body{
        grid-template-columns: repeat(1,100fr);
-       grid-template-rows: 32px 60vh auto 24px;
-       grid-column-gap: 16px;
+       grid-template-rows: 32px 55vh auto 24px;
+       grid-column-gap: 0px;
        margin: 16px;
     }
     .logo{
@@ -175,7 +175,6 @@ and (orientation : portrait) {
         grid-column: 1 / span all;
         grid-row: 2;
         align-self: center;
-        transform: translateY(-32px);
     }
     .copy, .connect{
         grid-column: 1;
@@ -199,7 +198,7 @@ and (orientation : portrait) {
 }
 @media only screen 
 and (min-device-width : 0px) 
-and (max-device-width : 568px) 
+and (max-device-width : 320px) 
 and (orientation : portrait) {
     section.home,
     section.grid-body{
@@ -220,12 +219,21 @@ and (orientation : portrait) {
     section.home,
     section.grid-body{
        grid-template-columns: repeat(1,100fr);
-       grid-template-rows: 92px 60vh auto 72px;
-       grid-column-gap: 32px;
-       margin: 32px 32px;
+       grid-template-rows: 56px 66vh auto 56px;
+       margin: 32px 64px 16px 64px;
     }
     .cover{
         transform: translateY(0px);
+        overflow: hidden;
+        height: calc(100% - 48px);
+    }
+    .copy, .connect{
+        width: 100%;
+        align-self: start;
+        column-gap: 32px;
+    }
+    .connect{
+        align-self: end;
     }
 }
 /* @media only screen 
