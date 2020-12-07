@@ -79,12 +79,9 @@ function showNavigation() {
   // Hide cover image
   //hideItem('.cover img')
   // Hide the cover parent with display none
-  if (!firstLoad) {
-    document.querySelectorAll('.cover').forEach((item) => {
-      item.style.display = 'none'
-    })
-  }
-  firstLoad = false
+  document.querySelectorAll('.cover').forEach((item) => {
+    item.style.display = 'none'
+  })
   // Show the LIs for the navigation with display block
   document.querySelectorAll('.menu li').forEach((item) => {
     item.style.display = 'block'
