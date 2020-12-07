@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function (event) {
       scrollTrigger: {
         scroller: '.container',
         trigger: panel,
-        start: 'top 60%',
-        end: "bottom 100px",
-       // markers: true,
+        start: 'top 40%',
+        // end: "bottom 33%",
+        markers: true,
         scrub: 0.6,
         toggleActions: 'restart none reverse none',
       },
