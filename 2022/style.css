@@ -8,7 +8,7 @@ body {
   grid-template-rows: repeat(3, 1fr);
   grid-column-gap: 32px;
   grid-row-gap: 32px;
-  max-width: 1440px;
+  max-width: 1320px;
   margin: 0 auto;
 }
 header .grid {
@@ -24,11 +24,11 @@ header ul li:nth-child(1){
 header ul li:nth-child(2){
     grid-column-start: 5;
     grid-column-end: 7;
-    font-size: .9em;
+    font-size: 12px;
 }
 header ul li:nth-child(3){
     grid-column-start: 7;
-    font-size: .9em;
+    font-size: 12px;
   
 }
 h1.grid {
@@ -82,10 +82,10 @@ header{
  line-height: 64px;
 }
 h1{
- height: 156px;
+ height: 15vh;
 }
 section{
-    max-height: calc(95vh - 64px - 144px);
+    max-height: calc(95vh - 64px - 15vh);
 }
 img{
     width: 100%;
@@ -174,11 +174,11 @@ p{
     font-size: 16px;
   }
   h1{
-    height: 156px;
+    height: 15vh;
     font-size: 2em;
   }
   section{
-    min-height: calc(85vh - 64px - 144px);}
+    min-height: calc(85vh - 64px - 15vh);}
   
 }
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
