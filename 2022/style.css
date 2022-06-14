@@ -85,22 +85,27 @@ h1{
  height: 156px;
 }
 section{
-    height: calc(95vh - 64px - 144px);
+    max-height: calc(95vh - 64px - 144px);
 }
 img{
     width: 100%;
     height: 100%;
+    aspect-ratio: 4 / 3;
     display: block;
     background: #ccc;
     border-radius: 16px;
 }
+.area1 img{
+  aspect-ratio: 4 / 3;
+}
 p{
     line-height: 120%;
-    font-size: 1.2em;
+    font-size: 20px;
 }
 .work p{
-    font-size: .8em;
+    font-size: 14px;
     font-weight: lighter;
+    opacity: .5;
 }
 @media only screen and (max-width: 767px) {
   body{
@@ -159,9 +164,11 @@ p{
   }
   img{
     aspect-ratio: 4 / 3;
+    
   }
   .area1 img{
     aspect-ratio: 4 / 3;
+    max-height: 400px;
   }
   p{
     font-size: 16px;
@@ -171,8 +178,7 @@ p{
     font-size: 2em;
   }
   section{
-    height: calc(85vh - 64px - 144px);
-}
+    min-height: calc(85vh - 64px - 144px);}
   
 }
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
