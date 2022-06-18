@@ -1,5 +1,5 @@
 body {
-  font-family: europa, brother-1816, greycliff-cf,urbane-rounded,sans-serif;
+  font-family:   greycliff-cf, urbane-rounded, sans-serif;
   padding: 16px 32px;
 }
 .grid {
@@ -99,13 +99,17 @@ img{
   aspect-ratio: 4 / 3;
 }
 p{
-    line-height: 120%;
-    font-size: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 600;
 }
 .work p{
     font-size: 14px;
-    font-weight: lighter;
-    opacity: .5;
+    line-height: 20px;
+    opacity: .6;
+    font-weight: normal;
+   
 }
 /* //
 Work images
