@@ -1,20 +1,20 @@
 :root {
   --spacing: 32px;
   --hero-spacing: 56px;
-  --body1: 18px;
-  --lh-body1:24px;
+  --body1: 16px;
+  --lh-body1: 22px;
   --body2: 14px;
-  --lh-body2:19px;
+  --lh-body2: 19px;
   --body3: 12px;
   --body4: 10px;
-  --headline:64px;
+  --headline: 64px;
   --title: 20px;
-  --lh-headline:70px;
+  --lh-headline: 70px;
   --max-width: 1280px;
   --text-columns: 2;
 }
 body {
-  font-family:   quasimoda, greycliff-cf, urbane-rounded, sans-serif;
+  font-family: quasimoda, greycliff-cf, urbane-rounded, sans-serif;
   line-height: var(--lh-body2);
   font-size: var(--body2);
   padding: 0 var(--spacing);
@@ -24,37 +24,36 @@ body {
   grid-template-columns: repeat(12, 1fr);
   /* grid-template-rows: repeat(3, 1fr); */
   grid-column-gap: var(--spacing);
-  grid-row-gap: 0px;;
+  grid-row-gap: 0px;
   max-width: var(--max-width);
   margin: 0 auto;
 }
-header{
+header {
   margin-top: calc(var(--spacing));
 }
-header ul{
+header ul {
   text-transform: uppercase;
   border-top: 4px solid;
   border-bottom: 1px solid;
   line-height: var(--hero-spacing);
   white-space: nowrap;
   font-size: var(--body3);
-  
 }
-header ul li:nth-child(1){
+header ul li:nth-child(1) {
   font-weight: 600;
   grid-column: 1 / span 3;
   font-size: var(--title);
 }
-header ul li:nth-child(2){
+header ul li:nth-child(2) {
   grid-column: 7 / span 2;
 }
-header ul li:nth-child(3){
-  grid-column: 10 / span 3;  
+header ul li:nth-child(3) {
+  grid-column: 10 / span 3;
 }
-footer{
+footer {
   margin-bottom: calc(var(--spacing));
 }
-footer ul{
+footer ul {
   text-transform: uppercase;
   border-top: 1px solid;
   border-bottom: 1px solid;
@@ -62,29 +61,29 @@ footer ul{
   white-space: nowrap;
   font-size: var(--body3);
 }
-footer ul li:nth-child(1){
+footer ul li:nth-child(1) {
   grid-column: 1 / span 3;
 }
-footer ul li:nth-child(2){
+footer ul li:nth-child(2) {
   grid-column: 7 / span 2;
 }
-footer ul li:nth-child(3){
+footer ul li:nth-child(3) {
   grid-column: 10 / span 3;
 }
 
 /* //
 GRID SYSTEM
 // */
-header{
+header {
   grid-column: 1 / span 12;
   grid-row: 1 / span 1;
 }
-h1{
+h1 {
   grid-column: 1 / span 6;
   grid-row: 1 / 2;
   margin: var(--hero-spacing) 0;
 }
-hr{
+hr {
   width: 100%;
   grid-column: 1 / span 12;
   grid-row: 2;
@@ -93,43 +92,43 @@ hr{
   padding: 0;
   border-top: 1px solid;
 }
-article{
+article {
   position: relative;
 }
-article::after{
+article::after {
   border-left: 1px solid;
   content: "";
   position: absolute;
   top: -1px;
   bottom: -1px;
-  left: calc(var(--spacing) / 2  * -1);
+  left: calc(var(--spacing) / 2 * -1);
 }
 article.area1::after,
-article.area2::after{
+article.area2::after {
   border: none;
 }
-.area1{
+.area1 {
   grid-column: 7 / span 6;
-  grid-row:1 / 2;
+  grid-row: 1 / 2;
   margin: var(--hero-spacing) 0;
 }
-.area2{
+.area2 {
   grid-column: 1 / span 3;
-  grid-row-start: 2 / span 2
+  grid-row-start: 2 / span 2;
 }
-.area3{
+.area3 {
   grid-column: 4 / span 3;
-  grid-row-start: 23 / span 2
+  grid-row-start: 23 / span 2;
 }
-.area4{
+.area4 {
   grid-column: 7 / span 3;
-  grid-row-start: 2 / span 2
+  grid-row-start: 2 / span 2;
 }
-.area5{
+.area5 {
   grid-column: 10 / span 3;
-  grid-row-start: 2 / span 2
+  grid-row-start: 2 / span 2;
 }
-.work p::after{
+.work p::after {
   border-top: 1px solid;
   content: "";
   position: absolute;
@@ -137,10 +136,10 @@ article.area2::after{
   left: calc(var(--spacing) / 2 * -1);
   right: calc(var(--spacing) / 2 * -1);
 }
-.work.area2 p::after{
+.work.area2 p::after {
   left: 0px;
 }
-.work.area5 p::after{
+.work.area5 p::after {
   right: 0px;
 }
 
@@ -149,19 +148,19 @@ Layout heights
 & 
 Typography
 // */
-h1{
+h1 {
   font-size: var(--headline);
   line-height: var(--lh-headline);
   text-transform: uppercase;
   font-weight: 600;
 }
-p{
-    margin-bottom: var(--hero-spacing);
-    padding: calc(var(--spacing) / 2) 0;
-    position: relative;
+p {
+  margin-bottom: var(--hero-spacing);
+  padding: calc(var(--spacing) / 2) 0;
+  position: relative;
 }
 .area1 p {
-  border-top:  none;
+  border-top: none;
   columns: var(--text-columns);
   column-gap: var(--spacing);
   padding: 0;
@@ -172,33 +171,159 @@ p{
 /* //
 Work images
 // */
-img{
+img {
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
   outline: solid 0px #fff;
   display: block;
 }
-article.area2 img{
+article.area2 img {
   background: url(images/fs_google.svg) no-repeat center center;
 }
-article.area3 img{
+article.area3 img {
   background: url(images/fs_abdz.svg) no-repeat center center;
   filter: invert();
 }
-article.area4 img{
-  background: url(images/fs_calmaria.png) no-repeat center bottom ;
+article.area4 img {
+  background: url(images/fs_calmaria.png) no-repeat center bottom;
   background-size: 110%;
 }
-article.area5 img{
+article.area5 img {
   background: url(images/fs_terral.svg) no-repeat center center;
   filter: invert();
   background-size: 55%;
 }
 
 @media only screen and (max-width: 767px) {
-
-  
+  :root {
+    --spacing: 16px;
+    --hero-spacing: 32px;
+    --body1: 15px;
+    --lh-body1: 20px;
+    --body2: 12px;
+    --lh-body2: 16px;
+    --body3: 11px;
+    --body4: 10px;
+    --headline: 48px;
+    --lh-headline: 54px;
+    --title: 16px;
+    --max-width: 1280px;
+    --text-columns: 1;
+  }
+  /* //
+GRID SYSTEM
+// */
+  header ul, footer ul{
+    line-height: 48px;
+  }
+  h1 {
+    grid-column: 1 / span 12;
+    grid-row: 1 / 2;
+    margin: var(--hero-spacing) 0 0 0;
+  }
+  hr {
+    width: 100%;
+    grid-column: 1 / span 12;
+    grid-row: 3;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid;
+  }
+  article {
+    position: relative;
+  }
+  article::after {
+    border-left: 1px solid;
+    content: "";
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: calc(var(--spacing) / 2 * -1);
+  }
+  article.area1::after,
+  article.area2::after,
+  article.area4::after {
+    border: none;
+  }
+  .area1 {
+    grid-column: 1 / span all;
+    grid-row: 2 / 3;
+    margin: var(--hero-spacing) 0;
+    border-top: 1px solid;
+    padding-top: var(--hero-spacing);
+  }
+  /* //
+  Work
+  // */
+  .area2 {
+    grid-column: 1 / span 6;
+    grid-row-start: 3 / span 2;
+  }
+  .area3 {
+    grid-column: 7 / span 6;
+    grid-row-start: 3 / span 2;
+  }
+  .area4 {
+    grid-column: 1 / span 6;
+    grid-row-start: 5 / span 2;
+  }
+  .area5 {
+    grid-column: 7 / span 6;
+    grid-row-start: 5 / span 2;
+  }
+  .work p::after,
+  article.area4::after,
+  article.area5::after{
+    border-top: 1px solid;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(var(--spacing) / 2 * -1);
+    right: calc(var(--spacing) / 2 * -1);
+  }
+  .work.area2 p::after {
+    left: 0px;
+  }
+  .work.area5 p::after {
+    right: 0px;
+  }
+  footer ul li:nth-child(2) {
+    grid-column: 7 / span 1;
+  }
+  footer ul li:nth-child(3) {
+    grid-column: 8 / span all;
+    text-align: right;
+  }
+  /* //
+Work images
+// */
+  img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    outline: solid 0px #fff;
+    display: block;
+  }
+  article.area2 img {
+    background: url(images/fs_google.svg) no-repeat center center;
+    background-size: 50%;
+  }
+  article.area3 img {
+    background: url(images/fs_abdz.svg) no-repeat center center;
+    filter: invert();
+    background-size: 80%;
+  }
+  article.area4 img {
+    background: url(images/fs_calmaria.png) no-repeat center bottom;
+    background-size: 110%;
+  }
+  article.area5 img {
+    background: url(images/fs_terral.svg) no-repeat center center;
+    filter: invert();
+    background-size: 80%;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   /* For Tablets portrait: */
@@ -206,20 +331,18 @@ article.area5 img{
     --spacing: 24px;
     --hero-spacing: 48px;
     --body1: 16px;
-    --lh-body1:22px;
+    --lh-body1: 22px;
     --body2: 13px;
-    --lh-body2:17px;
+    --lh-body2: 17px;
     --body3: 12px;
     --body4: 10px;
-    --headline:56px;
-    --lh-headline:62px;
+    --headline: 56px;
+    --lh-headline: 62px;
     --title: 20px;
     --max-width: 1280px;
     --text-columns: 1;
   }
-  
 }
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
   /* For Tablets portrait: */
-  
 }
