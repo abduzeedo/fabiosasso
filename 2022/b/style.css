@@ -1,53 +1,66 @@
 :root {
   --spacing: 32px;
-  --hero-spacing: 54px;
+  --hero-spacing: 56px;
+  --body1: 18px;
+  --lh-body1:24px;
+  --body2: 14px;
+  --lh-body2:19px;
+  --body3: 12px;
+  --body4: 10px;
+  --headline:64px;
+  --title: 20px;
+  --lh-headline:70px;
+  --max-width: 1280px;
+  --text-columns: 2;
 }
 body {
   font-family:   quasimoda, greycliff-cf, urbane-rounded, sans-serif;
-  padding: 16px 32px;
+  line-height: var(--lh-body2);
+  font-size: var(--body2);
+  padding: 0 var(--spacing);
 }
 .grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   /* grid-template-rows: repeat(3, 1fr); */
   grid-column-gap: var(--spacing);
-  grid-row-gap: 0px;
-  max-width: 1320px;
+  grid-row-gap: 0px;;
+  max-width: var(--max-width);
   margin: 0 auto;
 }
 header{
-  margin-top: calc(var(--spacing) / 2);
+  margin-top: calc(var(--spacing));
 }
 header ul{
   text-transform: uppercase;
   border-top: 4px solid;
   border-bottom: 1px solid;
-  line-height: 56px;
+  line-height: var(--hero-spacing);
   white-space: nowrap;
+  font-size: var(--body3);
   
 }
 header ul li:nth-child(1){
   font-weight: 600;
   grid-column: 1 / span 3;
-  font-size: 20px;
+  font-size: var(--title);
 }
 header ul li:nth-child(2){
   grid-column: 7 / span 2;
-    font-size: 12px;
 }
 header ul li:nth-child(3){
-  grid-column: 10 / span 3;
-  font-size: 12px;
-  
+  grid-column: 10 / span 3;  
+}
+footer{
+  margin-bottom: calc(var(--spacing));
 }
 footer ul{
   text-transform: uppercase;
   border-top: 1px solid;
   border-bottom: 1px solid;
-  line-height: 48px;
+  line-height: var(--hero-spacing);
   white-space: nowrap;
-  font-size: 12px;
-  
+  font-size: var(--body3);
 }
 footer ul li:nth-child(1){
   grid-column: 1 / span 3;
@@ -137,24 +150,24 @@ Layout heights
 Typography
 // */
 h1{
-  font-size: 64px;
+  font-size: var(--headline);
+  line-height: var(--lh-headline);
   text-transform: uppercase;
   font-weight: 600;
 }
 p{
-    line-height: 19px;
-    font-size: 14px;
     margin-bottom: var(--hero-spacing);
-    padding: 16px 0;
+    padding: calc(var(--spacing) / 2) 0;
     position: relative;
 }
 .area1 p {
   border-top:  none;
-  columns: 2;
+  columns: var(--text-columns);
   column-gap: var(--spacing);
+  padding: 0;
   margin: 0;
-  font-size: 16px;
-  line-height: 22px;
+  font-size: var(--body1);
+  line-height: var(--lh-body1);
 }
 /* //
 Work images
@@ -184,16 +197,26 @@ article.area5 img{
 }
 
 @media only screen and (max-width: 767px) {
-  body{
-    /* background: #ccc; */
+
   
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   /* For Tablets portrait: */
-  body{
-    /* background: #fcc; */
+  :root {
+    --spacing: 24px;
+    --hero-spacing: 48px;
+    --body1: 16px;
+    --lh-body1:22px;
+    --body2: 13px;
+    --lh-body2:17px;
+    --body3: 12px;
+    --body4: 10px;
+    --headline:56px;
+    --lh-headline:62px;
+    --title: 20px;
+    --max-width: 1280px;
+    --text-columns: 1;
   }
-  
   
 }
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
