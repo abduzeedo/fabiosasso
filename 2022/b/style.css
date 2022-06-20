@@ -1,10 +1,10 @@
 :root {
   --spacing: 32px;
   --hero-spacing: 56px;
-  --body1: 16px;
-  --lh-body1: 22px;
-  --body2: 14px;
-  --lh-body2: 19px;
+  --body1: 18px;
+  --lh-body1: 24px;
+  --body2: 16px;
+  --lh-body2: 22px;
   --body3: 12px;
   --body4: 10px;
   --headline: 64px;
@@ -38,6 +38,7 @@ header ul {
   line-height: var(--hero-spacing);
   white-space: nowrap;
   font-size: var(--body3);
+  align-items: center;
 }
 header ul li:nth-child(1) {
   font-weight: 600;
@@ -79,7 +80,7 @@ header {
   grid-row: 1 / span 1;
 }
 h1 {
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 4;
   grid-row: 1 / 2;
   margin: var(--hero-spacing) 0;
 }
@@ -198,15 +199,11 @@ article.area5 img {
   :root {
     --spacing: 16px;
     --hero-spacing: 32px;
-    --body1: 15px;
-    --lh-body1: 20px;
-    --body2: 12px;
-    --lh-body2: 16px;
-    --body3: 11px;
-    --body4: 10px;
     --headline: 48px;
     --lh-headline: 54px;
     --title: 16px;
+    --body2: 14px;
+    --lh-body2: 18px;
     --max-width: 600px;
     --text-columns: 1;
     --grid-columns: 6;
@@ -220,7 +217,6 @@ GRID SYSTEM
   header ul.grid{
     grid-column-gap: var(--spacing);
     align-items: center;
-    justify-items: right;
   }
   header ul, footer ul{
     line-height: 48px;
@@ -230,9 +226,11 @@ GRID SYSTEM
   }
   header ul li:nth-child(2) {
     grid-column: 5 / span 1;
+    justify-self: center;
   }
   header ul li:nth-child(3) {
     grid-column: 6 / span 1;
+    justify-self: right;
   }
   .external a{
     display: block;
@@ -245,6 +243,7 @@ GRID SYSTEM
     display: none;
   }
   h1{
+    grid-column: 1 / span all;
     grid-row: 1;
   }
   .area1{
