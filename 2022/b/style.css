@@ -252,7 +252,7 @@ GRID SYSTEM
     display: none;
   }
   h1{
-    grid-column: 1 / span all;
+    grid-column: 1 / span 4;
     grid-row: 1;
   }
   .area1{
