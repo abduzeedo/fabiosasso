@@ -333,7 +333,7 @@ Work images
   }
 }
 /* ipad Mini Portrait */
-@media only screen and (width:768px) and (resolution: 324dpi) {
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
   :root {
     --spacing: 24px;
     --hero-spacing: 48px;
