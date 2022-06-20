@@ -245,14 +245,21 @@ GRID SYSTEM
     display: block;
     width: 24px;
     height: 24px;
-    background: #000;
     border-radius: 50%;
+  }
+  header ul li:nth-child(2).external a {
+    background: url(images/ic_email.svg) center center;
+    background-size: cover;
+  }
+  header ul li:nth-child(3) {
+    background: url(images/ic_linkedin.svg) center center;
+    background-size: cover;
   }
   .external a *{
     display: none;
   }
   h1{
-    grid-column: 1 / span 4;
+    grid-column: 1 / span 5;
     grid-row: 1;
   }
   .area1{
