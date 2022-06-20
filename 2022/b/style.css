@@ -321,6 +321,7 @@ GRID SYSTEM
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 1;
   }
   article.area2.work p,
   article.area4.work p{
@@ -329,6 +330,10 @@ GRID SYSTEM
   article.area3.work p,
   article.area5.work p{
     padding-left: var(--spacing);
+  }
+  article.area4 *, article.area5 *{
+    position: relative;
+    z-index: 1000;
   }
   /* //
 Work images
