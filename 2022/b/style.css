@@ -1,15 +1,15 @@
 :root {
   --spacing: 32px;
   --hero-spacing: 56px;
-  --body1: 18px;
-  --lh-body1: 24px;
+  --body1: 16px;
+  --lh-body1: 22px;
   --body2: 16px;
   --lh-body2: 22px;
   --body3: 12px;
   --body4: 10px;
-  --headline: 64px;
+  --headline: 56px;
   --title: 20px;
-  --lh-headline: 70px;
+  --lh-headline: 64px;
   --max-width: 1280px;
   --text-columns: 2;
   --grid-columns: 12;
@@ -89,7 +89,7 @@ header {
   grid-row: 1 / span 1;
 }
 h1 {
-  grid-column: 1 / span 4;
+  grid-column: 1 / span 6;
   grid-row: 1 / 2;
   margin: var(--hero-spacing) 0;
 }
@@ -347,22 +347,19 @@ Work images
     background-size: 80%;
   }
 }
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
+@media only screen and (min-width: 768px) and (max-width: 1366px) {
   /* For Tablets portrait: */
   :root {
     --spacing: 24px;
-    --hero-spacing: 48px;
+    --hero-spacing: 56px;
     --body1: 16px;
     --lh-body1: 22px;
-    --body2: 13px;
-    --lh-body2: 17px;
-    --body3: 12px;
-    --body4: 10px;
-    --headline: 56px;
-    --lh-headline: 62px;
+    --body2: 14px;
+    --lh-body2: 19px;
+    --headline: 48px;
+    --lh-headline: 56px;
     --title: 20px;
-    --max-width: 1280px;
-    --text-columns: 1;
+    --text-columns:1;
   }
 }
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
