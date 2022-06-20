@@ -13,12 +13,21 @@
   --max-width: 1280px;
   --text-columns: 2;
   --grid-columns: 12;
+  --main-color:#111;
+  --background-color:#fff;
 }
 body {
   font-family: quasimoda, greycliff-cf, urbane-rounded, sans-serif;
   line-height: var(--lh-body2);
   font-size: var(--body2);
   padding: 0 var(--spacing);
+  background: var(--background-color);
+  color: var(--main-color);
+}
+a{
+  font-weight: bold;
+  color: var(--main-color);
+  text-decoration: none;
 }
 .grid {
   display: grid;
