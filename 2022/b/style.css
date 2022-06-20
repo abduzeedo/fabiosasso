@@ -332,6 +332,25 @@ Work images
     background-size: 80%;
   }
 }
+/* ipad Mini Portrait */
+@media only screen and (width:768px) and (resolution: 324dpi) {
+  :root {
+    --spacing: 24px;
+    --hero-spacing: 48px;
+    --body1: 16px;
+    --lh-body1: 22px;
+    --body2: 14px;
+    --lh-body2: 19px;
+    --body3: 12px;
+    --body4: 10px;
+    --headline: 64px;
+    --title: 20px;
+    --lh-headline: 70px;
+    --max-width: 1280px;
+    --text-columns: 2;
+    --grid-columns: 12;
+  }
+}
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   /* For Tablets portrait: */
   :root {
