@@ -41,7 +41,6 @@ a{
   grid-column-gap: var(--spacing);
   grid-row-gap: 0px;
   max-width: var(--max-width);
-  align-items: baseline;
 }
 .work{
   border-top: 1px solid;
@@ -61,6 +60,7 @@ header ul.grid {
   white-space: nowrap;
   font-size: var(--body3);
   align-items: center;
+  align-items: baseline;
 }
 header ul li:nth-child(1) {
   font-weight: 600;
@@ -81,6 +81,7 @@ footer ul {
   line-height: var(--spacing) auto;;
   white-space: nowrap;
   font-size: var(--body4);
+  align-items: baseline;
 }
 footer ul li:nth-child(1) {
   grid-column: 1 / span 3;
@@ -215,7 +216,7 @@ article.area5 img {
     --grid-columns: 12;
     --main-color:#111;
     --background-color:#fff;
-    --max-width: 400px;
+    --max-width: 560px;
   }
   .grid,
   .work{
