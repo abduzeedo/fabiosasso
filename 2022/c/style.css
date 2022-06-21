@@ -44,7 +44,8 @@ a{
 }
 .work{
   border-top: 1px solid;
-  padding: var(--spacing) 0 ;
+  padding: var(--spacing) 0;
+  align-items: baseline;
 }
 header {
   margin-top: var(--spacing);
@@ -136,6 +137,7 @@ picture{
 }
 .work .thumb{
   grid-column: 10 / span 2;
+  align-self: center;
 }
 /* //
 Layout heights 
