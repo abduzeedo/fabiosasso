@@ -1,13 +1,13 @@
 :root {
   --spacing: 32px;
-  --hero-spacing: 15vh;
+  --hero-spacing: 12vh;
   --header: 32px;
   --body1: 16px;
   --lh-body1: 22px;
   --body2: 16px;
   --lh-body2: 22px;
-  --body3: 12px;
-  --body4: 10px;
+  --body3: 14px;
+  --body4: 12px;
   --headline: 60px;
   --lh-headline: 68px;
   --headline2: 32px;
@@ -44,7 +44,7 @@ a{
 }
 .work{
   border-top: 1px solid;
-  padding: var(--spacing) 0;
+  padding: calc(var(--spacing) / 2) 0;
   align-items: baseline;
 }
 header {
@@ -173,7 +173,7 @@ img {
   display: block;
 }
 .work img {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
 }
 article.area2 img {
   background: url(images/fs_google.svg) no-repeat center center;
