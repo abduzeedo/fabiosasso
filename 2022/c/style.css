@@ -1,15 +1,15 @@
 :root {
   --spacing: 32px;
-  --hero-spacing: 72px;
-  --header: 72px;
+  --hero-spacing: 15vh;
+  --header: 32px;
   --body1: 16px;
   --lh-body1: 22px;
   --body2: 16px;
   --lh-body2: 22px;
   --body3: 12px;
   --body4: 10px;
-  --headline: 64px;
-  --lh-headline: 70px;
+  --headline: 60px;
+  --lh-headline: 68px;
   --headline2: 32px;
   --lh-headline2: 40px;
   --headline3: 20px;
@@ -28,6 +28,7 @@ body {
   padding: 0 var(--spacing);
   background: var(--background-color);
   color: var(--main-color);
+  
 }
 a{
   font-weight: bold;
@@ -40,18 +41,20 @@ a{
   grid-column-gap: var(--spacing);
   grid-row-gap: 0px;
   max-width: var(--max-width);
-  margin: 0 32px;
 }
 .work{
   border-top: 1px solid;
   padding: var(--spacing) 0 ;
 }
 header {
-  margin-top: calc(var(--spacing));
-  height: var(--header);
-  line-height: var(--header);
+  margin-top: var(--spacing);
+  height: auto;
 }
-header ul {
+header a{
+  font-weight: normal;
+}
+header ul.grid {
+  margin-top: var(--spacing);
   text-transform: uppercase;
   white-space: nowrap;
   font-size: var(--body3);
@@ -63,20 +66,19 @@ header ul li:nth-child(1) {
   font-size: var(--title);
 }
 header ul li:nth-child(2) {
-  grid-column: 9 / span 2;
+  grid-column: 6 / span 2;
 }
 header ul li:nth-child(3) {
-  grid-column: 11 / span 1;
-}
-footer {
-  margin-bottom: calc(var(--spacing));
+  grid-column: 9 / span 1;
 }
 footer ul {
   text-transform: uppercase;
   border-top: 1px solid;
-  line-height: var(--hero-spacing);
+  padding: var(--spacing) 0 !important;
+  height: var(--spacing) auto;
+  line-height: var(--spacing) auto;;
   white-space: nowrap;
-  font-size: var(--body2);
+  font-size: var(--body4);
 }
 footer ul li:nth-child(1) {
   grid-column: 1 / span 3;
@@ -157,9 +159,7 @@ h3{
   columns: var(--text-columns);
   column-gap: var(--spacing);
   padding: 0;
-  margin: 0;
-  font-size: var(--body1);
-  line-height: var(--lh-body1);
+  margin: 0 0 var(--spacing) 0 ;
 }
 /* //
 Work images
@@ -183,7 +183,6 @@ article.area3 img {
 article.area4 img {
   background: url(images/fs_calmaria.png) no-repeat center bottom;
   background-size: 100%;
-  transform: translateY(var(--spacing));
 }
 article.area5 img {
   background: url(images/fs_terral.svg) no-repeat center center;
@@ -191,35 +190,73 @@ article.area5 img {
   background-size: 55%;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 768px) {
   :root {
     --spacing: 16px;
-    --hero-spacing: 32px;
-    --headline: 48px;
-    --lh-headline: 54px;
-    --title: 16px;
+    --hero-spacing: 8vh;
+    --header: 20px;
+    --body1: 16px;
+    --lh-body1: 24px;
     --body2: 14px;
-    --lh-body2: 18px;
-    --max-width: 540px;
-    --text-columns: 1;
-    --grid-columns: 6;
+    --lh-body2: 20px;
+    --body3: 12px;
+    --body4: 10px;
+    --headline: 32px;
+    --lh-headline: 40px;
+    --headline3: 18px;
+    --lh-headline3: 24px;
+    --title: 16px;
+    --max-width: 600px;
+    --text-columns: 2;
+    --grid-columns: 12;
+    --main-color:#111;
+    --background-color:#fff;
+    --max-width: none;
   }
-
+  h1{
+    grid-column: 1 / span all;
+  }
+  picture{
+    grid-column: 1 / span all;
+  }
+  .area1{
+    grid-row: 3;
+    grid-column: 1 / span all;
+    margin: var(--spacing) 0 var(--hero-spacing) 0 ;
+  }
+  .work h2{
+    grid-column: 1 / span 6;
+    grid-row: 2;
+    margin-top: var(--hero-spacing) 0;
+  }
+  .work h3{
+    grid-column: 1 / span all;
+    grid-row: 3;
+    margin-top: calc(var(--spacing) / 2);
+    margin-bottom: var(--spacing) 0;
+  }
+  .work p{
+    grid-column: 1 / span all;
+    grid-row: 4;
+    margin: var(--spacing) 0;
+  }
+  .work .thumb{
+    grid-column: 1 / span all;
+    margin:var(--hero-spacing) 0 ;
+  }
+  footer ul li:nth-child(1) {
+    grid-column: 1 / span 2;
+  }
+  footer ul li:nth-child(2) {
+    grid-column: 6/ span 1;
+  }
+  footer ul li:nth-child(3) {
+    grid-column: 7 / span 3;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   /* For Tablets portrait: */
-  :root {
-    --spacing: 24px;
-    --hero-spacing: 56px;
-    --body1: 16px;
-    --lh-body1: 22px;
-    --body2: 14px;
-    --lh-body2: 19px;
-    --headline: 48px;
-    --lh-headline: 56px;
-    --title: 20px;
-    --text-columns:1;
-  }
+ 
 }
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
   /* For Tablets portrait: */
