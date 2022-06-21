@@ -1,6 +1,6 @@
 :root {
   --spacing: 32px;
-  --hero-spacing: 12vh;
+  --hero-spacing: 13vh;
   --header: 32px;
   --body1: 16px;
   --lh-body1: 22px;
@@ -41,6 +41,7 @@ a{
   grid-column-gap: var(--spacing);
   grid-row-gap: 0px;
   max-width: var(--max-width);
+  align-items: baseline;
 }
 .work{
   border-top: 1px solid;
@@ -75,7 +76,7 @@ header ul li:nth-child(3) {
 footer ul {
   text-transform: uppercase;
   border-top: 1px solid;
-  padding: var(--spacing) 0 !important;
+  padding: calc(var(--spacing) / 2) 0;
   height: var(--spacing) auto;
   line-height: var(--spacing) auto;;
   white-space: nowrap;
@@ -210,11 +211,15 @@ article.area5 img {
     --lh-headline3: 24px;
     --title: 16px;
     --max-width: 600px;
-    --text-columns: 2;
+    --text-columns: 1;
     --grid-columns: 12;
     --main-color:#111;
     --background-color:#fff;
-    --max-width: none;
+    --max-width: 400px;
+  }
+  .grid,
+  .work{
+    margin: auto auto;
   }
   h1{
     grid-column: 1 / span all;
@@ -225,7 +230,7 @@ article.area5 img {
   .area1{
     grid-row: 3;
     grid-column: 1 / span all;
-    margin: var(--spacing) 0 var(--hero-spacing) 0 ;
+    margin: var(--spacing) 0 var(--spacing) 0 ;
   }
   .work h2{
     grid-column: 1 / span 6;
@@ -244,8 +249,20 @@ article.area5 img {
     margin: var(--spacing) 0;
   }
   .work .thumb{
-    grid-column: 1 / span all;
+    grid-column: 4 / span 6;
     margin:var(--hero-spacing) 0 ;
+  }
+  .work img{
+    background-size:100% !important;
+  }
+  .work.area2 img{
+    background-size:60% !important;
+  }
+  header ul li:nth-child(2) {
+    grid-column: 8 / span 2;
+  }
+  header ul li:nth-child(3) {
+    grid-column: 11 / span 1;
   }
   footer ul li:nth-child(1) {
     grid-column: 1 / span 2;
@@ -270,9 +287,16 @@ article.area5 img {
     --lh-headline2: 36px;
     --headline3: 18px;
     --lh-headline3: 26px;
+    --text-columns: 1;
   }
   h1{
     grid-column: 1 / span 10;
+  }
+  .work p{
+    grid-column: 6 / span 4;
+  }
+  .work .thumb{
+    grid-column: 11 / span 2;
   }
   .work img{
     aspect-ratio: 1 / 1;
