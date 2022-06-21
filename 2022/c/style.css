@@ -195,6 +195,12 @@ article.area5 img {
   background-size: 55%;
 }
 
+@media only screen and (max-width: 480px) {
+  :root {
+    --headline: 32px;
+    --lh-headline: 40px;
+  }
+}
 @media only screen and (max-width: 768px) {
   :root {
     --spacing: 16px;
@@ -206,8 +212,8 @@ article.area5 img {
     --lh-body2: 20px;
     --body3: 12px;
     --body4: 10px;
-    --headline: 32px;
-    --lh-headline: 40px;
+    --headline: 45px;
+    --lh-headline: 56px;
     --headline3: 18px;
     --lh-headline3: 24px;
     --title: 16px;
@@ -216,7 +222,7 @@ article.area5 img {
     --grid-columns: 12;
     --main-color:#111;
     --background-color:#fff;
-    --max-width: 560px;
+    --max-width: 600px;
   }
   .grid,
   .work{
