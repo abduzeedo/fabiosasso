@@ -13,7 +13,7 @@
   --headline2: 32px;
   --lh-headline2: 40px;
   --headline3: 20px;
-  --lh-headline2: 30px;
+  --lh-headline3: 30px;
   --title: 20px;
   --max-width: 1920px;
   --text-columns: 2;
@@ -180,10 +180,11 @@ article.area2 img {
 }
 article.area3 img {
   background: url(images/fs_abdz.svg) no-repeat center center;
+  background-size: 100%;
   filter: invert();
 }
 article.area4 img {
-  background: url(images/fs_calmaria.png) no-repeat center bottom;
+  background: url(images/fs_calmaria.png) no-repeat center center;
   background-size: 100%;
 }
 article.area5 img {
@@ -256,9 +257,26 @@ article.area5 img {
     grid-column: 7 / span 3;
   }
 }
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
+@media only screen and (min-width: 769px) and (max-width: 1366px) {
   /* For Tablets portrait: */
- 
+  :root {
+    --body1: 16px;
+    --lh-body1: 24px;
+    --body2: 14px;
+    --lh-body2: 20px;
+    --body3: 12px;
+    --body4: 10px;
+    --headline2: 28px;
+    --lh-headline2: 36px;
+    --headline3: 18px;
+    --lh-headline3: 26px;
+  }
+  h1{
+    grid-column: 1 / span 10;
+  }
+  .work img{
+    aspect-ratio: 1 / 1;
+  }
 }
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
   /* For Tablets portrait: */
