@@ -22,7 +22,7 @@
   --background-color:#fff;
 }
 body {
-  font-family: Helvetica Neue, sans-serif;
+  font-family: quasimoda,Helvetica Neue, sans-serif;
   line-height: var(--lh-body2);
   font-size: var(--body2);
   padding: 0 var(--spacing);
