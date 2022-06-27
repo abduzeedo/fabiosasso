@@ -22,7 +22,7 @@
   --background-color:#fff;
 }
 body {
-  font-family: quasimoda,Helvetica Neue, sans-serif;
+  font-family: neue-haas-grotesk-text,Helvetica Neue, sans-serif;
   line-height: var(--lh-body2);
   font-size: var(--body2);
   padding: 0 var(--spacing);
@@ -138,7 +138,7 @@ picture{
   grid-column: 6 / span 3;
 }
 .work .thumb{
-  grid-column: 10 / span 2;
+  grid-column: 11 / span 2;
   align-self: center;
 }
 /* //
@@ -178,21 +178,20 @@ img {
   aspect-ratio: 1 / 1;
 }
 article.area2 img {
-  background: url(images/fs_google.svg) no-repeat center center;
+  background: url(images/hero_google.png) no-repeat center center;
+  background-size: 100%;
 }
 article.area3 img {
-  background: url(images/fs_abdz.svg) no-repeat center center;
+  background: url(images/hero_abdz.png) no-repeat center center;
   background-size: 100%;
-  filter: invert();
 }
 article.area4 img {
-  background: url(images/fs_calmaria.png) no-repeat center center;
+  background: url(images/hero_calmaria.png) no-repeat center center;
   background-size: 100%;
 }
 article.area5 img {
-  background: url(images/fs_terral.svg) no-repeat center center;
-  filter: invert();
-  background-size: 55%;
+  background: url(images/hero_terral.png) no-repeat center center;
+  background-size: 100%;
 }
 
 @media only screen and (max-width: 480px) {
@@ -259,12 +258,6 @@ article.area5 img {
     grid-column: 4 / span 6;
     margin:var(--hero-spacing) 0 ;
   }
-  .work img{
-    background-size:100% !important;
-  }
-  .work.area2 img{
-    background-size:60% !important;
-  }
   header ul li:nth-child(2) {
     grid-column: 8 / span 2;
   }
@@ -292,8 +285,8 @@ article.area5 img {
     --body4: 10px;
     --headline2: 28px;
     --lh-headline2: 36px;
-    --headline3: 18px;
-    --lh-headline3: 26px;
+    --headline3: 14px;
+    --lh-headline3: 20px;
     --text-columns: 1;
   }
   h1{
@@ -302,8 +295,10 @@ article.area5 img {
   .work p{
     grid-column: 6 / span 4;
   }
+  .work p{
+  }
   .work .thumb{
-    grid-column: 11 / span 2;
+    grid-column: 10/ span 3;
   }
   .work img{
     aspect-ratio: 1 / 1;
