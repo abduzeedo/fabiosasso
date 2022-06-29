@@ -12,14 +12,18 @@
   --lh-headline: 68px;
   --headline2: 32px;
   --lh-headline2: 40px;
-  --headline3: 20px;
-  --lh-headline3: 30px;
+  --headline3: 16px;
+  --lh-headline3: 22px;
   --title: 20px;
   --max-width: 1920px;
   --text-columns: 2;
   --grid-columns: 12;
   --main-color:#111;
   --background-color:#fff;
+}
+:root.dark{
+  --background-color:#111;
+  --main-color:#fff;
 }
 body {
   font-family: neue-haas-grotesk-text,Helvetica Neue, sans-serif;
@@ -138,9 +142,10 @@ picture{
 .work p{
   grid-column: 6 / span 3;
 }
-.work .thumb{
+.work a.thumb{
   grid-column: 11 / span 2;
   align-self: center;
+  background: var(--main-color);
 }
 /* //
 Layout heights 
@@ -214,8 +219,8 @@ article.area5 img {
     --body4: 10px;
     --headline: 45px;
     --lh-headline: 56px;
-    --headline3: 18px;
-    --lh-headline3: 24px;
+    --headline3: 14px;
+    --lh-headline3: 20px;
     --title: 16px;
     --max-width: 600px;
     --text-columns: 1;
@@ -255,9 +260,9 @@ article.area5 img {
     grid-row: 4;
     margin: var(--spacing) 0;
   }
-  .work .thumb{
+  .work a.thumb{
     grid-column: 4 / span 6;
-    margin:var(--hero-spacing) 0 ;
+    margin:var(--spacing) 0 ;
   }
   header ul li:nth-child(2) {
     grid-column: 8 / span 2;
@@ -305,6 +310,9 @@ article.area5 img {
     aspect-ratio: 1 / 1;
   }
 }
-@media only screen and (min-width: 1024px) and (max-width: 1280px) {
+@media only screen and (min-width: 768px) and (max-width: 920px) {
   /* For Tablets portrait: */
+  .work h3 {
+    grid-column: 1 / span 3;
+  }
 }
