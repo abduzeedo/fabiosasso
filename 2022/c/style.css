@@ -1,19 +1,19 @@
 :root {
   --spacing: 32px;
-  --hero-spacing: 13vh;
+  --hero-spacing: 10vh;
   --header: 32px;
-  --body1: 16px;
-  --lh-body1: 22px;
-  --body2: 16px;
-  --lh-body2: 22px;
-  --body3: 14px;
+  --body1: 14px;
+  --lh-body1: 20px;
+  --body2: 14px;
+  --lh-body2: 20px;
+  --body3: 12px;
   --body4: 12px;
   --headline: 60px;
   --lh-headline: 68px;
   --headline2: 32px;
   --lh-headline2: 40px;
-  --headline3: 16px;
-  --lh-headline3: 22px;
+  --headline3: 14px;
+  --lh-headline3: 20px;
   --title: 20px;
   --max-width: 1920px;
   --text-columns: 2;
@@ -159,10 +159,12 @@ h1 {
 h2{
   font-size: var(--headline2);
   line-height: var(--lh-headline2);
+  
 }
 h3{
   font-size: var(--headline3);
   line-height: var(--lh-headline3);
+  text-transform: uppercase;
 }
 .area1 p {
   border-top: none;

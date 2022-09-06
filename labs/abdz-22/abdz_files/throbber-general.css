@@ -1,0 +1,21 @@
+.ajax-throbber {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+/* Override core throbber */
+.ajax-progress.ajax-progress-fullscreen {
+  background-color: transparent;
+  background-image: none;
+  z-index: 11000;
+  position: fixed;
+  height: 2em;
+  width: 2em;
+  overflow: visible;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
