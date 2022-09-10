@@ -806,7 +806,7 @@ main .search-form {
     grid-column: 1 / span all;
     scroll-snap-align: start;
     min-height: 90vh;
-    height: var(--windowHeight);
+    height: calc(var(--windowHeight) - 48px);
     padding-top: 24px;
     overflow: hidden;
   }
