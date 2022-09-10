@@ -810,10 +810,7 @@ main .search-form {
     padding-top: 24px;
     overflow: hidden;
   }
-  .path-frontpage main .posts article.post-item img{
-    /* transform: translateY(-38px); */
-    margin-bottom: 56px;
-  }
+
   .path-frontpage .pager{
     background: var(--background);
     position: fixed;
@@ -843,7 +840,7 @@ main .search-form {
     height: calc(41vh - 38px);
   }
   main .posts article.post-item span img {
-    height: 55vh;
+    height: 60vh;
   }
   .path-taxonomy main .posts {
     grid-template-columns: repeat(2, 1fr);
