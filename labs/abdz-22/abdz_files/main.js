@@ -78,6 +78,9 @@ var submenuOn = false
   window.onscroll = function () {
 
   }
+  window.onchange = function (){
+    $(':root').css("--windowHeight", $(window).height() + "px");
+  }
   function imgGallery() {
     if ($('.imgsGrid')) {
       $('.imgsGrid').photosetGrid({
