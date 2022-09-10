@@ -812,7 +812,7 @@ main .search-form {
   }
   .path-frontpage main .posts article.post-item img{
     /* transform: translateY(-38px); */
-    margin-bottom: 38px;
+    margin-bottom: 56px;
   }
   .path-frontpage .pager{
     position: fixed;
