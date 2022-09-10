@@ -909,7 +909,7 @@ main .search-form {
     grid-column: 1 / span all;
   }
   main .posts article.post-item span {
-      max-height: 1280px;
+      max-height: 1400px;
   }
   main .posts article.post-item span .meta_tags {
     height: 45vh;
