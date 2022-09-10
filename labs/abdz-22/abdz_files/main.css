@@ -289,7 +289,7 @@ header {
   grid-column: 1 / span 2;
   grid-row: 1;
   font-size: var(--text-size-h1);
-  line-height: var(--line-height);
+  line-height: 29px;
   font-weight: 500;
 }
 
@@ -324,6 +324,7 @@ main .posts article.post-item span {
   display: flex;
   height: calc(100vh - (var(--basic-spacing) * 2));
   max-height: 1024px;
+  min-height: 400px;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
@@ -418,13 +419,14 @@ main .posts article.post-item span img {
 }
 
 .pager__item.is-active {
-  grid-column: 5 / span 1;
+  grid-column: 6 / span 1;
   font-weight: normal;
   grid-row: 1;
+  text-align: right;
 }
 
 .pager__items li.pager__item--next {
-  grid-column: 3 / span 1;
+  grid-column: 4 / span 1;
   grid-row: 1;
   
 }
@@ -445,17 +447,16 @@ menu .content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* height: calc(100vh - 20.5vh - 16px); */
-  /* height: calc(85.5vh); */
   position: sticky;
-  /* top: 21.9vh; */
-  top: 150px;
+  height: calc(var(--windowHeight) - 32px);
+  top:16px;
   line-height: 28px;
   text-transform: lowercase;
 }
 
 .submenu-collections {
   font-weight: 500;
+  margin-top: 135px;
 }
 
 menu a.is-active {
@@ -766,17 +767,22 @@ main .search-form {
     top: 48px;
     line-height: 40px;
     text-transform: lowercase;
-    font-size: var(--text-size-h2);
+    font-size: var(--text-size-h3);
+    height: calc(var(--windowHeight) - 82px);
+    top:0;
   }
+  .submenu-collections{
+    margin-top: 0;
 
+  }
   .top-search {
-    margin: 4vh 0;
+    
   }
   .top-search input.form-search {
     width: calc(100% - 32px);
   }
   footer {
-    margin: 8vh 0 0 0;
+    
     position: relative;
   }
 
@@ -820,13 +826,12 @@ main .search-form {
 
   .path-frontpage .pager{
     background: var(--background);
-    position: fixed;
+    position: absolute;
     bottom: 0;
-    left: var(--basic-spacing);
-    right: var(--basic-spacing);
-    height: 56px;
-    line-height: 56px;
-    display: none;
+    left: 0;
+    height: 48px;
+    line-height: 48px;
+    width: calc(100vw - 32px);
   }
   .path-frontpage .pager__items{
     margin: 0px !important;
