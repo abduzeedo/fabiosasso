@@ -108,6 +108,7 @@ html {
   --post-top-space-categories: 118px;
   --post-top-space-post: 138px;
   --search-image-size: calc(((100% / 6)) - (var(--basic-spacing)));
+  --windowHeight: 100vh;
 
 }
 
@@ -717,7 +718,9 @@ main .search-form {
   }
 
   header .close_menu {
+    font-size: 18px;
     height: 56px;
+    line-height: 56px;
     background: #000;
     display: block;
     z-index: 100000;
@@ -730,7 +733,7 @@ main .search-form {
     content: "menu";
     font-size: 18px;
     height: 56px;
-    line-height: 56px;
+    line-height: 48px;
   }
 
   .night .close_menu {
@@ -792,7 +795,7 @@ main .search-form {
   .path-frontpage main .posts {
     grid-column: 1 / span all;
     scroll-snap-type: y mandatory;
-    height: 100vh;
+    height: var(--windowHeight);
     overflow-y: scroll;
   }
   /* Hide scrollbar for Chrome, Safari and Opera */
@@ -802,7 +805,8 @@ main .search-form {
   .path-frontpage main .posts article.post-item {
     grid-column: 1 / span all;
     scroll-snap-align: start;
-    height: calc(100vh);
+    min-height: 90vh;
+    height: var(--windowHeight);
     padding-top: 24px;
     overflow: hidden;
   }
@@ -827,7 +831,7 @@ main .search-form {
 
   main .posts article.post-item h2,
   h1 {
-    margin-top: 48px;
+    margin-top: 32px;
   }
   main .posts article.post-item span .meta_tags{
     height: calc(41vh - 38px);

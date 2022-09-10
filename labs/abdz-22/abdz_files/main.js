@@ -35,6 +35,8 @@ var submenuOn = false
       removeEmptyPs()
       gliteboxImgs()
       //$("#sidebar .content").height($(document).height())
+      $(':root').css("--windowHeight", $(window).height() + "px");
+      console.log($(window).height())
       var sidebar_open = false
       $('header .close_menu').click(function(){
           if (sidebar_open == false){
