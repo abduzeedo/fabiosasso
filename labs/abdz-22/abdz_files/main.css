@@ -812,14 +812,20 @@ main .search-form {
   }
   .path-frontpage main .posts article.post-item img{
     /* transform: translateY(-38px); */
-    margin-bottom: 56px;
+    
   }
   .path-frontpage .pager{
+    background: var(--background);
     position: fixed;
     bottom: 0;
     left: var(--basic-spacing);
     right: var(--basic-spacing);
-    bottom: calc(var(--basic-spacing) / 2);
+    height: 56px;
+    line-height: 56px;
+  }
+  .path-frontpage .pager__items{
+    margin: 0px !important;
+
   }
   /* //
   // End of snap css
