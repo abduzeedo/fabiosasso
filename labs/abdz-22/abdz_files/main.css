@@ -795,7 +795,8 @@ main .search-form {
   .path-frontpage main .posts {
     grid-column: 1 / span all;
     scroll-snap-type: y mandatory;
-    height: var(--windowHeight);
+    height: 100vh;
+    height: 100mvh;
     overflow-y: scroll;
   }
   /* Hide scrollbar for Chrome, Safari and Opera */
@@ -805,14 +806,17 @@ main .search-form {
   .path-frontpage main .posts article.post-item {
     grid-column: 1 / span all;
     scroll-snap-align: start;
-    min-height: 90vh;
-    height: calc(var(--windowHeight));
+    height: 100vh;
+    height: 100mvh;
     padding-top: 24px;
     overflow: hidden;
   }
-  /* main .posts article.post-item span {
-    padding-bottom: 56px;
-  } */
+  main .posts article.post-item span {
+    height: calc(100vh - 16px);
+    height: calc(100mvh - 16px);
+    padding-bottom: 24px;
+    overflow: hidden;
+  }
 
   .path-frontpage .pager{
     background: var(--background);
@@ -841,10 +845,15 @@ main .search-form {
     margin-top: 32px;
   }
   main .posts article.post-item span .meta_tags{
-    height: calc(41vh - 38px);
+    height: calc(40vh);
+  }
+  main .posts article.post-item span .hero_image{
+    
   }
   main .posts article.post-item span img {
     height: 60vh;
+    display: block;
+   
   }
   .path-taxonomy main .posts {
     grid-template-columns: repeat(2, 1fr);
