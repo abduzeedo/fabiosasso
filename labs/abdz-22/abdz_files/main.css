@@ -912,10 +912,13 @@ main .search-form {
       max-height: 1400px;
   }
   main .posts article.post-item span .meta_tags {
-    height: 45vh;
+    height: 35vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+  main .posts article.post-item span img{
+    height: 65vh;
   }
   .page-node-type-page .node, .page-node-type-blog .node {
     grid-column: 1 / span all;
