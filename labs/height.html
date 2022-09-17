@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Height experiements</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+  body{
+    background: #ccc;
+    display: flex;
+    padding: 0 8px;
+    margin: 0;
+    font-family: sans-serif;
+  }
+  div{
+    margin: 0 8px;
+    flex-grow: 1;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+  }
+  .vh{
+    background: #f00;
+    height: 100vh;
+  }
+  .svh{
+    background: rgb(129, 33, 33);
+    height: 100svh;
+  }
+  .dvh{
+    background: rgb(33, 129, 123);
+    height: 100dvh;
+  }
+  .vmin{
+    background: rgb(16, 202, 190);
+    height: 100vmin;
+  }
+  .vmax{
+    background: rgb(0, 0, 255);
+    height: 100vmax;
+  }
+</style>
+<body>
+<div class="vh">vh</div>
+<div class="svh">svh</div>
+<div class="dvh">dvh</div>
+<div class="vmin">vmin</div>
+<div class="vmax">vmax</div>
+</body>
+</html>
