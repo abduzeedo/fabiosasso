@@ -22,6 +22,7 @@
     text-align: center;
     color: #fff;
     font-weight: bold;
+    text-transform: uppercase;
   }
   .vh{
     background: #f00;
@@ -30,6 +31,10 @@
   .svh{
     background: rgb(129, 33, 33);
     height: 100svh;
+  }
+  .lvh{
+    background: rgb(34, 255, 0);
+    height: 100lvh;
   }
   .dvh{
     background: rgb(33, 129, 123);
@@ -43,12 +48,34 @@
     background: rgb(0, 0, 255);
     height: 100vmax;
   }
+  .js{
+    background: rgb(255, 204, 0);
+    height: 100vmax;
+  }
 </style>
-<body>
+<body onload="loadHeights()">
 <div class="vh">vh</div>
 <div class="svh">svh</div>
+<div class="lvh">lvh</div>
 <div class="dvh">dvh</div>
 <div class="vmin">vmin</div>
 <div class="vmax">vmax</div>
+<div class="js">JS</div>
+<script>
+  function loadHeights() {
+    // var text = "";
+  
+    // if (navigator.cookieEnabled == true) {
+    //   text = "Cookies are enabled.";
+    // } else {
+    //    text = "Cookies are not enabled.";
+    // }
+    // document.getElementById("demo").innerHTML = text;
+    document.getElementsByClassName("js")[0].style.height = window.innerHeight + "px";
+  }
+  window.onscroll = function(){
+    document.getElementsByClassName("js")[0].style.height = window.innerHeight + "px";
+  }
+  </script>
 </body>
 </html>
