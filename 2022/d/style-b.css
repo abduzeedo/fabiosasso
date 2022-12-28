@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap');
+:root {
+  --spacing: 32px;
+  --hero-spacing: 6vh;
+  --header: 32px;
+  --body1: 16px;
+  --lh-body1: 24px;
+  --body2: 12px;
+  --lh-body2: 20px;
+  --body3: 12px;
+  --body4: 10px;
+  --headline: 72px;
+  --lh-headline: 76px;
+  --headline2: 48px;
+  --lh-headline2: 54px;
+  --headline3: 24px;
+  --lh-headline3: 30px;
+  --title: 20px;
+  --max-width: 1920px;
+  --text-columns: 2;
+  --grid-columns: 12;
+  --main-color:#333;
+  --background-color:#fff;
+  --accent-color:rgb(81, 0, 255);
+}
+:root.dark{
+  --background-color:#111;
+  --main-color:#fff;
+  --accent-color:rgb(225, 0, 255);
+  --accent-color:rgb(140, 92, 245);
+}
+body {
+  font-family: 'Lexend', Helvetica Neue, sans-serif;
+  line-height: var(--lh-body1);
+  font-size: var(--body1);
+  padding: 0 var(--spacing);
+  background: var(--background-color);
+  color: var(--main-color);
+  
+}
+a{
+  /* font-weight: bold; */
+  color: var(--main-color);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-color);
+}
+
+article a, strong{
+  color: var(--accent-color);
+}
+.grid, .work, .page {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  grid-column-gap: var(--spacing);
+  grid-row-gap: var(--spacing);
+  max-width: var(--max-width);
+}
+.work{
+  border-top: 1px solid;
+  padding: calc(var(--spacing) / 2) 0;
+  align-items: baseline;
+}
+header {
+  margin-top:  calc(var(--spacing));
+  height: auto;
+  position: fixed;
+  z-index: 3;
+}
+header a{
+  font-weight: normal;
+}
+header ul.grid {
+  /* margin-top: var(--spacing); */
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: var(--body3);
+  align-items: center;
+  align-items: baseline;
+}
+header ul li:nth-child(1) {
+  font-weight: 600;
+  grid-column: 1 / span 3;
+  font-size: var(--title);
+}
+footer{
+  position: fixed;
+  left: var(--spacing);
+  right: var(--spacing);
+  bottom: calc(var(--spacing)/2);
+  z-index: 2;
+}
+footer ul {
+
+  /* border-top: 1px solid; */
+  
+  height: var(--spacing) auto;
+  line-height: var(--spacing) auto;;
+  white-space: nowrap;
+  font-size: var(--body4);
+  align-items: baseline;
+}
+footer ul li:nth-child(1) {
+  grid-column: 1 / span 3;
+}
+footer ul li:nth-child(2) {
+  grid-column: 8 / span 2;
+}
+footer ul li:nth-child(3) {
+  grid-column: 10 / span 1;
+  text-align: right;
+}
+footer ul li:nth-child(4) {
+  grid-column: 12 / span 1;
+  text-align: right;
+}
+
+
+/* //
+GRID SYSTEM
+// */
+header {
+  grid-column: 1 / span 12;
+  grid-row: 1 / span 1;
+}
+h1{
+  grid-column: 1 / span 11;
+  margin: var(--hero-spacing) 0 0 0;
+  font-weight: 400;
+}
+h2{
+  grid-column: 1 / span 3;
+  margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
+  font-weight: 400;
+}
+h3{
+  width: 100%;
+  font-weight: 400;
+  margin-bottom: calc(var(--spacing) / 2.5);
+}
+p{
+  margin-bottom: calc(var(--spacing) / 2.5);
+}
+.page .content h2{
+  margin-top: 0;
+}
+.page .content{
+  grid-column: 8 / span 5;
+  margin: var(--hero-spacing) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.project .content{
+  grid-column: 1 / span 4;
+  grid-row: 1 / span 2;
+  margin: var(--hero-spacing) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.about .content{
+  justify-content: start;
+}
+.page ul{
+  width: 100%;
+  font-size: var(--body2);
+}
+.page ul li{
+  border-bottom: 1px solid;
+  padding: 4px 0;
+}
+.page ul li:last-child{
+  border-bottom: none;
+}
+div.w{
+  background: #ccc;
+  border-radius: 8px;
+}
+.pic1{
+  grid-column: 5 / span 4;
+  grid-row: 1 / span 2;
+  margin: var(--hero-spacing) 0;
+}
+.pic2{
+  grid-column: 9 / span 4;
+  grid-row: 1;
+  margin: var(--hero-spacing) 0 0 0;
+}
+.pic3{
+  grid-column: 9 / span 4;
+  grid-row: 2;
+  margin: 0 0 var(--hero-spacing) 0;
+}
+div.w.c{
+  background: var(--accent-color);
+}
+/* //
+Layout heights 
+& 
+Typography
+// */
+h1 {
+  font-size: var(--headline);
+  line-height: var(--lh-headline);
+}
+h2{
+  font-size: var(--headline2);
+  line-height: var(--lh-headline2);
+  
+}
+h3{
+  font-size: var(--headline3);
+  line-height: var(--lh-headline3);
+}
+/* //
+Work images
+// */
+img {
+  width: 100%;
+  height: auto;
+  outline: solid 0px #fff;
+  display: block;
+}
+.work img {
+  aspect-ratio: 1 / 1;
+}
+article.area2 img {
+  background: url(images/hero_google.png) no-repeat center center;
+  background-size: 100%;
+}
+article.area3 img {
+  background: url(images/hero_abdz.png) no-repeat center center;
+  background-size: 100%;
+}
+article.area4 img {
+  background: url(images/hero_calmaria.png) no-repeat center center;
+  background-size: 100%;
+}
+article.area5 img {
+  background: url(images/hero_terral.png) no-repeat center center;
+  background-size: 100%;
+}
+section{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom:0;
+  z-index: 1;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+}
+article{
+  width: calc(100% - (var(--spacing) * 2));
+  height: calc(100% - (var(--spacing) * 2));
+  scroll-snap-align: center;
+  padding: var(--spacing);
+  position: sticky;
+  top: 0;
+  background: var(--background-color);
+}
+/* article.page1{
+  background: #f00;
+}
+article.page2{
+  background: #00f;
+}
+article.page3{
+  background: #f0f;
+}
+article.page4{
+  background: #000;
+} */
+
+@media only screen and (max-width: 480px) {
+  :root {
+    --headline: 32px;
+    --lh-headline: 40px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  /*  */
+}
+@media only screen and (min-width: 769px) and (max-width: 1366px) {
+  /* For Tablets portrait: */
+  :root {
+    --spacing: 16px;
+    --hero-spacing: 8vh;
+    --body1: 14px;
+    --lh-body1: 20px;
+    --body2: 12px;
+    --lh-body2: 18px;
+    --body3: 10px;
+    --body4: 8px;
+    --headline: 56px;
+    --lh-headline: 60px;
+    --headline2: 48px;
+    --lh-headline2: 52px;
+    --headline3: 24px;
+    --lh-headline3: 30px;
+    --title: 20px;
+    --text-columns: 1;
+    --grid-columns: 12;
+    --main-color:#111;
+    --background-color:#fff;
+  }
+  .page .content{
+    grid-column: 5 / span 8;
+  
+  }
+  .project .content{
+    grid-column: 1 / span 7;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 920px) {
+  /* For Tablets portrait: */
+}
