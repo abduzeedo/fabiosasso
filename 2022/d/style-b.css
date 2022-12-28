@@ -55,11 +55,6 @@ article a, strong{
   grid-row-gap: var(--spacing);
   max-width: var(--max-width);
 }
-.work{
-  border-top: 1px solid;
-  padding: calc(var(--spacing) / 2) 0;
-  align-items: baseline;
-}
 header {
   margin-top:  calc(var(--spacing));
   height: auto;
@@ -272,45 +267,330 @@ article.page3{
 article.page4{
   background: #000;
 } */
-
+/* ******************************************************************
+***************************** MOBILE ********************************
+********************************************************************* */
 @media only screen and (max-width: 480px) {
   :root {
-    --headline: 32px;
-    --lh-headline: 40px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  /*  */
-}
-@media only screen and (min-width: 769px) and (max-width: 1366px) {
-  /* For Tablets portrait: */
-  :root {
     --spacing: 16px;
-    --hero-spacing: 8vh;
-    --body1: 14px;
-    --lh-body1: 20px;
-    --body2: 12px;
-    --lh-body2: 18px;
+    --hero-spacing: 6vh;
+    --body1: 12px;
+    --lh-body1: 18px;
+    --body2: 10px;
+    --lh-body2: 15px;
     --body3: 10px;
     --body4: 8px;
-    --headline: 56px;
-    --lh-headline: 60px;
-    --headline2: 48px;
-    --lh-headline2: 52px;
-    --headline3: 24px;
-    --lh-headline3: 30px;
-    --title: 20px;
+    --headline: 44px;
+    --lh-headline: 48px;
+    --headline2: 32px;
+    --lh-headline2: 36px;
+    --headline3: 16px;
+    --lh-headline3: 22px;
+    --title: 16px;
     --text-columns: 1;
     --grid-columns: 12;
     --main-color:#111;
     --background-color:#fff;
   }
+  footer ul li:nth-child(1) {
+    grid-column: 1 / span 3;
+  }
+  footer ul li:nth-child(2) {
+    grid-column: 7 / span 2;
+  }
+  footer ul li:nth-child(3) {
+    grid-column: 12 / span 1;
+    text-align: right;
+  }
+  footer ul li:nth-child(4) {
+    grid-column: 12 / span 1;
+    text-align: right;
+    display: none;
+  }
+  /* //
+  GRID SYSTEM
+  // */
+  header {
+    grid-column: 1 / span 12;
+    grid-row: 1 / span 1;
+  }
+  h1{
+    grid-column: 1 / span ALL;
+    margin: var(--hero-spacing) 0 0 0;
+  }
+  h2{
+    grid-column: 1 / span ALL;
+    margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
+  }
+  h3{
+    margin-bottom: calc(var(--spacing) / 2.5);
+  }
+  p{
+    margin-bottom: calc(var(--spacing) / 2.5);
+  }
+  .page .content h2{
+    margin-top: 0;
+  }
   .page .content{
-    grid-column: 5 / span 8;
-  
+    grid-column: 1 / span ALL;
+    margin: var(--hero-spacing) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .project .content{
-    grid-column: 1 / span 7;
+    grid-column: 1 / span ALL;
+    grid-row: 1 / span 1;
+    margin:var(--hero-spacing) 0 calc(var(--spacing) * 1.5) 0;
+
+  }
+  .about{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .about .content{
+    justify-content: start;
+  }
+
+  .page ul li{
+    padding: 4px 0;
+  }
+  .pic1{
+    grid-column: 5 / span 4;
+    grid-row: 1 / span 2;
+    margin: var(--hero-spacing) 0;
+  }
+  .pic2{
+    grid-column: 9 / span 4;
+    grid-row: 1;
+    margin: var(--hero-spacing) 0 0 0;
+  }
+  .pic3{
+    grid-column: 9 / span 4;
+    grid-row: 2;
+    margin: 0 0 var(--hero-spacing) 0;
+  }
+}
+/* ******************************************************************
+***************************** TABLET ********************************
+********************************************************************* */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait){
+  :root {
+    --spacing: 24px;
+    --hero-spacing: 6vh;
+    --body1: 13px;
+    --lh-body1: 18px;
+    --body2: 11px;
+    --lh-body2: 17px;
+    --body3: 10px;
+    --body4: 8px;
+    --headline: 56px;
+    --lh-headline: 60px;
+    --headline2: 32px;
+    --lh-headline2: 36px;
+    --headline3: 18px;
+    --lh-headline3: 22px;
+    --title: 16px;
+    --text-columns: 1;
+    --grid-columns: 12;
+    --main-color:#111;
+    --background-color:#fff;
+  }
+  footer ul li:nth-child(1) {
+    grid-column: 1 / span 3;
+  }
+  footer ul li:nth-child(2) {
+    grid-column: 7 / span 2;
+  }
+  footer ul li:nth-child(3) {
+    grid-column: 12 / span 1;
+    text-align: right;
+  }
+  footer ul li:nth-child(4) {
+    grid-column: 12 / span 1;
+    text-align: right;
+    display: none;
+  }
+  /* //
+  GRID SYSTEM
+  // */
+  header {
+    grid-column: 1 / span 12;
+    grid-row: 1 / span 1;
+  }
+  h1{
+    grid-column: 1 / span 11;
+    margin: var(--hero-spacing) 0 0 0;
+  }
+  h2{
+    grid-column: 1 / span 3;
+    margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
+  }
+  h3{
+    margin-bottom: calc(var(--spacing));
+  }
+  p{
+    margin-bottom: calc(var(--spacing));
+  }
+  .page .content h2{
+    margin-top: 0;
+  }
+  .page .content{
+    grid-column: 7/ span all;
+    margin: var(--hero-spacing) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .project .content{
+    grid-column: 1 / span all;
+    margin: var(--hero-spacing) 0;
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+    grid-column-gap: var(--spacing);
+    grid-row-gap: var(--spacing);
+  }
+
+  .project .content .header{
+    grid-column: 1 / span 6;
+  }
+  .project .content ul{
+    grid-column: 7 / span 6;
+    grid-row: 1;
+    justify-content: baseline;
+    margin-top: var(--headline);
+  }
+  .about .content{
+    justify-content: start;
+  }
+  
+  .page ul li{
+    padding: 4px 0;
+  }
+  .pic1{
+    grid-column: 1 / span all;
+    grid-row: 2;
+    min-height: 20vh;
+    margin: 0 !important;
+  }
+  .pic2{
+    grid-column: 1 / span 6;
+    grid-row: 3;
+    margin: 0 0 var(--spacing) 0;
+    min-height:10vh;
+  }
+  .pic3{
+    grid-column: 7 / span all;
+    grid-row: 3;
+    margin: 0 0 var(--spacing) 0;
+    min-height: 10vh;
+  }
+}
+/* ******************************************************************
+***************************** TABLET ********************************
+********************************************************************* */
+@media and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+  /* For Tablets portrait: */
+  :root {
+    --spacing: 24px;
+    --hero-spacing: 6vh;
+    --body1: 13px;
+    --lh-body1: 18px;
+    --body2: 11px;
+    --lh-body2: 17px;
+    --body3: 10px;
+    --body4: 8px;
+    --headline: 56px;
+    --lh-headline: 60px;
+    --headline2: 32px;
+    --lh-headline2: 36px;
+    --headline3: 18px;
+    --lh-headline3: 22px;
+    --title: 16px;
+    --text-columns: 1;
+    --grid-columns: 12;
+    --main-color:#111;
+    --background-color:#fff;
+  }
+  footer ul li:nth-child(1) {
+    grid-column: 1 / span 3;
+  }
+  footer ul li:nth-child(2) {
+    grid-column: 8 / span 2;
+  }
+  footer ul li:nth-child(3) {
+    grid-column: 10 / span 1;
+    text-align: right;
+  }
+  footer ul li:nth-child(4) {
+    grid-column: 12 / span 1;
+    text-align: right;
+  }
+  /* //
+  GRID SYSTEM
+  // */
+  header {
+    grid-column: 1 / span 12;
+    grid-row: 1 / span 1;
+  }
+  h1{
+    grid-column: 1 / span 11;
+    margin: var(--hero-spacing) 0 0 0;
+  }
+  h2{
+    grid-column: 1 / span 3;
+    margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
+  }
+  h3{
+    margin-bottom: calc(var(--spacing));
+  }
+  p{
+    margin-bottom: calc(var(--spacing));
+  }
+  .page .content h2{
+    margin-top: 0;
+  }
+  .page .content{
+    grid-column: 8 / span 5;
+    margin: var(--hero-spacing) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .project .content{
+    grid-column: 1 / span 4;
+    grid-row: 1 / span 2;
+    margin: var(--hero-spacing) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .about .content{
+    justify-content: start;
+  }
+  .page ul li{
+    padding: 4px 0;
+  }
+  .pic1{
+    grid-column: 5 / span 4;
+    grid-row: 1 / span 2;
+    margin: var(--hero-spacing) 0;
+  }
+  .pic2{
+    grid-column: 9 / span 4;
+    grid-row: 1;
+    margin: var(--hero-spacing) 0 0 0;
+  }
+  .pic3{
+    grid-column: 9 / span 4;
+    grid-row: 2;
+    margin: 0 0 var(--hero-spacing) 0;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 920px) {
