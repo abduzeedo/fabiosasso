@@ -17,7 +17,6 @@
   --headline3: 24px;
   --lh-headline3: 30px;
   --title: 20px;
-  --max-width: 1920px;
   --text-columns: 2;
   --grid-columns: 12;
   --main-color:#333;
@@ -369,19 +368,19 @@ and (max-height : 480px)
 and (orientation : landscape){
   :root {
     --spacing: 16px;
-    --hero-spacing: 7vh;
+    --hero-spacing: 6vh;
     --body1: 12px;
     --lh-body1: 18px;
     --body2: 10px;
     --lh-body2: 15px;
     --body3: 10px;
     --body4: 8px;
-    --headline: 44px;
-    --lh-headline: 48px;
-    --headline2: 32px;
-    --lh-headline2: 36px;
-    --headline3: 16px;
-    --lh-headline3: 22px;
+    --headline: 40px;
+    --lh-headline: 42px;
+    --headline2: 28px;
+    --lh-headline2: 32px;
+    --headline3: 14px;
+    --lh-headline3: 20px;
     --title: 14px;
     --text-columns: 1;
     --grid-columns: 12;
@@ -394,6 +393,9 @@ and (orientation : landscape){
   .page ul li{
     padding: 4px 0;
     display: none;
+  }
+  h3, p{
+    margin-bottom: calc(var(--spacing) / 2);
   }
   footer ul li:nth-child(2) {
     grid-column: 6 / span 2;
