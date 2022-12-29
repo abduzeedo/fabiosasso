@@ -22,6 +22,7 @@
   --main-color:#333;
   --background-color:#fff;
   --accent-color:rgb(81, 0, 255);
+  --window-height: 100vh;
 }
 :root.dark{
   --background-color:#111;
@@ -35,9 +36,8 @@ body {
   font-size: var(--body1);
   padding: 0 var(--spacing);
   color: var(--main-color);
-  overflow:hidden;  
-  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-  height: calc(var(--vh, 1vh) * 100);
+  overflow:hidden;
+  height: --window-height;
 }
 a{
   /* font-weight: bold; */
@@ -242,8 +242,6 @@ section{
   right: 0;
   top: 0;
   bottom:0;
-  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-  height: calc(var(--vh, 1vh) * 100);
   z-index: 1;
   overflow-y: scroll;
   overscroll-behavior-y: contain;
@@ -257,7 +255,7 @@ article{
   padding: var(--spacing);
   position: sticky;
   top: 0;
-  background: #ccc;
+  background:var(--background-color);
   overflow:hidden; 
 }
 /* article.page1{
