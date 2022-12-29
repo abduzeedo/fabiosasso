@@ -357,6 +357,9 @@ article.page4{
   .page ul li{
     padding: 4px 0;
   }
+  .w{
+    display:none;
+  }
   .pic1{
     grid-column: 5 / span 4;
     grid-row: 1 / span 2;
