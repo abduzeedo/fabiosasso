@@ -362,6 +362,67 @@ article.page4{
   }
 }
 /* ******************************************************************
+***************************** MOBILE ********************************
+********************************************************************* */
+@media only screen 
+and (max-height : 480px) 
+and (orientation : landscape){
+  :root {
+    --spacing: 16px;
+    --hero-spacing: 7vh;
+    --body1: 12px;
+    --lh-body1: 18px;
+    --body2: 10px;
+    --lh-body2: 15px;
+    --body3: 10px;
+    --body4: 8px;
+    --headline: 44px;
+    --lh-headline: 48px;
+    --headline2: 32px;
+    --lh-headline2: 36px;
+    --headline3: 16px;
+    --lh-headline3: 22px;
+    --title: 14px;
+    --text-columns: 1;
+    --grid-columns: 12;
+    --main-color:#111;
+    --background-color:#fff;
+  }
+  .about .content{
+    grid-column: 6 / span 7;
+  }
+  .page ul li{
+    padding: 4px 0;
+    display: none;
+  }
+  footer ul li:nth-child(2) {
+    grid-column: 6 / span 2;
+  }
+  footer ul li:nth-child(3) {
+    grid-column: 8 / span 2;
+  }
+  footer ul li:nth-child(4) {
+    grid-column: 12 / span 1;
+  }
+  .pic1{
+    grid-column: 6 / span 4;
+    grid-row: 1 / span 2;
+    margin: var(--hero-spacing) 0;
+  }
+  .pic2{
+    grid-column: 10 / span 3;
+    grid-row: 1;
+    margin: var(--hero-spacing) 0 0 0;
+  }
+  .pic3{
+    grid-column: 10 / span 3;
+    grid-row: 2;
+    margin: 0 0 var(--hero-spacing) 0;
+  }
+  
+}
+
+/* ******************************************************************
 ***************************** TABLET ********************************
 ********************************************************************* */
 @media only screen 
