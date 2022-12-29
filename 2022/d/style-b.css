@@ -37,7 +37,6 @@ body {
   padding: 0 var(--spacing);
   color: var(--main-color);
   overflow:hidden;
-  height: --window-height;
 }
 a{
   /* font-weight: bold; */
@@ -250,14 +249,14 @@ section{
 }
 article{
   width: calc(100% - (var(--spacing) * 2));
-  height: calc(100vh - (var(--spacing) * 2));
-  height: calc(100dvh - (var(--spacing) * 2));
   scroll-snap-align: center;
   padding: var(--spacing);
   position: sticky;
   top: 0;
   background:var(--background-color);
   overflow:hidden; 
+  height: var(--window-height);
+  background: #ccc;
 }
 /* article.page1{
   background: #f00;
@@ -359,7 +358,9 @@ article.page4{
 
   .page ul li{
     padding: 4px 0;
+    display: none;
   }
+
   .w{
     display:none;
   }
