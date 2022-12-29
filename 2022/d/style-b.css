@@ -84,7 +84,6 @@ footer{
   right: var(--spacing);
   bottom: calc(var(--spacing)/2);
   z-index: 2;
-  display: none;
 }
 footer ul {
 
@@ -210,33 +209,8 @@ h3{
   line-height: var(--lh-headline3);
 }
 /* //
-Work images
+Snapping effects
 // */
-img {
-  width: 100%;
-  height: auto;
-  outline: solid 0px #fff;
-  display: block;
-}
-.work img {
-  aspect-ratio: 1 / 1;
-}
-article.area2 img {
-  background: url(images/hero_google.png) no-repeat center center;
-  background-size: 100%;
-}
-article.area3 img {
-  background: url(images/hero_abdz.png) no-repeat center center;
-  background-size: 100%;
-}
-article.area4 img {
-  background: url(images/hero_calmaria.png) no-repeat center center;
-  background-size: 100%;
-}
-article.area5 img {
-  background: url(images/hero_terral.png) no-repeat center center;
-  background-size: 100%;
-}
 section{
   position: absolute;
   left: 0;
@@ -256,7 +230,6 @@ article{
   top: 0;
   background:var(--background-color);
   overflow:hidden; 
-  background: #ccc;
 }
 /* article.page1{
   background: #f00;
@@ -314,6 +287,9 @@ article.page4{
     position: absolute;
     left: 0;
     right: 0;
+    height: calc(var(--window-height) - 20px);
+  }
+  article{
     height: calc(var(--window-height) - 20px);
   }
   /* //
