@@ -37,6 +37,8 @@ body {
   background: var(--background-color);
   color: var(--main-color);
   overflow:hidden;
+  height: 100vh;
+  height: 100dvh;
   
 }
 a{
