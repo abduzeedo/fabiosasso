@@ -387,6 +387,12 @@ and (orientation : landscape){
     --main-color:#111;
     --background-color:#fff;
   }
+  section{
+    height: calc(var(--window-height) - 10px);
+  }
+  article{
+    height: calc(var(--window-height) - 10px);
+  }
   .about .content{
     grid-column: 1 / span all;
     column-count: 2;
