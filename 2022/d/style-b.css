@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap');
+
 :root {
   --spacing: 32px;
   --hero-spacing: 6vh;
@@ -83,6 +84,7 @@ footer{
   right: var(--spacing);
   bottom: calc(var(--spacing)/2);
   z-index: 2;
+  display: none;
 }
 footer ul {
 
@@ -236,26 +238,24 @@ article.area5 img {
   background-size: 100%;
 }
 section{
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
-  top: 0;
-  bottom:0;
-  height: var(--window-height);
+  height: calc(var(--window-height) / 1.2);
   z-index: 1;
   overflow-y: scroll;
   overscroll-behavior-y: contain;
   scroll-snap-type: y mandatory;
 }
 article{
-  width: calc(100% - (var(--spacing) * 2));
+  width: calc(100vw);
   scroll-snap-align: center;
+  height: var(--window-height);
   padding: var(--spacing);
   position: sticky;
   top: 0;
   background:var(--background-color);
   overflow:hidden; 
-  height: var(--window-height);
   background: #ccc;
 }
 /* article.page1{
