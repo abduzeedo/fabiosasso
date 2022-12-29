@@ -242,6 +242,7 @@ section{
   right: 0;
   top: 0;
   bottom:0;
+  height: var(--window-height);
   z-index: 1;
   overflow-y: scroll;
   overscroll-behavior-y: contain;
