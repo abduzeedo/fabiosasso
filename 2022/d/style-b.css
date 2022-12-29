@@ -34,9 +34,11 @@ body {
   line-height: var(--lh-body1);
   font-size: var(--body1);
   padding: 0 var(--spacing);
-  background: var(--background-color);
+  background: #ccc;
   color: var(--main-color);
   overflow:hidden;  
+  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 100);
 }
 a{
   /* font-weight: bold; */
@@ -242,7 +244,7 @@ section{
   top: 0;
   bottom:0;
   z-index: 1;
-  overflow-y: auto;
+  overflow-y: scroll;
   overscroll-behavior-y: contain;
   scroll-snap-type: y mandatory;
 }
