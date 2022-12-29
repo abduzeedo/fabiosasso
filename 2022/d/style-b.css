@@ -36,10 +36,7 @@ body {
   padding: 0 var(--spacing);
   background: var(--background-color);
   color: var(--main-color);
-  overflow:hidden;
-  height: 100vh;
-  height: 100dvh;
-  
+  overflow:hidden;  
 }
 a{
   /* font-weight: bold; */
@@ -251,12 +248,14 @@ section{
 }
 article{
   width: calc(100% - (var(--spacing) * 2));
-  height: calc(100% - (var(--spacing) * 2));
+  height: calc(100vh - (var(--spacing) * 2));
+  height: calc(100dvh - (var(--spacing) * 2));
   scroll-snap-align: center;
   padding: var(--spacing);
   position: sticky;
   top: 0;
   background: var(--background-color);
+  overflow:hidden; 
 }
 /* article.page1{
   background: #f00;
