@@ -241,7 +241,7 @@ section{
   position: absolute;
   left: 0;
   right: 0;
-  height: calc(var(--window-height));
+  height: calc(var(--window-height) - 10px);
   z-index: 1;
   overflow-y: scroll;
   overscroll-behavior-y: contain;
