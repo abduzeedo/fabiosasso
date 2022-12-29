@@ -241,7 +241,7 @@ section{
   position: absolute;
   left: 0;
   right: 0;
-  height: calc(var(--window-height) - 10px);
+  height: calc(var(--window-height));
   z-index: 1;
   overflow-y: scroll;
   overscroll-behavior-y: contain;
@@ -309,6 +309,12 @@ article.page4{
     grid-column: 12 / span 1;
     text-align: right;
     display: none;
+  }
+  section{
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: calc(var(--window-height) - 20px);
   }
   /* //
   GRID SYSTEM
