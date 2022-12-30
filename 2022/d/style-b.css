@@ -16,7 +16,7 @@
   --lh-headline2: 54px;
   --headline3: 24px;
   --lh-headline3: 30px;
-  --title: 20px;
+  --title: 18px;
   --text-columns: 2;
   --grid-columns: 12;
   --main-color:#333;
@@ -98,15 +98,16 @@ footer ul li:nth-child(1) {
   grid-column: 1 / span 3;
 }
 footer ul li:nth-child(2) {
-  grid-column: 8 / span 2;
+  grid-column: 6 / span 2;
 }
 footer ul li:nth-child(3) {
   grid-column: 10 / span 1;
-  text-align: right;
+
 }
 footer ul li:nth-child(4) {
   grid-column: 12 / span 1;
   text-align: right;
+  display: none;
 }
 
 
@@ -139,7 +140,7 @@ p{
   margin-top: 0;
 }
 .page .content{
-  grid-column: 8 / span 5;
+  grid-column: 6 / span 6;
   margin: var(--hero-spacing) 0;
   display: flex;
   flex-direction: column;
@@ -245,7 +246,7 @@ article.page4{
 /* ******************************************************************
 ***************************** MOBILE ********************************
 ********************************************************************* */
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 767px) {
   :root {
     --spacing: 16px;
     --hero-spacing: 6vh;
@@ -364,7 +365,7 @@ article.page4{
 ***************************** MOBILE ********************************
 ********************************************************************* */
 @media only screen 
-and (max-height : 480px) 
+and (max-height : 580px) 
 and (orientation : landscape){
   :root {
     --spacing: 16px;
@@ -393,11 +394,15 @@ and (orientation : landscape){
   article{
     height: calc(var(--window-height) - 10px);
   }
+  article.about{
+    align-content: space-between;
+  }
   .about .content{
     grid-column: 1 / span all;
     column-count: 2;
     column-gap: var(--spacing);
     display: block;
+    align-self: flex-start;
   }
   .page ul li{
     padding: 4px 0;
@@ -410,7 +415,7 @@ and (orientation : landscape){
     grid-column: 6 / span 2;
   }
   footer ul li:nth-child(3) {
-    grid-column: 8 / span 2;
+    grid-column: 10 / span 2;
   }
   footer ul li:nth-child(4) {
     grid-column: 12 / span 1;
@@ -432,6 +437,16 @@ and (orientation : landscape){
   }
   
 }
+@media only screen 
+and (max-width : 880px)
+and (max-height : 880px) {
+  .page ul{
+    display: none;
+  }
+
+}
+
+
 
 /* ******************************************************************
 ***************************** TABLET ********************************
