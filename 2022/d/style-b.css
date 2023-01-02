@@ -3,7 +3,8 @@
 :root {
   --spacing: 32px;
   --hero-spacing: 6vh;
-  --header: 32px;
+  --header: 56px;
+  --footer: 32px;
   --body1: 16px;
   --lh-body1: 24px;
   --body2: 12px;
@@ -56,10 +57,14 @@ article a, strong{
   max-width: var(--max-width);
 }
 header {
-  margin-top:  calc(var(--spacing));
-  height: auto;
+  height: var(--header);
+  line-height: var(--header);
   position: fixed;
+  left: 0;
+  right: 0;
   z-index: 3;
+  background-color: darkviolet;
+  padding: 0 var(--spacing);
 }
 header a{
   font-weight: normal;
@@ -79,15 +84,18 @@ header ul li:nth-child(1) {
 }
 footer{
   position: fixed;
-  left: var(--spacing);
-  right: var(--spacing);
-  bottom: calc(var(--spacing)/2);
+  left: 0;
+  right: 0;
+  z-index: 3;
+  bottom: 0;
+  padding: 0 var(--spacing);
   z-index: 2;
+  height: var(--footer);
+  line-height: var(--footer);
+  background-color: rgb(4, 211, 0);
 }
 footer ul {
 
-  /* border-top: 1px solid; */
-  
   height: var(--spacing) auto;
   line-height: var(--spacing) auto;;
   white-space: nowrap;
@@ -120,12 +128,10 @@ header {
 }
 h1{
   grid-column: 1 / span 11;
-  margin: var(--hero-spacing) 0 0 0;
   font-weight: 400;
 }
 h2{
   grid-column: 1 / span 3;
-  margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
   font-weight: 400;
 }
 h3{
@@ -137,19 +143,19 @@ p{
   margin-bottom: calc(var(--spacing) / 2.5);
 }
 .page .content h2{
-  margin-top: 0;
+  margin-bottom: var(--spacing);
 }
 .page .content{
   grid-column: 6 / span 6;
-  padding: var(--hero-spacing) 0;
+  /* padding: var(--hero-spacing) 0; */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .project .content{
   grid-column: 1 / span 5;
   grid-row: 1 / span 2;
-  padding: var(--hero-spacing) 0;
+  /* padding: var(--hero-spacing) 0; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -175,17 +181,17 @@ div.w{
 .pic1{
   grid-column: 6 / span 4;
   grid-row: 1 / span 2;
-  margin: var(--hero-spacing) 0;
+  /* margin: var(--hero-spacing) 0; */
 }
 .pic2{
   grid-column: 10 / span 3;
   grid-row: 1;
-  margin: var(--hero-spacing) 0 0 0;
+  /* margin: var(--hero-spacing) 0 0 0; */
 }
 .pic3{
   grid-column: 10 / span 3;
   grid-row: 2;
-  margin: 0 0 var(--hero-spacing) 0;
+  /* margin: 0 0 var(--hero-spacing) 0; */
 }
 div.w.c{
   background: var(--accent-color);
@@ -225,13 +231,17 @@ article{
   width: calc(100vw);
   scroll-snap-align: center;
   height: var(--window-height);
-  padding: var(--spacing);
+  padding: calc(var(--header) + var(--spacing)) var(--spacing) calc(var(--footer) + var(--spacing)) var(--spacing);
   position: sticky;
   top: 0;
   background:var(--background-color);
   overflow:hidden; 
+  
 }
-/* article.page1{
+/* article *{
+  display: none;
+} */
+article.page1{
   background: #f00;
 }
 article.page2{
@@ -241,8 +251,17 @@ article.page3{
   background: #f0f;
 }
 article.page4{
-  background: #000;
-} */
+  background: #999;
+}
+article.page5{
+  background: rgb(0, 255, 247);
+}
+article.page6{
+  background: rgb(217, 255, 0);
+}
+article.page7{
+  background: rgb(142, 122, 122);
+}
 /* ******************************************************************
 ***************************** MOBILE ********************************
 ********************************************************************* */
@@ -258,8 +277,8 @@ article.page4{
     --body4: 8px;
     --headline: 44px;
     --lh-headline: 48px;
-    --headline2: 32px;
-    --lh-headline2: 36px;
+    --headline2: 24px;
+    --lh-headline2: 28px;
     --headline3: 16px;
     --lh-headline3: 22px;
     --title: 16px;
@@ -301,38 +320,25 @@ article.page4{
   }
   h1{
     grid-column: 1 / span ALL;
-    margin: var(--hero-spacing) 0 0 0;
   }
   h2{
     grid-column: 1 / span ALL;
-    margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
-  }
-  h3{
-    margin-bottom: calc(var(--spacing) / 2.5);
-  }
-  p{
-    margin-bottom: calc(var(--spacing));
-  }
-  .page .content h2{
-    margin-top: 0;
   }
   .page .content{
     grid-column: 1 / span ALL;
-    margin: var(--hero-spacing) 0 var(--spacing) 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
   }
   .project .content{
     grid-column: 1 / span ALL;
     grid-row: 1 / span 1;
-    margin:var(--hero-spacing) 0 calc(var(--spacing) * 1.5) 0;
+    /* margin:var(--hero-spacing) 0 calc(var(--spacing) * 1.5) 0; */
 
   }
   .about{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
   .about .content{
     justify-content: start;
@@ -351,13 +357,13 @@ article.page4{
   .pic2{
     grid-column: 1 / span 6;
     grid-row: 3;
-    margin: 0 0 var(--spacing) 0;
+    /* margin: 0 0 var(--spacing) 0; */
     min-height:10vh;
   }
   .pic3{
     grid-column: 7 / span all;
     grid-row: 3;
-    margin: 0 0 var(--spacing) 0;
+    /* margin: 0 0 var(--spacing) 0; */
     min-height: 10vh;
   }
 }
@@ -393,7 +399,6 @@ and (orientation : landscape){
   }
   article{
     height: calc(var(--window-height) - 0);
-
   }
   article.about{
     align-content: space-between;
@@ -405,7 +410,6 @@ and (orientation : landscape){
     column-gap: var(--spacing);
     display: block;
     align-self: flex-start;
-    transform: translateY(-16px);
   }
   .project .content{
     grid-column: 1 / span 6;
@@ -439,17 +443,17 @@ and (orientation : landscape){
   .pic1{
     grid-column: 7 / span 3;
     grid-row: 1 / span 2;
-    margin: var(--hero-spacing) 0;
+    /* margin: var(--hero-spacing) 0; */
   }
   .pic2{
     grid-column: 10 / span 3;
     grid-row: 1;
-    margin: var(--hero-spacing) 0 0 0;
+    /* margin: var(--hero-spacing) 0 0 0; */
   }
   .pic3{
     grid-column: 10 / span 3;
     grid-row: 2;
-    margin: 0 0 var(--hero-spacing) 0;
+    /* margin: 0 0 var(--hero-spacing) 0; */
   }
   
 }
@@ -460,10 +464,10 @@ and (max-height : 880px) {
     display: none;
   }
   section{
-    height: calc(var(--window-height) - 10px);
+    height: calc(var(--window-height));
   }
   article{
-    height: calc(var(--window-height) - 10px);
+    height: calc(var(--window-height));
   }
 }
 
@@ -521,31 +525,18 @@ and (orientation : portrait){
   }
   h1{
     grid-column: 1 / span 11;
-    margin: var(--hero-spacing) 0 0 0;
   }
   h2{
     grid-column: 1 / span 3;
-    margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
-  }
-  h3{
-    margin-bottom: calc(var(--spacing));
-  }
-  p{
-    margin-bottom: calc(var(--spacing));
-  }
-  .page .content h2{
-    margin-top: 0;
   }
   .page .content{
     grid-column: 7/ span all;
-    margin: var(--hero-spacing) 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
   .project .content{
     grid-column: 1 / span all;
-    margin: var(--hero-spacing) 0;
     display: grid;
     grid-template-columns: repeat(var(--grid-columns), 1fr);
     grid-column-gap: var(--spacing);
@@ -638,24 +629,12 @@ and (orientation : landscape) {
   }
   h1{
     grid-column: 1 / span 11;
-    margin: var(--hero-spacing) 0 0 0;
   }
   h2{
     grid-column: 1 / span 3;
-    margin: var(--hero-spacing) 0 calc(var(--spacing)) 0;
-  }
-  h3{
-    margin-bottom: calc(var(--spacing));
-  }
-  p{
-    margin-bottom: calc(var(--spacing));
-  }
-  .page .content h2{
-    margin-top: 0;
   }
   .page .content{
     grid-column: 8 / span 5;
-    margin: var(--hero-spacing) 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -663,7 +642,6 @@ and (orientation : landscape) {
   .project .content{
     grid-column: 1 / span 4;
     grid-row: 1 / span 2;
-    margin: var(--hero-spacing) 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
