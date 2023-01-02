@@ -2,15 +2,13 @@ window.onload = function(){
    getWindowHeight()
 };
 window.onresize = function(event) {
-  getWindowHeight()  
+  //getWindowHeight()  
 }
 
 function getWindowHeight(){
   let vh = window.innerHeight
   let vw = window.innerWidth
-  if(vh > vw){
-   document.documentElement.style.setProperty('--window-height', `${vh}px`);
-  }
+  document.documentElement.style.setProperty('--window-height', `${vh}px`);
   document.getElementById("vh").innerText = `width: ${vw}px & height: ${vh}px`
 
 }
