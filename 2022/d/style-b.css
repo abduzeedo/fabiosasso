@@ -242,7 +242,7 @@ article{
   display: none;
 } */
 article.page1{
-  background: #f00;
+  background: rgb(159, 109, 90);
 }
 article.page2{
   background: #00f;
