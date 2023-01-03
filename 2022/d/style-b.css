@@ -2,7 +2,6 @@
 
 :root {
   --spacing: 32px;
-  --hero-spacing: 10vh;
   --header: 8vh;
   --footer: 5vh;
   --body1: 16px;
@@ -24,6 +23,7 @@
   --background-color:#fff;
   --accent-color:rgb(81, 0, 255);
   --window-height: 100vh;
+  --hero-spacing: calc(var(--header) + var(--spacing))
 }
 :root.dark{
   --background-color:#111;
@@ -268,7 +268,6 @@ article.page7{
 @media only screen and (max-width: 767px) {
   :root {
     --spacing: 16px;
-    --hero-spacing: 6vh;
     --body1: 12px;
     --lh-body1: 18px;
     --body2: 10px;
@@ -375,7 +374,6 @@ and (max-height : 580px)
 and (orientation : landscape){
   :root {
     --spacing: 16px;
-    --hero-spacing: 8vh;
     --body1: 12px;
     --lh-body1: 18px;
     --body2: 10px;
@@ -495,7 +493,6 @@ and (max-device-width : 1024px)
 and (orientation : portrait){
   :root {
     --spacing: 24px;
-    --hero-spacing: 6vh;
     --body1: 13px;
     --lh-body1: 18px;
     --body2: 11px;
@@ -543,7 +540,7 @@ and (orientation : portrait){
     grid-column: 1 / span 3;
   }
   .page .content{
-    grid-column: 7/ span all;
+    grid-column: 7/ span 6;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -575,20 +572,18 @@ and (orientation : portrait){
   .pic1{
     grid-column: 1 / span all;
     grid-row: 2;
-    min-height: 20vh;
-    margin: 0 !important;
+    min-height: 12vh;
+    margin:10vh 0 0 0 !important;
   }
   .pic2{
     grid-column: 1 / span 6;
     grid-row: 3;
-    margin: 0 0 var(--spacing) 0;
-    min-height:10vh;
+    min-height: 12vh;
   }
   .pic3{
     grid-column: 7 / span all;
     grid-row: 3;
-    margin: 0 0 var(--spacing) 0;
-    min-height: 10vh;
+    min-height: 12vh;
   }
 }
 /* ******************************************************************
@@ -601,7 +596,6 @@ and (orientation : landscape) {
   /* For Tablets portrait: */
   :root {
     --spacing: 24px;
-    --hero-spacing: 6vh;
     --body1: 13px;
     --lh-body1: 18px;
     --body2: 11px;
@@ -627,7 +621,7 @@ and (orientation : landscape) {
     grid-column: 8 / span 2;
   }
   footer ul li:nth-child(3) {
-    grid-column: 10 / span 1;
+    grid-column: 12 / span 1;
     text-align: right;
   }
   footer ul li:nth-child(4) {
@@ -654,7 +648,7 @@ and (orientation : landscape) {
     justify-content: space-between;
   }
   .project .content{
-    grid-column: 1 / span 4;
+    grid-column: 1 / span 5;
     grid-row: 1 / span 2;
     display: flex;
     flex-direction: column;
@@ -665,21 +659,21 @@ and (orientation : landscape) {
   }
   .page ul li{
     padding: 4px 0;
+
   }
   .pic1{
-    grid-column: 5 / span 4;
+    grid-column: 6 / span 4;
     grid-row: 1 / span 2;
-    margin: var(--hero-spacing) 0;
   }
   .pic2{
-    grid-column: 9 / span 4;
+    grid-column: 10 / span 4;
     grid-row: 1;
-    margin: var(--hero-spacing) 0 0 0;
+
   }
   .pic3{
-    grid-column: 9 / span 4;
+    grid-column: 10 / span 4;
     grid-row: 2;
-    margin: 0 0 var(--hero-spacing) 0;
+  
   }
 }
 @media only screen 
