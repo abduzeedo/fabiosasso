@@ -12,8 +12,8 @@ function getWindowHeight(){
     document.documentElement.style.setProperty('--window-height', `${vh}px`);
   }
   if(vh == 775){
-    document.documentElement.style.setProperty('--window-height', `774px`);
+    document.documentElement.style.setProperty('--window-height', `${vh - 1}px`);
   }
-  document.getElementById("vh").innerText = `width: ${vw}px & height: ${vh}px`
+  document.getElementById("vh").innerText = `width: ${vw}px & height: ${vh - 1}px`
 
 }
