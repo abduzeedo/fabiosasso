@@ -224,6 +224,7 @@ section{
   overflow-y: scroll;
   overscroll-behavior-y: contain;
   scroll-snap-type: y mandatory;
+  margin: 0 auto;
 }
 article{
   width: calc(100vw);
