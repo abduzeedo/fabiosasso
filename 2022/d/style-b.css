@@ -31,6 +31,9 @@
   --accent-color:rgb(225, 0, 255);
   --accent-color:rgb(140, 92, 245);
 }
+#vh{
+  display: none;
+}
 body {
   font-family: 'Lexend', Helvetica Neue, sans-serif;
   line-height: var(--lh-body1);
@@ -62,7 +65,6 @@ header {
   left: 0;
   right: 0;
   z-index: 3;
-  background-color: darkviolet;
   padding: 0 var(--spacing);
 }
 header a{
@@ -91,7 +93,6 @@ footer{
   z-index: 2;
   height: var(--footer);
   line-height: var(--footer);
-  background-color: rgb(4, 211, 0);
 }
 footer ul {
 
