@@ -2,9 +2,9 @@
 
 :root {
   --spacing: 32px;
-  --hero-spacing: 6vh;
-  --header: 56px;
-  --footer: 32px;
+  --hero-spacing: 10vh;
+  --header: 8vh;
+  --footer: 5vh;
   --body1: 16px;
   --lh-body1: 24px;
   --body2: 12px;
