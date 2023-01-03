@@ -35,7 +35,6 @@ body {
   font-family: 'Lexend', Helvetica Neue, sans-serif;
   line-height: var(--lh-body1);
   font-size: var(--body1);
-  padding: 0 var(--spacing);
   color: var(--main-color);
   overflow:hidden;
 }
@@ -218,9 +217,8 @@ h3{
 Snapping effects
 // */
 section{
-  position: absolute;
-  left: 0;
-  right: 0;
+  position: relative;
+  width: 100vw;
   height: calc(var(--window-height));
   z-index: 1;
   overflow-y: scroll;
