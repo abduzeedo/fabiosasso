@@ -457,8 +457,9 @@ and (orientation : landscape){
 }
 @media only screen 
 and (max-width : 880px)
-and (min-height : 782px) 
-and (max-height : 880px) {
+and (min-height : 783px) 
+and (max-height : 880px) 
+and (orientation : landscape) {
   .page ul{
     display: none;
   }

@@ -6,9 +6,10 @@ window.onresize = function(event) {
 }
 
 function getWindowHeight(){
+  counter = 0;
   let vh = window.innerHeight
   let vw = window.innerWidth
-  if(vh > 782){
+  if(vw > vh){
     document.documentElement.style.setProperty('--window-height', `${vh}px`);
   }
   if(vh <= 782){
