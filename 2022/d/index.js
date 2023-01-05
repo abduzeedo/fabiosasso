@@ -8,10 +8,10 @@ window.onresize = function(event) {
 function getWindowHeight(){
   let vh = window.innerHeight
   let vw = window.innerWidth
-  if(vh > 767){
+  if(vh > 782){
     document.documentElement.style.setProperty('--window-height', `${vh}px`);
   }
-  if(vh == 775){
+  if(vh <= 782){
     document.documentElement.style.setProperty('--window-height', `${vh - 1}px`);
   }
   document.getElementById("vh").innerText = `width: ${vw}px & height: ${vh - 1}px`
