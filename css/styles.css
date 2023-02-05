@@ -18,8 +18,8 @@
 body {
   padding: 0;
   margin: 0;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 20px;
   color: var(--foreground);
   background: var(--background);
   font-family: "Avenir", sans-serif;
@@ -110,7 +110,7 @@ blockquote {
   font-family: "brandon-grotesque", "Avenir", sans-serif;
 }
 p {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 blockquote a {
