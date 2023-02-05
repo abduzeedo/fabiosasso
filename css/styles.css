@@ -99,6 +99,9 @@ blockquote {
     margin-top: 25vh;
     font-family: "brandon-grotesque", "Avenir", sans-serif;
 }
+p{
+    margin-bottom: 8px;
+}
 
 blockquote a {
     border-bottom: 5px solid #404040;
@@ -224,10 +227,10 @@ blockquote a {
         columns: 1;
     }
     .body p {
-        margin-bottom: 32px;
+        margin-bottom: 16px;
     }
     .cover_image {
-        margin: -200px 0px 0 0px;
+        margin: -200px 16px 0 16px;
         height: 400px;
     }
     .me {
