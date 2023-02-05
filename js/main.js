@@ -25,13 +25,13 @@ function changeTheme() {
 function animateSite() {
     gsap.fromTo(".intro li",
         {
-            y: -2000,
+            y: window.innerHeight,
             opacity: 0
         },
         {
             y: 0,
             opacity: .5,
-            duration:2,
+            duration:.3,
             stagger: { // wrap advanced options in an object
                 each: 0.1,
                 from: -30000,
@@ -44,6 +44,7 @@ function animateSite() {
         opacity: .5
     }, {
         opacity: 0,
+        duration:.6,
         ease: "elastic.out(1, 0.5)",
         delay: 2.2,
         
