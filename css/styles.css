@@ -231,9 +231,12 @@ blockquote a {
   section.home {
     display: block;
   }
+  .col1, .col2{
+    padding: 16px 0;
+  }
   blockquote {
     position: relative;
-    margin: 56px 24px 0 24px !important;
+    margin: 48px 24px 0 24px !important;
     font-size: 32px;
     line-height: 42px;
     width: auto;
@@ -249,7 +252,7 @@ blockquote a {
     padding: 32px 0 16px 0;
   }
   .cover_image {
-    margin: -200px 16px 0 16px;
+    margin: 0px 16px 0 16px;
     height: 400px;
   }
   .me {
@@ -280,7 +283,7 @@ blockquote a {
     display: none;
   }
 }
-@media only screen and (max-width: 844px) and (orientation:landscape){
+@media only screen and (max-width: 980px) and (orientation:landscape){
    body{
     
    }
@@ -290,8 +293,5 @@ blockquote a {
   }
   div.body{
     margin-bottom: 72px;
-  }
-  .col1, .col2{
-    
   }
 }
