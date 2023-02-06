@@ -1,9 +1,13 @@
+:root {
+    --window-height: 97vh;
+}
 @media (prefers-color-scheme: light) {
   :root {
     --background: #fff;
     --secondary-background: #eee;
     --foreground: #404040;
     --border: rgba(0, 0, 0, 1);
+    
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -14,7 +18,16 @@
     --border: rgba(255, 255, 255, 1);
   }
 }
-
+html {
+	box-sizing: border-box;
+  }
+  
+  *,
+  *:before,
+  *:after {
+	box-sizing: inherit;
+  }
+  
 body {
   padding: 0;
   margin: 0;
@@ -38,7 +51,7 @@ p a {
 
 section.home {
   max-width: 1140px;
-  min-height: 100vh;
+  min-height: var(--window-height);
   position: relative;
   margin: 0 auto;
   overflow: hidden;
@@ -232,6 +245,9 @@ blockquote a {
   .body p {
     margin-bottom: 16px;
   }
+  .col2 {
+    padding: 32px 0 16px 0;
+  }
   .cover_image {
     margin: -200px 16px 0 16px;
     height: 400px;
@@ -242,7 +258,7 @@ blockquote a {
   }
   .connect_icons {
     position: relative;
-    margin: 32px 0 0 24px;
+    margin: 72px 0 16px 24px;
     bottom: auto;
   }
   .bottom {
@@ -262,5 +278,20 @@ blockquote a {
   .c5 {
     right: 0;
     display: none;
+  }
+}
+@media only screen and (max-width: 844px) and (orientation:landscape){
+   body{
+    
+   }
+   blockquote {
+    font-size: 32px;
+    line-height: 42px;
+  }
+  div.body{
+    margin-bottom: 72px;
+  }
+  .col1, .col2{
+    
   }
 }

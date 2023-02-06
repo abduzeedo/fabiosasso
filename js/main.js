@@ -6,9 +6,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 window.onresize = function(e) {
-    //resizeTitle();
+    getWindowHeight()  
 }
 
+window.onload = function(){
+    getWindowHeight()
+ };
 function changeTheme() {
 	console.log(hr);
     if (hr > 9 && hr < 11) {
@@ -21,6 +24,20 @@ function changeTheme() {
         document.getElementsByTagName("body")[0].classList.add("night");
     }
 }
+
+function getWindowHeight(){
+    counter = 0;
+    let vh = window.innerHeight
+    let vw = window.innerWidth
+    if(vw > vh){
+      document.documentElement.style.setProperty('--window-height', `${vh}px`);
+    }
+    if(vh <= 782){
+      document.documentElement.style.setProperty('--window-height', `${vh - 1}px`);
+    }
+    document.getElementById("vh").innerText = `width: ${vw}px & height: ${vh - 1}px`
+  
+  }
 
 function animateSite() {
     gsap.fromTo(".intro li",
