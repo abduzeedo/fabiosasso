@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="dardk" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Fabio Sasso Labs — Radar in CSS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes rotation {
+        0% {
+          transform: rotate(0);
+        }
+        50% {
+          transform: rotate(-180deg);
+        }
+        100% {
+          transform: rotate(-360deg);
+        }
+      }
+      @keyframes show_heart {
+        0% {
+          opacity: .3;
+        }
+        25%{
+            opacity: 0;
+        }
+        88%{
+            opacity: 0;
+        }
+        100% {
+         opacity: .3;
+        }
+      }
+      body{
+        font-family: sans-serif;
+      }
+      h1{
+        color: #fff;
+      }
+      section {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        background: #20171B;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+      }
+      #radar{
+        width: 300px;
+        height: 300px;
+        border: 2px solid;
+        padding: 20px;
+        border-radius: 50%;
+        background: #2E2830;
+        position: relative;
+        box-shadow: 
+            inset 0px 4px 2px rgba(220, 172, 209, 0.2), 
+            inset 0px -6px 12px rgba(0, 0, 0, 0.8), 
+            0px 4px 4px rgba(0, 0, 0, 0.25), 
+            0px 128px 128px rgba(0, 0, 0, 0.1), 
+            0px 64px 64px rgba(0, 0, 0, 0.19), 
+            0px 32px 32px rgba(0, 0, 0, 0.1), 
+            0px 16px 16px rgba(0, 0, 0, 0.1), 
+            0px 8px 8px rgba(0, 0, 0, 0.1), 
+            0px 2px 2px rgba(0, 0, 0, 0.5);
+      }
+      #light {
+        background: conic-gradient(from 180deg at 50% 50%, #F7F7F7 0deg, #000000 270deg, #000000 359.96deg, #F7F7F7 360deg);
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        position: absolute;
+        opacity: .8;
+        z-index: 20;
+        mix-blend-mode: color-dodge;
+        animation: rotation 4s linear infinite;
+      }
+      #screen {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        position: absolute;
+        background: radial-gradient(50% 50% at 50% 50%, #2c162a 0%, #0C060B 100%);
+        z-index: 1;
+        box-shadow: 
+            inset 0 0px 3px rgba(173, 89, 163, .2);
+       
+      }
+      .ring{
+        border-radius: 50%;
+        box-shadow: 
+        inset 0 0 3px rgba(255,255,255,.06);
+        position: absolute;
+      }
+      .line{
+        background-color: rgba(255,255,255,.04);
+        position: absolute;
+      }
+      .r1{
+        width: 100px;
+        height: 100px;
+        left: calc(50% - 50px);
+        top: calc(50% - 50px);
+        z-index: 2;
+      }
+      .r2{
+        width: 200px;
+        height: 200px;
+        left: calc(50% - 100px);
+        top: calc(50% - 100px);
+        z-index: 2;
+      }
+      .l1{
+        width: 2px;
+        height: 300px;
+        left: calc(50% - 1px);
+        z-index: 2;
+      }
+      .l2{
+        width: 300px;
+        height: 2px;
+        top: calc(50% - 1px);
+        z-index: 2;
+      }
+      #highlight{
+        width: 340px;
+        height: 340px;
+        border-radius: 50%;
+        background: radial-gradient(41.42% 51.69% at 38.11% 101.81%, rgba(173, 89, 163, 0.5) 0%, rgba(173, 89, 163, 0) 48.96%);
+        position: absolute;
+        opacity: 1;
+        z-index:21;
+        left: 0;
+        top: 0;
+        animation: rotation 4s linear infinite;
+      }
+      img{
+        position: absolute;
+        z-index: 3;
+        left: 35%;
+        top: 64%;
+        filter:blur(1px);
+        mix-blend-mode: color-dodge;
+        animation: show_heart 4s linear infinite;
+        
+      }
+      .accent{
+        color: rgba(173, 89, 163, 1);
+      }
+    </style>
+  </head>
+  <body>
+    <section id="canvas">
+        <h1>Love is always around</h1>
+    <div id="radar">
+        <div id="light"></div>
+        <div id="highlight">
+        </div>
+        <div class="r1 ring"></div>
+        <div class="r2 ring"></div>
+        <div class="l1 line"></div>
+        <div class="l2 line"></div>
+        <img src="heart.svg" />
+        <div id="screen"></div>
+    </div>
+    <h1 class="accent">Happy Valentines Day</h1>
+    </section>
+  </body>
+</html>

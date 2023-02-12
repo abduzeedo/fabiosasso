@@ -54,6 +54,7 @@ article a, strong{
 .grid, .work, .page {
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), 1fr);
+  grid-template-rows: repeat(2, 1fr);
   grid-column-gap: var(--spacing);
   grid-row-gap: var(--spacing);
   max-width: var(--max-width);
@@ -177,6 +178,7 @@ p{
 div.w{
   background: #ccc;
   border-radius: 8px;
+  overflow: hidden;
 }
 .pic1{
   grid-column: 6 / span 4;
@@ -195,6 +197,21 @@ div.w{
 }
 div.w.c{
   background: var(--accent-color);
+}
+.page3 .pic1{
+  grid-column: 6 / span 7;
+  grid-row: 1 / span 1;
+  /* margin: var(--hero-spacing) 0; */
+}
+.page3 .pic2{
+  grid-column: 6 / span 4;
+  grid-row: 2;
+  /* margin: var(--hero-spacing) 0 0 0; */
+}
+.page3 .pic3{
+  grid-column: 10 / span 3;
+  grid-row: 2;
+  /* margin: 0 0 var(--hero-spacing) 0; */
 }
 /* //
 Layout heights 
@@ -453,6 +470,8 @@ and (orientation : landscape){
     grid-row: 2;
     /* margin: 0 0 var(--hero-spacing) 0; */
   }
+
+ 
   
 }
 @media only screen 
