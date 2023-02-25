@@ -1,36 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap');
 :root {
   --spacing: 32px;
   --hero-spacing: 10vh;
   --header: 32px;
+
   --body1: 14px;
   --lh-body1: 20px;
-  --body2: 14px;
-  --lh-body2: 20px;
+
   --body3: 12px;
-  --body4: 12px;
-  --headline: 60px;
-  --lh-headline: 68px;
+  --body4: 10px;
+
+  --headline: 56px;
+  --lh-headline: 60px;
+
   --headline2: 32px;
   --lh-headline2: 40px;
+
   --headline3: 14px;
   --lh-headline3: 20px;
+
   --title: 20px;
   --max-width: 1920px;
+
   --text-columns: 2;
   --grid-columns: 12;
-  --main-color:#111;
-  --background-color:#fff;
+
 }
-:root.dark{
-  --background-color:#111;
-  --main-color:#fff;
+@media (prefers-color-scheme: light) {
+	:root {
+    /* Colors */
+    --background: #fff;
+    --main-color: rgba(0, 0, 0, 0.97);
+    --secondary-color: rgba(0, 0, 0, 0.64);
+    --tertiary-color: rgba(0, 0, 0, 0.4);
+    --quarternary: rgba(0, 0, 0, 0.5);
+    --code-color: #eee;
+    --border-color: rgba(0, 0, 0, 0.2);
+    --primary-color-reverse: #ffffff;
+    --header-bg: rgba(255, 255, 255, 0.5);
+    --blur-background: rgba(255, 255, 255, 0.4);
+    --ads-bg: #f4f4f4;
+   
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+    --background: rgba(0, 0, 0, 1);
+    --main-color: rgba(255, 255, 255, 0.97);
+    --secondary-color: rgba(255, 255, 255, 0.64);
+    --tertiary-color: rgba(255, 255, 255, 0.4);
+    --quarternary: rgba(255, 255, 255, 0.5);
+    --code-color: #666;
+    --border-color: rgba(255, 255, 255, 0.2);
+    --primary-color-reverse: #101010;
+    --header-bg: rgba(16, 16, 16, 0.5);
+    --blur-background: rgba(0, 0, 0, 0.4);
+    --ads-bg: #1f1c1c;
+  }
 }
 body {
-  font-family: neue-haas-grotesk-text,Helvetica Neue, sans-serif;
-  line-height: var(--lh-body2);
-  font-size: var(--body2);
+  font-family: 'Lexend', neue-haas-grotesk-text,Helvetica Neue, sans-serif;
+  line-height: var(--lh-body1);
+  font-size: var(--body1);
   padding: 0 var(--spacing);
-  background: var(--background-color);
+  background: var(--background);
   color: var(--main-color);
   
 }
@@ -107,6 +141,7 @@ header {
 h1{
   grid-column: 1 / span 8;
   margin: var(--hero-spacing) 0;
+  font-weight: 400;
 }
 picture{
   grid-column: 1 / span 5;
@@ -164,7 +199,7 @@ h2{
 h3{
   font-size: var(--headline3);
   line-height: var(--lh-headline3);
-  text-transform: uppercase;
+  font-weight: 500;
 }
 .area1 p {
   border-top: none;
@@ -178,12 +213,13 @@ Work images
 // */
 img {
   width: 100%;
-  height: auto;
   outline: solid 0px #fff;
   display: block;
+  border-radius: 18px;
 }
 .work img {
   aspect-ratio: 1 / 1;
+  object-fit: scale-down;
 }
 article.area2 img {
   background: url(images/hero_google.png) no-repeat center center;
@@ -213,22 +249,19 @@ article.area5 img {
     --spacing: 16px;
     --hero-spacing: 8vh;
     --header: 20px;
-    --body1: 16px;
-    --lh-body1: 24px;
-    --body2: 14px;
-    --lh-body2: 20px;
+    --body1: 14px;
+    --lh-body1: 20px;
     --body3: 12px;
     --body4: 10px;
-    --headline: 45px;
-    --lh-headline: 56px;
+
+    --headline: 34px;
+    --lh-headline: 42px;
     --headline3: 14px;
     --lh-headline3: 20px;
     --title: 16px;
     --max-width: 600px;
     --text-columns: 1;
     --grid-columns: 12;
-    --main-color:#111;
-    --background-color:#fff;
     --max-width: 600px;
   }
   .grid,
@@ -263,8 +296,12 @@ article.area5 img {
     margin: var(--spacing) 0;
   }
   .work a.thumb{
-    grid-column: 4 / span 6;
+    grid-column: 1 / span all;
     margin:var(--spacing) 0 ;
+  }
+  .work img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
   header ul li:nth-child(2) {
     grid-column: 8 / span 2;
@@ -287,8 +324,8 @@ article.area5 img {
   :root {
     --body1: 16px;
     --lh-body1: 24px;
-    --body2: 14px;
-    --lh-body2: 20px;
+    --body1: 14px;
+    --lh-body1: 20px;
     --body3: 12px;
     --body4: 10px;
     --headline2: 28px;
