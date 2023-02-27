@@ -11,7 +11,7 @@
   --body4: 10px;
 
   --headline: 56px;
-  --lh-headline: 60px;
+  --lh-headline: 62px;
 
   --headline2: 32px;
   --lh-headline2: 40px;
@@ -31,9 +31,9 @@
     /* Colors */
     --background: #fff;
     --main-color: rgba(0, 0, 0, 0.97);
-    --secondary-color: rgba(0, 0, 0, 0.64);
-    --tertiary-color: rgba(0, 0, 0, 0.4);
-    --quarternary: rgba(0, 0, 0, 0.5);
+    --accent1-color: rgba(255, 0, 0, 1);
+    --accent2-color: rgba(4, 0, 255, 1);
+    --accent3-color: rgba(246, 255, 0, 1);
     --code-color: #eee;
     --border-color: rgba(0, 0, 0, 0.2);
     --primary-color-reverse: #ffffff;
@@ -48,9 +48,9 @@
 	:root {
     --background: rgba(0, 0, 0, 1);
     --main-color: rgba(255, 255, 255, 0.97);
-    --secondary-color: rgba(255, 255, 255, 0.64);
-    --tertiary-color: rgba(255, 255, 255, 0.4);
-    --quarternary: rgba(255, 255, 255, 0.5);
+    --accent1-color: rgba(255, 0, 0, 1);
+    --accent2-color: rgba(4, 0, 255, 1);
+    --accent3-color: rgba(246, 255, 0, 1);
     --code-color: #666;
     --border-color: rgba(255, 255, 255, 0.2);
     --primary-color-reverse: #101010;
@@ -80,20 +80,28 @@ a{
   grid-row-gap: 0px;
   max-width: var(--max-width);
 }
+section.grid{
+  background: #ff0;
+}
 .work{
   border-top: 1px solid;
   padding: calc(var(--spacing) / 2) 0;
   align-items: baseline;
 }
 header {
-  margin-top: var(--spacing);
-  height: auto;
+  margin-top: 0;
+  height: calc(var(--spacing) * 2);
+  line-height: calc(var(--spacing) * 2);
+  position: sticky;
+  top: 0;
+  background: var(--background);
+  z-index: 100;
 }
 header a{
   font-weight: normal;
 }
 header ul.grid {
-  margin-top: var(--spacing);
+  /* margin-top: var(--spacing); */
   text-transform: uppercase;
   white-space: nowrap;
   font-size: var(--body3);
@@ -110,6 +118,12 @@ header ul li:nth-child(2) {
 }
 header ul li:nth-child(3) {
   grid-column: 9 / span 1;
+}
+footer{
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+  background: var(--background);
 }
 footer ul {
   text-transform: uppercase;
@@ -191,6 +205,9 @@ h1 {
   font-size: var(--headline);
   line-height: var(--lh-headline);
 }
+h1 span{
+  color: var(--accent2-color);
+}
 h2{
   font-size: var(--headline2);
   line-height: var(--lh-headline2);
@@ -206,7 +223,11 @@ h3{
   columns: var(--text-columns);
   column-gap: var(--spacing);
   padding: 0;
+  opacity: .6;
   margin: 0 0 var(--spacing) 0 ;
+}
+.area1 p span{
+ 
 }
 /* //
 Work images
@@ -220,6 +241,9 @@ img {
 .work img {
   aspect-ratio: 1 / 1;
   object-fit: scale-down;
+}
+.work a{
+  border-bottom: 1px solid var(--accent2-color);;
 }
 article.area2 img {
   background: url(images/hero_google.png) no-repeat center center;
