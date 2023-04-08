@@ -40,7 +40,7 @@ h1{
 }
 p{
     margin-bottom: 16px;
-    opacity: .6;
+    color: #777;
 }
 article{
     margin-top: 380px;
@@ -58,6 +58,9 @@ div img{
     display: block;
     z-index: 100000;
     position: relative;
+}
+p strong{
+    color: #fff;
 }
 video{
     width: 359px;
