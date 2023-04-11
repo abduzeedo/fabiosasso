@@ -94,6 +94,10 @@ video{
     }
     header{
         line-height: 72px;
+        height: 72px;
+        z-index: 10000000;
+        background: rgba(0,0,0,.5);
+        backdrop-filter: blur(32px);
     }
     header a.badge{
         position: absolute;
@@ -164,6 +168,7 @@ video{
 @media only screen and (min-width: 481px) and (max-width: 851px) and (orientation: landscape) {
     header{
         padding: 0 24px;
+        
     }
     h1{
         font-size: 40px;
@@ -182,10 +187,14 @@ video{
         left: 51px;
         z-index: 10;
     }
+    .mask {
+        height: 43px;
+        width: 149px;
+        top: 36px;
+        left: 115px;
+    }
     article {
         margin-top: 208px;
-        background: rgba(0,0,0,.5);
-        backdrop-filter: blur(32px);
     }
     article img {
         display: block;
