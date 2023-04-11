@@ -208,13 +208,96 @@ video{
 }
 
 /* /* Tablets (portrait) / */
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
-
+@media only screen and (min-width: 768px) and (max-width: 1023px) and (orientation: portrait){
+    header{
+        height: 72px;
+        padding: 0 24px;
+    }
+    footer{
+        padding: 0 24px;
+    }
+    header a.badge{
+        display: block;
+        right: 24px;
+        top: 16px;
+        position: absolute;
+    }
+    section {
+        display: flex;
+        padding: 92px 32px 72px 32px;
+        background: url(ribbon.png) repeat-x 0 256px;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+    article {
+        margin-top: 24px;
+    }
+    div img {
+        max-width: 350px;
+    }
+    video {
+        width: 260px;
+        height: auto;
+        position: absolute;
+        top: 20px;
+        left: 45px;
+    }
+    .mask {
+        position: absolute;
+        background: #000;
+        height: 30px;
+        width: 117px;
+        top: 27px;
+        left: 115px;
+        z-index: 10000;
+    }
+    article img{
+        margin-top: 24px;
+    }
+    article a.badge{
+        display:none;
+    }
 }
 
 /* /* Tablets (landscape) / */
-@media only screen and (min-width: 1024px) and (max-width: 1199px) {
-
+@media only screen and (min-width: 1024px) and (max-width: 1199px) and (orientation: landscape){
+    header{
+        height: 72px;
+        padding: 0 24px;
+    }
+    footer{
+        padding: 0 24px;
+    }
+    section{
+        padding: 32px;
+        background: url(ribbon.png) repeat-x 0 128px;
+        background-size: 100%;
+    }
+    article {
+        margin-top: 230px;
+    }
+    div img {
+        max-width: 400px;
+    }
+    video {
+        width: 298px;
+        height: auto;
+        position: absolute;
+        top: 25px;
+        left: 51px;
+    }
+    .mask {
+        position: absolute;
+        background: #000;
+        height: 43px;
+        width: 135px;
+        top: 30px;
+        left: 129px;
+        z-index: 10000;
+    }
+    article img{
+        margin-top: 24px;
+    }
 }
 
 /* /* Desktop / */
