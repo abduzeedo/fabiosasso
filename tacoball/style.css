@@ -61,6 +61,7 @@ div img{
     display: block;
     z-index: 100000;
     position: relative;
+    pointer-events: none;
 }
 p strong{
     color: #fff;
