@@ -14,6 +14,9 @@ header{
     line-height: 120px;
     padding: 0 48px;
 }
+header a.badge{
+    display: none;
+}
 footer{
     position: fixed;
     bottom: 0;
@@ -78,4 +81,99 @@ video{
     top: 36px;
     left: 155px;
     z-index: 10000;
+}
+
+/* /* Phones (portrait) / */
+@media only screen and (max-width: 480px) {
+    body{
+        
+    }
+    header, footer{
+        padding: 0 24px;
+    }
+    header{
+        line-height: 72px;
+    }
+    header a{
+        position: absolute;
+        right: 24px;
+        top: 16px;
+    }
+    h1{
+        font-size: 32px;
+        line-height: 72px;
+    }
+    footer{
+        font-size: 10px;
+    }
+    section {
+        padding: 64px 0 24px 0;
+        display: flex;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        background: #000 url(ribbon.png) repeat-x 0 256px fixed;
+    }
+    article a.badge{
+        display: none;
+    }
+    div {
+        position: relative;
+        margin-top: 64px;
+    }
+    div img {
+        max-width: 330px;
+        height: auto;
+        display: block;
+        z-index: 100000;
+        position: relative;
+    }
+    video {
+        width: 246px;
+        height: auto;
+        position: absolute;
+        top: 19px;
+        left: 42px;
+        z-index: 10;
+    }
+    .mask {
+        position: absolute;
+        background: #000;
+        height: 30px;
+        width: 115px;
+        top: 24px;
+        left: 105px;
+        z-index: 10000;
+    }
+    article {
+        margin-top: 24px;
+        background: rgba(0,0,0,.5);
+        backdrop-filter: blur(32px);
+        padding: 24px;
+    }
+    footer{
+        position: relative;
+    }
+}
+
+/* /* Phones (landscape) / */
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+
+}
+
+/* /* Tablets (portrait) / */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+
+}
+
+/* /* Tablets (landscape) / */
+@media only screen and (min-width: 1024px) and (max-width: 1199px) {
+
+}
+
+/* /* Desktop / */
+@media only screen and (min-width: 1200px) {
+
 }
