@@ -160,8 +160,41 @@ video{
 }
 
 /* /* Phones (landscape) / */
-@media only screen and (min-width: 481px) and (max-width: 767px) {
-
+@media only screen and (min-width: 481px) and (max-width: 851px) and (orientation: landscape) {
+    header{
+        padding: 0 24px;
+    }
+    h1{
+        font-size: 40px;
+    }
+    section {
+        padding: 0px 24px;
+        background: #000 url(ribbon.png) repeat-x 0 115px;
+        background-size: 100% 56px;
+    }
+    div img {
+        max-width: 400px;
+    }
+    video {
+        width: 298px;
+        top: 30px;
+        left: 51px;
+        z-index: 10;
+    }
+    article {
+        margin-top: 208px;
+        background: rgba(0,0,0,.5);
+        backdrop-filter: blur(32px);
+    }
+    article img {
+        display: block;
+        margin-top: 48px;
+    }
+    footer{
+        padding: 0 24px;
+        position: relative;
+        margin-top: 48px;
+    }
 }
 
 /* /* Tablets (portrait) / */
