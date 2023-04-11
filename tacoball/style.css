@@ -165,7 +165,7 @@ video{
 }
 
 /* /* Phones (landscape) / */
-@media only screen and (min-width: 481px) and (max-width: 851px) and (orientation: landscape) {
+@media only screen and (min-width: 481px) and (max-width: 899px) and (orientation: landscape) {
     header{
         padding: 0 24px;
         
