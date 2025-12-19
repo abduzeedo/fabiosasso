@@ -12,7 +12,7 @@
       content="black-translucent"
     />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="theme-color" content="#e7e7e7" />
+    <meta name="theme-color" content="#ffffff" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -29,9 +29,10 @@
       :root {
         --board-columns: 6;
         --board-rows: 10;
-        --bg-color: #e7e7e7;
+        --bg-color: #ffffff;
+        --bg-color-sec: #eeeeee;
         --text-color: #000000;
-        --overlay-bg: #e7e7e7;
+        --overlay-bg: #ffffff;
         --ts-1: #bbb;
         --ts-2: #999;
         --ts-3: #888;
@@ -45,18 +46,19 @@
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --bg-color: #1a1a1a;
+          --bg-color: #000000;
+          --bg-color-sec: #222222;
           --text-color: #ffffff;
-          --overlay-bg: #1a1a1a;
-          --ts-1: #444;
-          --ts-2: #666;
-          --ts-3: #777;
-          --ts-4: #888;
-          --ts-5: #999;
-          --ts-6: #aaa;
-          --ts-7: #bbb;
-          --ts-8: #ccc;
-          --ts-9: #ffffff;
+          --overlay-bg: #000000;
+          --ts-1: #bbb;
+          --ts-2: #999;
+          --ts-3: #888;
+          --ts-4: #777;
+          --ts-5: #666;
+          --ts-6: #555;
+          --ts-7: #444;
+          --ts-8: #333;
+          --ts-9: #302314;
         }
       }
 
@@ -78,6 +80,7 @@
         /* Padding to account for fixed toolbar (64) and target words (48) at top, and bottom-bar (80) at bottom */
         padding-top: 112px;
         padding-bottom: 80px;
+        background: var(--bg-color-sec);
       }
       .game-board {
         display: grid;
@@ -85,10 +88,10 @@
         grid-template-rows: repeat(var(--board-rows), 1fr);
         width: min(360px, 95vw);
         aspect-ratio: var(--board-columns) / var(--board-rows);
-        height: calc(100dvh - 192px); /* 64 + 48 + 80 */
+        height: calc(100dvh - 192px - 16px); /* 64 + 48 + 80 */
         overflow: hidden;
         border-right: 1px solid #909090;
-
+        margin-top: 16px;
         background-image: linear-gradient(
           to right,
           #808080 1px,
@@ -136,13 +139,12 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
       .toolbar {
         top: 0;
         height: 64px;
         padding: 0 1rem;
-        border-bottom: 2px solid rgba(128, 128, 128, 0.4);
+        /* border-bottom: 2px solid rgba(128, 128, 128, 0.4); */
       }
       .bottom-bar {
         bottom: 0;
@@ -161,9 +163,9 @@
         height: 48px;
         line-height: 48px;
         text-align: center;
-        background-color: var(--overlay-bg);
-        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-        color: var(--text-color);
+        background-color: var(--text-color);
+        /* border-bottom: 1px solid rgba(128, 128, 128, 0.2); */
+        color: var(--bg-color);
       }
       .btn-3d {
         position: relative;
@@ -221,9 +223,8 @@
         height: 48px;
         line-height: 48px;
         text-align: center;
-        background-color: var(--overlay-bg);
+
         border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-        color: var(--text-color);
       }
       .target-word {
         display: inline-block;
