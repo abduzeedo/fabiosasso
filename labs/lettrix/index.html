@@ -7,9 +7,16 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#e7e7e7" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <link rel="manifest" href="manifest.json" />
     <title>LETTRIX</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -81,7 +88,7 @@
         height: calc(100dvh - 192px); /* 64 + 48 + 80 */
         overflow: hidden;
         border-right: 1px solid #909090;
-        
+
         background-image: linear-gradient(
           to right,
           #808080 1px,
@@ -90,7 +97,7 @@
         background-size: calc(100% / var(--board-columns)) 100%;
       }
       .block {
-        color:#fff;
+        color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -100,14 +107,9 @@
         line-height: 1;
         overflow: hidden;
         transition: all 0.2s ease-in-out;
-        text-shadow: 0 1px 1px var(--ts-1),
-          0 2px 0 var(--ts-2), 
-          0 3px 0 var(--ts-3), 
-          0 4px 0 var(--ts-4), 
-          0 5px 0 var(--ts-5), 
-          0 6px 0 var(--ts-6), 
-          0 7px 0 var(--ts-7), 
-          0 8px 0 var(--ts-8), 
+        text-shadow: 0 1px 1px var(--ts-1), 0 2px 0 var(--ts-2),
+          0 3px 0 var(--ts-3), 0 4px 0 var(--ts-4), 0 5px 0 var(--ts-5),
+          0 6px 0 var(--ts-6), 0 7px 0 var(--ts-7), 0 8px 0 var(--ts-8),
           0 9px 7px var(--ts-9);
         margin-top: 24px;
       }
@@ -122,7 +124,8 @@
         background-color: var(--overlay-bg);
         color: var(--text-color);
       }
-      .toolbar, .bottom-bar {
+      .toolbar,
+      .bottom-bar {
         position: fixed;
         left: 0;
         right: 0;
@@ -133,7 +136,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
       .toolbar {
         top: 0;
@@ -164,16 +167,13 @@
       }
       .btn-3d {
         position: relative;
-        box-shadow: 0 1px 0 var(--ts-1),
-          0 2px 0 var(--ts-2), 
-          0 3px 0 var(--ts-3), 
-          0 4px 0 var(--ts-4);
+        box-shadow: 0 1px 0 var(--ts-1), 0 2px 0 var(--ts-2),
+          0 3px 0 var(--ts-3), 0 4px 0 var(--ts-4);
         transition: all 0.1s ease;
       }
       .btn-3d:active {
         transform: translateY(2px);
-        box-shadow: 0 1px 0 var(--ts-1),
-          0 2px 0 var(--ts-2);
+        box-shadow: 0 1px 0 var(--ts-1), 0 2px 0 var(--ts-2);
       }
       .game-overlay {
         position: fixed; /* Fixed is better for overlays */
@@ -208,17 +208,17 @@
       .bottom-sheet.show {
         bottom: 0;
       }
-      .toolbar{
+      .toolbar {
         height: 64px;
         line-height: 64px;
       }
-      .bottom-bar{
+      .bottom-bar {
         height: 64px;
         line-height: 64px;
       }
       .target-words-container {
         padding: 0 0.5rem;
-        height:48px;
+        height: 48px;
         line-height: 48px;
         text-align: center;
         background-color: var(--overlay-bg);
@@ -268,7 +268,8 @@
       <div id="game-board" class="game-board"></div>
       <div id="pause-screen" class="game-overlay hidden">
         <h2 class="text-5xl font-bold mb-8">
-          <span>P</span><span>A</span><span>U</span><span>S</span><span>E</span><span>D</span>
+          <span>P</span><span>A</span><span>U</span><span>S</span><span>E</span
+          ><span>D</span>
         </h2>
         <div class="flex flex-col gap-6 items-center">
           <button
@@ -297,7 +298,8 @@
       </div>
       <div id="start-screen" class="game-overlay">
         <h2 class="text-5xl font-bold mb-4 tracking-widest">
-          <span>L</span><span>E</span><span>T</span><span>T</span><span>R</span><span>I</span><span>X</span>
+          <span>L</span><span>E</span><span>T</span><span>T</span><span>R</span
+          ><span>I</span><span>X</span>
         </h2>
         <p id="start-instructions" class="text-lg mb-6 text-center max-w-sm">
           Swipe to move letters and create words.
@@ -313,8 +315,18 @@
 
     <!-- Bottom Bar -->
     <div class="bottom-bar">
-      <button id="pause-button" class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-2 px-6 rounded-lg text-base">PAUSE</button>
-      <button id="words-button" class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-2 px-6 rounded-lg text-base">WORDS</button>
+      <button
+        id="pause-button"
+        class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-2 px-6 rounded-lg text-base"
+      >
+        PAUSE
+      </button>
+      <button
+        id="words-button"
+        class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-2 px-6 rounded-lg text-base"
+      >
+        WORDS
+      </button>
     </div>
 
     <!-- Words Bottom Sheet -->
@@ -360,7 +372,10 @@
       const BOARD_HEIGHT = 8;
 
       // Sync CSS variables with constants
-      document.documentElement.style.setProperty("--board-columns", BOARD_WIDTH);
+      document.documentElement.style.setProperty(
+        "--board-columns",
+        BOARD_WIDTH
+      );
       document.documentElement.style.setProperty("--board-rows", BOARD_HEIGHT);
       const ALL_VALID_WORDS = [
         "ACCEPT",
@@ -617,16 +632,20 @@
           // Wrap title in spans
           const title = document.getElementById("game-over-title");
           const text = title.textContent.trim();
-          title.innerHTML = text.split('').map(char => 
-            `<span>${char === ' ' ? '&nbsp;' : char}</span>`
-          ).join('');
+          title.innerHTML = text
+            .split("")
+            .map((char) => `<span>${char === " " ? "&nbsp;" : char}</span>`)
+            .join("");
 
           // Animate game over screen
           const tl = gsap.timeline();
-          
-          gsap.killTweensOf("#game-over-screen h2 span, #game-over-screen p, #restart-button");
 
-          tl.fromTo("#game-over-screen h2 span", 
+          gsap.killTweensOf(
+            "#game-over-screen h2 span, #game-over-screen p, #restart-button"
+          );
+
+          tl.fromTo(
+            "#game-over-screen h2 span",
             { y: -150, opacity: 0 },
             {
               y: 0,
@@ -634,15 +653,22 @@
               duration: 0.6,
               stagger: {
                 amount: 0.4,
-                from: "random"
+                from: "random",
               },
-              ease: "back.out(1.7)"
+              ease: "back.out(1.7)",
             }
           );
 
-          tl.fromTo("#game-over-screen p, #restart-button", 
+          tl.fromTo(
+            "#game-over-screen p, #restart-button",
             { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              stagger: 0.1,
+              ease: "power2.out",
+            },
             "-=0.2"
           );
         }
@@ -650,11 +676,11 @@
 
       function draw() {
         if (isPaused) return;
-        
+
         // Use a more stable drawing approach to preserve GSAP animations
         const children = Array.from(boardElement.children);
         const totalBlocks = BOARD_HEIGHT * BOARD_WIDTH;
-        
+
         if (children.length !== totalBlocks) {
           boardElement.innerHTML = "";
           for (let i = 0; i < totalBlocks; i++) {
@@ -669,14 +695,14 @@
             const index = y * BOARD_WIDTH + x;
             const block = boardElement.children[index];
             const cell = board[y][x];
-            
+
             if (cell) {
               if (block.textContent !== cell.letter) {
-                 block.textContent = cell.letter;
+                block.textContent = cell.letter;
               }
               if (cell.isForming) block.classList.add("forming-word");
               else block.classList.remove("forming-word");
-              
+
               if (cell.isClearing) block.classList.add("clearing");
               else block.classList.remove("clearing");
 
@@ -686,11 +712,12 @@
               }
             } else {
               // Reset empty blocks, but spare the current active piece block to allow cycling animations to play
-              const isCurrentPieceBlock = currentPiece && x === currentPiece.x && y === currentPiece.y;
-              
+              const isCurrentPieceBlock =
+                currentPiece && x === currentPiece.x && y === currentPiece.y;
+
               block.textContent = "";
               block.classList.remove("forming-word", "clearing");
-              
+
               if (!isCurrentPieceBlock) {
                 gsap.set(block, { scale: 1, opacity: 1, rotationY: 0, y: 0 });
               }
@@ -701,7 +728,10 @@
         if (currentPiece && !isGameOver) {
           const index = currentPiece.y * BOARD_WIDTH + currentPiece.x;
           const blockElement = boardElement.children[index];
-          if (blockElement && blockElement.textContent !== currentPiece.letter) {
+          if (
+            blockElement &&
+            blockElement.textContent !== currentPiece.letter
+          ) {
             blockElement.textContent = currentPiece.letter;
           }
         }
@@ -735,14 +765,14 @@
         const x = currentPiece.x;
         const y = currentPiece.y;
         board[y][x] = { letter: currentPiece.letter };
-        
+
         const index = y * BOARD_WIDTH + x;
         const blockElement = boardElement.children[index];
         if (blockElement) {
           gsap.from(blockElement, {
             y: -20,
             duration: 0.4,
-            ease: "bounce.out"
+            ease: "bounce.out",
           });
         }
 
@@ -806,7 +836,7 @@
             coords.forEach(({ x, y }) => {
               if (board[y][x]) board[y][x].isForming = true;
             });
-          }
+          },
         });
 
         gsap.to(elements, {
@@ -817,11 +847,11 @@
           stagger: 0.1,
           ease: "power2.in",
           onComplete: () => {
-             // Reset state of elements before draw() ensures they aren't stuck at 0
-             gsap.set(elements, { scale: 1, opacity: 1 });
-             clearAndCollapse(coords);
-             draw();
-          }
+            // Reset state of elements before draw() ensures they aren't stuck at 0
+            gsap.set(elements, { scale: 1, opacity: 1 });
+            clearAndCollapse(coords);
+            draw();
+          },
         });
       }
 
@@ -864,9 +894,10 @@
           clearInterval(gameLoopInterval);
           // Reset and kill any pending animations on these elements
           gsap.killTweensOf("#pause-screen h2 span, #pause-screen .btn-3d");
-          
+
           // Animate pause screen text
-          gsap.fromTo("#pause-screen h2 span", 
+          gsap.fromTo(
+            "#pause-screen h2 span",
             { y: -250, opacity: 0 },
             {
               y: 0,
@@ -874,12 +905,13 @@
               duration: 0.5,
               stagger: {
                 amount: 0.3,
-                from: "random"
+                from: "random",
               },
-              ease: "back.out(1.7)"
+              ease: "back.out(1.7)",
             }
           );
-          gsap.fromTo("#pause-screen .btn-3d", 
+          gsap.fromTo(
+            "#pause-screen .btn-3d",
             { scale: 0.1, opacity: 0 },
             {
               scale: 1,
@@ -887,7 +919,7 @@
               duration: 0.5,
               delay: 0.3, // Slightly less delay for better feel
               stagger: 0.1,
-              ease: "elastic.out(2, 0.8)"
+              ease: "elastic.out(2, 0.8)",
             }
           );
         } else {
@@ -900,10 +932,10 @@
 
         const index = currentPiece.y * BOARD_WIDTH + currentPiece.x;
         const blockElement = boardElement.children[index];
-        
+
         if (blockElement) {
           const tl = gsap.timeline();
-          
+
           // Pop out
           tl.to(blockElement, {
             scale: 0.5,
@@ -912,10 +944,11 @@
             ease: "power2.in",
             onComplete: () => {
               // Cycle through all available letters for this piece
-              currentPieceLetterIndex = (currentPieceLetterIndex + 1) % availableLetters.length;
+              currentPieceLetterIndex =
+                (currentPieceLetterIndex + 1) % availableLetters.length;
               currentPiece.letter = availableLetters[currentPieceLetterIndex];
               draw(); // Update text content
-            }
+            },
           });
 
           // Pop in
@@ -923,11 +956,12 @@
             scale: 1,
             opacity: 1,
             duration: 0.15,
-            ease: "back.out(2)"
+            ease: "back.out(2)",
           });
         } else {
           // Fallback if no block element found
-          currentPieceLetterIndex = (currentPieceLetterIndex + 1) % availableLetters.length;
+          currentPieceLetterIndex =
+            (currentPieceLetterIndex + 1) % availableLetters.length;
           currentPiece.letter = availableLetters[currentPieceLetterIndex];
           draw();
         }
@@ -947,11 +981,11 @@
         clearInterval(gameLoopInterval);
         isPaused = false;
         isGameOver = false;
-        
+
         // Hide all screens first
         pauseScreen.classList.add("hidden");
         gameOverScreen.classList.add("hidden");
-        
+
         // Hide game UI
         const uiBars = [toolbar, bottomBar, targetWordsContainer];
         gsap.killTweensOf(uiBars);
@@ -959,8 +993,8 @@
           opacity: 0,
           duration: 0.3,
           onComplete: () => {
-             uiBars.forEach(bar => bar.style.pointerEvents = "none");
-          }
+            uiBars.forEach((bar) => (bar.style.pointerEvents = "none"));
+          },
         });
 
         // Reset board for a clean look behind overlay
@@ -971,7 +1005,7 @@
 
         // Reveal start screen
         startScreen.classList.remove("hidden");
-        
+
         // Reset and run intro animation
         initStartScreen();
       }
@@ -990,16 +1024,17 @@
         // Reveal game UI with robust fromTo
         const uiBars = [toolbar, bottomBar, targetWordsContainer];
         gsap.killTweensOf(uiBars);
-        
+
         gsap.set(uiBars, { pointerEvents: "auto" });
-        gsap.fromTo(uiBars, 
-          { opacity: 0, y: (i) => i === 1 ? 50 : (i === 0 ? -50 : 0) },
+        gsap.fromTo(
+          uiBars,
+          { opacity: 0, y: (i) => (i === 1 ? 50 : i === 0 ? -50 : 0) },
           {
             opacity: 1,
             y: 0,
             duration: 0.5,
             stagger: 0.1,
-            ease: "power2.out"
+            ease: "power2.out",
           }
         );
 
@@ -1015,13 +1050,20 @@
         // Wrap instructions in spans
         const instr = document.getElementById("start-instructions");
         const text = instr.textContent.trim();
-        instr.innerHTML = text.split('').map(char => 
-          `<span style="display:inline-block">${char === ' ' ? '&nbsp;' : char}</span>`
-        ).join('');
+        instr.innerHTML = text
+          .split("")
+          .map(
+            (char) =>
+              `<span style="display:inline-block">${
+                char === " " ? "&nbsp;" : char
+              }</span>`
+          )
+          .join("");
 
         const tl = gsap.timeline();
 
-        tl.fromTo("#start-screen h2 span", 
+        tl.fromTo(
+          "#start-screen h2 span",
           { y: -100, opacity: 0 },
           {
             y: 0,
@@ -1029,30 +1071,33 @@
             duration: 0.6,
             stagger: {
               amount: 0.4,
-              from: "random"
+              from: "random",
             },
-            ease: "back.out(1.7)"
+            ease: "back.out(1.7)",
           }
         );
 
-        tl.fromTo("#start-instructions span", 
+        tl.fromTo(
+          "#start-instructions span",
           { opacity: 0, scale: 0 },
           {
             opacity: 1,
             scale: 1,
             duration: 0.2,
             stagger: 0.02,
-            ease: "power2.out"
-          }, "-=0.2"
+            ease: "power2.out",
+          },
+          "-=0.2"
         );
 
-        tl.fromTo("#start-button", 
+        tl.fromTo(
+          "#start-button",
           { opacity: 0, scale: 0.1 },
           {
             opacity: 1,
             scale: 1,
             duration: 0.6,
-            ease: "elastic.out(2, 0.8)"
+            ease: "elastic.out(2, 0.8)",
           }
         );
       }
@@ -1074,45 +1119,56 @@
 
       // Swipe Controls
       // Swipe Controls
-      gameAreaElement.addEventListener("touchstart", (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        touchMoveX = touchStartX;
-        touchMoveY = touchStartY;
-        isTouchMoving = false;
-      }, { passive: false });
+      gameAreaElement.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchMoveX = touchStartX;
+          touchMoveY = touchStartY;
+          isTouchMoving = false;
+        },
+        { passive: false }
+      );
 
-      gameAreaElement.addEventListener("touchmove", (e) => {
-        e.preventDefault(); // Prevent scrolling
-        touchMoveX = e.touches[0].clientX;
-        touchMoveY = e.touches[0].clientY;
-        
-        const diffX = touchMoveX - touchStartX;
-        const diffY = touchMoveY - touchStartY;
-        const threshold = boardElement.clientWidth / BOARD_WIDTH;
+      gameAreaElement.addEventListener(
+        "touchmove",
+        (e) => {
+          e.preventDefault(); // Prevent scrolling
+          touchMoveX = e.touches[0].clientX;
+          touchMoveY = e.touches[0].clientY;
 
-        // Horizontal movement
-        if (Math.abs(diffX) > threshold) {
-          movePiece(diffX > 0 ? 1 : -1, 0);
-          touchStartX = touchMoveX; // Reset start position
-          isTouchMoving = true;
-          draw();
-        }
-        
-        // Vertical movement (Swipe Down to Drop)
-        // Require a more significant swipe for drop to avoid accidental drops while moving sideways
-        if (diffY > threshold * 2 && Math.abs(diffY) > Math.abs(diffX) * 1.5) {
-             dropPiece();
-             touchStartY = touchMoveY; // Reset to prevent multiple drops in one swipe if not desired, or let it flow
-             isTouchMoving = true;
-        }
-      }, { passive: false });
+          const diffX = touchMoveX - touchStartX;
+          const diffY = touchMoveY - touchStartY;
+          const threshold = boardElement.clientWidth / BOARD_WIDTH;
+
+          // Horizontal movement
+          if (Math.abs(diffX) > threshold) {
+            movePiece(diffX > 0 ? 1 : -1, 0);
+            touchStartX = touchMoveX; // Reset start position
+            isTouchMoving = true;
+            draw();
+          }
+
+          // Vertical movement (Swipe Down to Drop)
+          // Require a more significant swipe for drop to avoid accidental drops while moving sideways
+          if (
+            diffY > threshold * 2 &&
+            Math.abs(diffY) > Math.abs(diffX) * 1.5
+          ) {
+            dropPiece();
+            touchStartY = touchMoveY; // Reset to prevent multiple drops in one swipe if not desired, or let it flow
+            isTouchMoving = true;
+          }
+        },
+        { passive: false }
+      );
 
       gameAreaElement.addEventListener("touchend", (e) => {
-          if (!isTouchMoving) {
-              // It was a tap
-              cycleLetter();
-          }
+        if (!isTouchMoving) {
+          // It was a tap
+          cycleLetter();
+        }
       });
 
       function animateButton(el, callback) {
@@ -1124,23 +1180,40 @@
           ease: "power1.inOut",
           onComplete: () => {
             if (callback) callback();
-          }
+          },
         });
       }
 
-      startButton.addEventListener("click", () => animateButton(startButton, startGame));
-      restartButton.addEventListener("click", () => animateButton(restartButton, startGame));
-      pauseButton.addEventListener("click", () => animateButton(pauseButton, togglePause));
-      resumeButton.addEventListener("click", () => animateButton(resumeButton, togglePause));
-      quitButton.addEventListener("click", () => animateButton(quitButton, quitGame));
+      startButton.addEventListener("click", () =>
+        animateButton(startButton, startGame)
+      );
+      restartButton.addEventListener("click", () =>
+        animateButton(restartButton, startGame)
+      );
+      pauseButton.addEventListener("click", () =>
+        animateButton(pauseButton, togglePause)
+      );
+      resumeButton.addEventListener("click", () =>
+        animateButton(resumeButton, togglePause)
+      );
+      quitButton.addEventListener("click", () =>
+        animateButton(quitButton, quitGame)
+      );
 
       wordsButton.addEventListener("click", (e) => {
         if (e) e.preventDefault();
         animateButton(wordsButton, () => {
           wordsSheet.classList.add("show");
-          gsap.fromTo("#found-words-list li", 
+          gsap.fromTo(
+            "#found-words-list li",
             { x: -20, opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" }
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.4,
+              stagger: 0.05,
+              ease: "power2.out",
+            }
           );
         });
       });
@@ -1152,22 +1225,25 @@
       // Register Service Worker
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker.register("sw.js").then((reg) => {
-            console.log("SW registered!", reg);
-            // Check for updates
-            reg.onupdatefound = () => {
-              const installingWorker = reg.installing;
-              installingWorker.onstatechange = () => {
-                if (installingWorker.state === 'installed') {
-                  if (navigator.serviceWorker.controller) {
-                    console.log('New content available; please refresh.');
+          navigator.serviceWorker
+            .register("sw.js")
+            .then((reg) => {
+              console.log("SW registered!", reg);
+              // Check for updates
+              reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                installingWorker.onstatechange = () => {
+                  if (installingWorker.state === "installed") {
+                    if (navigator.serviceWorker.controller) {
+                      console.log("New content available; please refresh.");
+                    }
                   }
-                }
+                };
               };
-            };
-          }).catch((err) => {
-            console.log("SW registration failed:", err);
-          });
+            })
+            .catch((err) => {
+              console.log("SW registration failed:", err);
+            });
         });
       }
     </script>
