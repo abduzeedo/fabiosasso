@@ -1,7 +1,7 @@
 {
     "name": "LETTRIX",
     "short_name": "LETTRIX",
-    "start_url": "./letris.html",
+    "start_url": "./index.html",
     "scope": "./",
     "display": "standalone",
     "background_color": "#e7e7e7",
