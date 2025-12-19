@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LETTRIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --grid-cols: 10;
+            --grid-rows: 18;
+            --cell-size: 10vw; /* Responsive cell size */
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #000000;
+            --grid-line-color: #d1d5db; /* gray-300 */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            touch-action: none; /* Prevent browser zooming/scrolling */
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .title-group h1 {
+            font-weight: 900;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+        .title-group p {
+            color: #6b7280; /* gray-500 */
+            font-size: 0.75rem;
+            font-weight: 400;
+            max-width: 200px;
+            line-height: 1.2;
+        }
+        .score {
+            font-weight: 400;
+            font-size: 1.8rem;
+            letter-spacing: 0.05em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* GAME AREA */
+        .game-wrapper {
+            flex: 1;
+            position: relative;
+            margin: 1rem 1.5rem; /* Margins to match screenshot padding */
+            overflow: hidden;
+        }
+
+        .game-grid {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), 1fr);
+            grid-template-rows: repeat(var(--grid-rows), 1fr);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dotted Lines Background */
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .grid-line {
+            width: 1px;
+            height: 100%;
+            border-left: 1px dotted var(--grid-line-color);
+        }
+        /* Hide first and last line to look cleaner on edges if desired, 
+           or keep them to match reference exactly. Reference shows lines between cols. */
+        .grid-line:first-child, .grid-line:last-child {
+            visibility: hidden; 
+        }
+
+        /* BLOCKS */
+        .block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem; /* Large letters */
+            font-weight: 400; /* Regular weight normally */
+            background: transparent;
+            z-index: 2;
+        }
+        
+        /* The specific "GHOST" bold effect */
+        .block.bold-word {
+            font-weight: 900;
+            transform: scale(1.1);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .block.clearing {
+            opacity: 0;
+            filter: blur(8px);
+            transform: scale(1.5);
+            transition: all 0.4s ease-out;
+        }
+
+        /* BOTTOM BAR */
+        .bottom-bar {
+            padding: 1.5rem 2rem 2.5rem 2rem; /* Extra padding bottom for safe area */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .btn {
+            background: none;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            color: black;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        /* OVERLAYS */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+        .hidden { display: none !important; }
+        
+        .overlay h2 {
+            font-weight: 900;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .overlay-btn {
+            background: black;
+            color: white;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        /* WORDS SHEET */
+        .words-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50vh;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.1);
+            z-index: 100;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+        .words-sheet.open {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="title-group">
+            <h1>LETTRIX</h1>
+            <p>Swipe left or right move letters and create words</p>
+        </div>
+        <div class="score" id="score">0</div>
+    </header>
+
+    <!-- Game Section -->
+    <div class="game-wrapper" id="game-area">
+        <!-- Dotted Lines Background -->
+        <div class="grid-lines">
+            <!-- 11 lines for 10 columns boundaries -->
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div>
+        </div>
+
+        <!-- The Actual Grid -->
+        <div class="game-grid" id="grid"></div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="overlay">
+            <h2>LETTRIX</h2>
+            <button class="overlay-btn" onclick="startGame()">START GAME</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over" class="overlay hidden">
+            <h2>GAME OVER</h2>
+            <p style="margin-bottom: 1rem;">SCORE: <span id="final-score">0</span></p>
+            <button class="overlay-btn" onclick="startGame()">PLAY AGAIN</button>
+        </div>
+        
+        <!-- Pause Screen -->
+        <div id="pause-screen" class="overlay hidden">
+            <h2>PAUSED</h2>
+            <button class="overlay-btn" onclick="togglePause()">RESUME</button>
+        </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <footer class="bottom-bar">
+        <button class="btn" onclick="togglePause()">PAUSE</button>
+        <button class="btn" onclick="toggleWords()">WORDS</button>
+    </footer>
+
+    <!-- Collected Words Sheet -->
+    <div class="words-sheet" id="words-sheet">
+        <div class="flex justify-between items-center mb-4 border-b pb-4">
+            <h3 class="font-bold text-xl">COLLECTED WORDS</h3>
+            <button onclick="toggleWords()" class="text-2xl font-bold">&times;</button>
+        </div>
+        <div class="overflow-y-auto flex-1">
+            <ul id="word-list" class="space-y-2 font-medium">
+                <!-- Words go here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // --- CONSTANTS & CONFIG ---
+        const COLS = 10;
+        const ROWS = 18;
+        const LETTER_POOL = "AAAAABCDEEEEFGHIIIIJKLMNOOOOPQRSTUUUVWXYZ"; // Weighted slightly for common letters
+        // Dictionary containing GHOST and positive/neutral words + common nouns
+        const DICTIONARY = new Set([
+            "GHOST", "HOST", "MOST", "POST", "LOST", "COST", // Reference image context
+            "HOPE", "LOVE", "JOY", "CALM", "PEACE", "HAPPY", "SMILE", "LAUGH", "DREAM", "GROW",
+            "LIFE", "SOUL", "MIND", "PURE", "TRUE", "KIND", "GIFT", "PLAY", "SAFE", "FREE",
+            "GOOD", "BEST", "WISH", "CARE", "HEAL", "WARM", "COOL", "NICE", "NEAT", "TIDY",
+            "RICH", "WISE", "FAIR", "FINE", "GLAD", "DEAR", "CUTE", "BOLD", "BRAVE",
+            "TIME", "YEAR", "WEEK", "WORK", "HOME", "PLAN", "GOAL", "TEAM", "IDEA", "STAR"
+        ]);
+
+        // --- STATE ---
+        let grid = Array(ROWS).fill().map(() => Array(COLS).fill(null));
+        let score = 0;
+        let activePiece = null;
+        let gameInterval = null;
+        let isPaused = false;
+        let isGameOver = false;
+        let collectedWords = [];
+        
+        // --- DOM ELEMENTS ---
+        const gridEl = document.getElementById('grid');
+        const scoreEl = document.getElementById('score');
+        const finalScoreEl = document.getElementById('final-score');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over');
+        const pauseScreen = document.getElementById('pause-screen');
+        const wordsSheet = document.getElementById('words-sheet');
+        const wordListEl = document.getElementById('word-list');
+
+        // --- INPUT HANDLING (SWIPE & KEYS) ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('keydown', e => {
+            if(isPaused || isGameOver) return;
+            if(e.key === 'ArrowLeft') movePiece(-1, 0);
+            if(e.key === 'ArrowRight') movePiece(1, 0);
+            if(e.key === 'ArrowDown') movePiece(0, 1); // Soft drop
+        });
+
+        const gameArea = document.getElementById('game-area');
+        gameArea.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, {passive: false});
+
+        gameArea.addEventListener('touchmove', e => {
+            if(isPaused || isGameOver) return;
+            e.preventDefault(); // Prevent scrolling
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            
+            const diffX = touchX - touchStartX;
+            const diffY = touchY - touchStartY;
+
+            // Sensitivity threshold
+            if (Math.abs(diffX) > 30) {
+                movePiece(diffX > 0 ? 1 : -1, 0);
+                touchStartX = touchX; // Reset to prevent rapid firing
+            }
+            if (diffY > 50) {
+                // Swipe down for drop
+                movePiece(0, 1);
+                touchStartY = touchY;
+            }
+        }, {passive: false});
+
+        // --- GAME LOOP & LOGIC ---
+
+        function startGame() {
+            grid = Array(ROWS).fill().map(() => Array(COLS).fill(null));
+            score = 0;
+            collectedWords = [];
+            isGameOver = false;
+            isPaused = false;
+            updateScore(0);
+            
+            // Clear UI
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            wordListEl.innerHTML = '';
+            
+            spawnPiece();
+            if(gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, 700); // Standard speed
+            render();
+        }
+
+        function gameLoop() {
+            if(!isPaused && !isGameOver) {
+                if(!movePiece(0, 1)) {
+                    lockPiece();
+                }
+            }
+        }
+
+        function spawnPiece() {
+            const letter = LETTER_POOL[Math.floor(Math.random() * LETTER_POOL.length)];
+            activePiece = {
+                x: Math.floor(COLS / 2),
+                y: 0,
+                char: letter
+            };
+            
+            // Check collision on spawn
+            if (grid[activePiece.y][activePiece.x]) {
+                endGame();
+            }
+        }
+
+        function movePiece(dx, dy) {
+            if (!activePiece) return false;
+            const newX = activePiece.x + dx;
+            const newY = activePiece.y + dy;
+
+            if (isValid(newX, newY)) {
+                activePiece.x = newX;
+                activePiece.y = newY;
+                render();
+                return true;
+            }
+            return false;
+        }
+
+        function isValid(x, y) {
+            return x >= 0 && x < COLS && y < ROWS && grid[y] && grid[y][x] === null;
+        }
+
+        function lockPiece() {
+            if (!activePiece) return;
+            grid[activePiece.y][activePiece.x] = activePiece.char;
+            activePiece = null;
+            
+            // Check for words
+            findAndClearWords();
+            
+            // Check top out condition again
+            if (grid[0].some(cell => cell !== null)) {
+                 // But wait, we just locked. If we locked at y=0, it's game over.
+                 // Actually, let's let the next spawn check trigger game over usually,
+                 // or check here if the stack is full.
+            }
+
+            spawnPiece();
+            render();
+        }
+
+        // --- WORD DETECTION ---
+
+        function findAndClearWords() {
+            let matches = new Set(); // Stores {r, c} strings
+            let wordsFoundThisTurn = [];
+
+            // Helper to check a line (array of chars)
+            function checkLine(line, isRow, index) {
+                // Join line into string, use placeholder for null
+                const str = line.map(c => c || ' ').join('');
+                
+                // Naive check against dictionary (since grid is small, 10x18)
+                // Optimized: iterate dictionary or iterate string? 
+                // Dictionary is small in this demo. Real game would use Trie.
+                // For this demo: check all substrings >= 3 chars
+                
+                for (let start = 0; start < line.length; start++) {
+                    for (let end = start + 3; end <= line.length; end++) {
+                        const sub = str.substring(start, end);
+                        if (sub.includes(' ')) continue; // Must be contiguous
+                        if (DICTIONARY.has(sub)) {
+                            // Found word
+                            wordsFoundThisTurn.push(sub);
+                            for(let k = start; k < end; k++) {
+                                if (isRow) matches.add(`${index},${k}`);
+                                else matches.add(`${k},${index}`);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Check Rows
+            for(let r=0; r<ROWS; r++) checkLine(grid[r], true, r);
+            
+            // Check Cols
+            for(let c=0; c<COLS; c++) {
+                let col = [];
+                for(let r=0; r<ROWS; r++) col.push(grid[r][c]);
+                checkLine(col, false, c);
+            }
+
+            if (matches.size > 0) {
+                handleMatches(matches, wordsFoundThisTurn);
+            }
+        }
+
+        function handleMatches(matches, words) {
+            // Convert set to array of coords
+            const coords = Array.from(matches).map(s => {
+                const [r, c] = s.split(',').map(Number);
+                return {r, c};
+            });
+
+            // 1. Highlight Effect (Bold/Black)
+            render(coords); 
+            
+            // Update Score
+            let points = 0;
+            words.forEach(w => {
+                points += w.length * 10; // Simple scoring
+                collectedWords.push(w);
+                addWordToSheet(w);
+            });
+            updateScore(score + points);
+
+            // 2. Delay then Clear
+            setTimeout(() => {
+                // Clear cells
+                coords.forEach(({r, c}) => {
+                    grid[r][c] = null;
+                });
+                
+                // Gravity (Drop blocks)
+                applyGravity();
+                render();
+            }, 600); // Wait for bold animation
+        }
+
+        function applyGravity() {
+            for(let c=0; c<COLS; c++) {
+                let newCol = [];
+                for(let r=0; r<ROWS; r++) {
+                    if(grid[r][c] !== null) newCol.push(grid[r][c]);
+                }
+                // Fill top with nulls
+                while(newCol.length < ROWS) newCol.unshift(null);
+                
+                // Update grid
+                for(let r=0; r<ROWS; r++) {
+                    grid[r][c] = newCol[r];
+                }
+            }
+        }
+
+        // --- RENDER ---
+        function render(highlightCoords = []) {
+            gridEl.innerHTML = '';
+            
+            // Map for quick lookup of highlighting
+            const highlightMap = new Set();
+            highlightCoords.forEach(p => highlightMap.add(`${p.r},${p.c}`));
+
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cellVal = grid[r][c];
+                    
+                    // Also check active piece
+                    let displayChar = cellVal;
+                    let isActive = false;
+                    
+                    if (activePiece && activePiece.y === r && activePiece.x === c) {
+                        displayChar = activePiece.char;
+                        isActive = true;
+                    }
+
+                    if (displayChar) {
+                        const div = document.createElement('div');
+                        div.className = 'block';
+                        div.innerText = displayChar;
+                        
+                        // Positioning
+                        div.style.gridColumnStart = c + 1;
+                        div.style.gridRowStart = r + 1;
+
+                        if (highlightMap.has(`${r},${c}`)) {
+                            div.classList.add('bold-word');
+                            // Trigger clear animation slightly later?
+                            // For simplicity, we just use the class for bolding now
+                        }
+                        
+                        gridEl.appendChild(div);
+                    }
+                }
+            }
+        }
+
+        // --- UI HELPERS ---
+
+        function updateScore(newScore) {
+            score = newScore;
+            scoreEl.innerText = score;
+        }
+
+        function addWordToSheet(word) {
+            const li = document.createElement('li');
+            li.className = 'flex justify-between border-b border-gray-100 py-2';
+            li.innerHTML = `<span>${word}</span> <span class="font-bold">+${word.length*10}</span>`;
+            wordListEl.prepend(li);
+        }
+
+        function togglePause() {
+            if(isGameOver) return;
+            isPaused = !isPaused;
+            if(isPaused) {
+                pauseScreen.classList.remove('hidden');
+            } else {
+                pauseScreen.classList.add('hidden');
+            }
+        }
+
+        function toggleWords() {
+            wordsSheet.classList.toggle('open');
+            // Auto pause when looking at words
+            if(wordsSheet.classList.contains('open') && !isPaused && !isGameOver) {
+                togglePause();
+            }
+        }
+
+        function endGame() {
+            isGameOver = true;
+            clearInterval(gameInterval);
+            finalScoreEl.innerText = score;
+            gameOverScreen.classList.remove('hidden');
+        }
+
+    </script>
+</body>
+</html>

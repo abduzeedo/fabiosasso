@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#e7e7e7" />
+    <link rel="manifest" href="manifest.json" />
+    <title>LETTRIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Luckiest+Guy&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+      :root {
+        --board-columns: 6;
+        --board-rows: 10;
+        --bg-color: #e7e7e7;
+        --text-color: #000000;
+        --overlay-bg: #e7e7e7;
+        --ts-1: #bbb;
+        --ts-2: #999;
+        --ts-3: #888;
+        --ts-4: #777;
+        --ts-5: #666;
+        --ts-6: #555;
+        --ts-7: #444;
+        --ts-8: #333;
+        --ts-9: #302314;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-color: #1a1a1a;
+          --text-color: #ffffff;
+          --overlay-bg: #1a1a1a;
+          --ts-1: #444;
+          --ts-2: #666;
+          --ts-3: #777;
+          --ts-4: #888;
+          --ts-5: #999;
+          --ts-6: #aaa;
+          --ts-7: #bbb;
+          --ts-8: #ccc;
+          --ts-9: #ffffff;
+        }
+      }
+
+      body {
+        font-family: "Luckiest Guy", system-ui, sans-serif;
+        touch-action: manipulation;
+        overflow: hidden;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .game-container {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        /* Padding to account for fixed toolbar (64) and target words (48) at top, and bottom-bar (80) at bottom */
+        padding-top: 112px;
+        padding-bottom: 80px;
+      }
+      .game-board {
+        display: grid;
+        grid-template-columns: repeat(var(--board-columns), 1fr);
+        grid-template-rows: repeat(var(--board-rows), 1fr);
+        width: min(360px, 95vw);
+        aspect-ratio: var(--board-columns) / var(--board-rows);
+        height: calc(100dvh - 192px); /* 64 + 48 + 80 */
+        overflow: hidden;
+        border-right: 1px solid #909090;
+        
+        background-image: linear-gradient(
+          to right,
+          #808080 1px,
+          transparent 1px
+        );
+        background-size: calc(100% / var(--board-columns)) 100%;
+      }
+      .block {
+        color:#fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-weight: 400;
+        font-size: clamp(1.8rem, 10vw, 2.8rem);
+        line-height: 1;
+        overflow: hidden;
+        transition: all 0.2s ease-in-out;
+        text-shadow: 0 1px 1px var(--ts-1),
+          0 2px 0 var(--ts-2), 
+          0 3px 0 var(--ts-3), 
+          0 4px 0 var(--ts-4), 
+          0 5px 0 var(--ts-5), 
+          0 6px 0 var(--ts-6), 
+          0 7px 0 var(--ts-7), 
+          0 8px 0 var(--ts-8), 
+          0 9px 7px var(--ts-9);
+        margin-top: 24px;
+      }
+      .forming-word {
+        font-weight: 900;
+        /* Animation handled by GSAP */
+      }
+      .game-overlay h2 span {
+        display: inline-block;
+      }
+      #start-screen {
+        background-color: var(--overlay-bg);
+        color: var(--text-color);
+      }
+      .toolbar, .bottom-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none; /* Default to none until game starts */
+        background-color: var(--bg-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      .toolbar {
+        top: 0;
+        height: 64px;
+        padding: 0 1rem;
+        border-bottom: 2px solid rgba(128, 128, 128, 0.4);
+      }
+      .bottom-bar {
+        bottom: 0;
+        height: 80px; /* Taller for mobile ease */
+        padding: 0 1.5rem;
+        padding-bottom: env(safe-area-inset-bottom);
+        border-top: 2px solid rgba(128, 128, 128, 0.4);
+      }
+      .target-words-container {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        z-index: 90;
+        opacity: 0;
+        height: 48px;
+        line-height: 48px;
+        text-align: center;
+        background-color: var(--overlay-bg);
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        color: var(--text-color);
+      }
+      .btn-3d {
+        position: relative;
+        box-shadow: 0 1px 0 var(--ts-1),
+          0 2px 0 var(--ts-2), 
+          0 3px 0 var(--ts-3), 
+          0 4px 0 var(--ts-4);
+        transition: all 0.1s ease;
+      }
+      .btn-3d:active {
+        transform: translateY(2px);
+        box-shadow: 0 1px 0 var(--ts-1),
+          0 2px 0 var(--ts-2);
+      }
+      .game-overlay {
+        position: fixed; /* Fixed is better for overlays */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--overlay-bg);
+        backdrop-filter: blur(5px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color);
+        z-index: 150; /* Above bars, below sheet */
+      }
+      .bottom-sheet {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        right: 0;
+        height: 60%;
+        background-color: var(--overlay-bg);
+        backdrop-filter: blur(15px);
+        border-top: 2px solid rgba(128, 128, 128, 0.3);
+        border-top-left-radius: 2rem;
+        border-top-right-radius: 2rem;
+        transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 200;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      .bottom-sheet.show {
+        bottom: 0;
+      }
+      .toolbar{
+        height: 64px;
+        line-height: 64px;
+      }
+      .bottom-bar{
+        height: 64px;
+        line-height: 64px;
+      }
+      .target-words-container {
+        padding: 0 0.5rem;
+        height:48px;
+        line-height: 48px;
+        text-align: center;
+        background-color: var(--overlay-bg);
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        color: var(--text-color);
+      }
+      .target-word {
+        display: inline-block;
+        margin: 0 0.5rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        font-size: 13px;
+        transition: all 0.3s ease;
+      }
+      .target-word.found {
+        text-decoration: line-through;
+        opacity: 0.6;
+        color: #10b981;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col h-screen">
+    <!-- Toolbar -->
+    <div
+      class="toolbar w-full p-4 flex justify-between items-center border-b border-gray-400 dark:border-gray-600"
+    >
+      <h1 class="text-2xl font-bold tracking-widest">LETTRIX</h1>
+      <div class="flex items-center gap-4">
+        <div class="text-center">
+          <div class="text-sm text-gray-600">LEVEL</div>
+          <div id="level" class="text-xl font-bold">1</div>
+        </div>
+        <div class="text-center">
+          <div class="text-sm text-gray-600">SCORE</div>
+          <div id="score" class="text-xl font-bold">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Target Words -->
+    <div id="target-words-container" class="target-words-container">
+      <!-- Target words will be injected here -->
+    </div>
+
+    <!-- Game Area -->
+    <div id="game-area" class="game-container relative">
+      <div id="game-board" class="game-board"></div>
+      <div id="pause-screen" class="game-overlay hidden">
+        <h2 class="text-5xl font-bold mb-8">
+          <span>P</span><span>A</span><span>U</span><span>S</span><span>E</span><span>D</span>
+        </h2>
+        <div class="flex flex-col gap-6 items-center">
+          <button
+            id="resume-button"
+            class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-3 px-8 rounded-lg text-lg min-w-[160px]"
+          >
+            Resume
+          </button>
+          <button
+            id="quit-button"
+            class="btn-3d bg-red-600 text-white font-bold py-3 px-8 rounded-lg text-lg min-w-[160px]"
+          >
+            Quit
+          </button>
+        </div>
+      </div>
+      <div id="game-over-screen" class="game-overlay hidden">
+        <h2 id="game-over-title" class="text-4xl font-bold mb-4">Game Over</h2>
+        <p class="text-xl mb-6">Final Score: <span id="final-score">0</span></p>
+        <button
+          id="restart-button"
+          class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-3 px-6 rounded-lg text-lg"
+        >
+          Play Again
+        </button>
+      </div>
+      <div id="start-screen" class="game-overlay">
+        <h2 class="text-5xl font-bold mb-4 tracking-widest">
+          <span>L</span><span>E</span><span>T</span><span>T</span><span>R</span><span>I</span><span>X</span>
+        </h2>
+        <p id="start-instructions" class="text-lg mb-6 text-center max-w-sm">
+          Swipe to move letters and create words.
+        </p>
+        <button
+          id="start-button"
+          class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-3 px-6 rounded-lg text-lg opacity-0"
+        >
+          Start Game
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button id="pause-button" class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-2 px-6 rounded-lg text-base">PAUSE</button>
+      <button id="words-button" class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-2 px-6 rounded-lg text-base">WORDS</button>
+    </div>
+
+    <!-- Words Bottom Sheet -->
+    <div id="words-sheet" class="bottom-sheet p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Collected Words</h2>
+        <button id="close-sheet-button" class="font-bold text-2xl">
+          &times;
+        </button>
+      </div>
+      <ul id="found-words-list" class="h-full overflow-y-auto pb-12">
+        <!-- Found words will be added here -->
+      </ul>
+    </div>
+
+    <script>
+      // DOM Elements
+      const boardElement = document.getElementById("game-board");
+      const gameAreaElement = document.getElementById("game-area");
+      const scoreElement = document.getElementById("score");
+      const levelElement = document.getElementById("level");
+      const gameOverScreen = document.getElementById("game-over-screen");
+      const startScreen = document.getElementById("start-screen");
+      const pauseScreen = document.getElementById("pause-screen");
+      const finalScoreElement = document.getElementById("final-score");
+      const startButton = document.getElementById("start-button");
+      const restartButton = document.getElementById("restart-button");
+      const pauseButton = document.getElementById("pause-button");
+      const resumeButton = document.getElementById("resume-button");
+      const quitButton = document.getElementById("quit-button");
+      const wordsButton = document.getElementById("words-button");
+      const wordsSheet = document.getElementById("words-sheet");
+      const closeSheetButton = document.getElementById("close-sheet-button");
+      const foundWordsListElement = document.getElementById("found-words-list");
+      const targetWordsContainer = document.getElementById(
+        "target-words-container"
+      );
+      const toolbar = document.querySelector(".toolbar");
+      const bottomBar = document.querySelector(".bottom-bar");
+
+      // Game Constants (Change these to adjust board size)
+      const BOARD_WIDTH = 6;
+      const BOARD_HEIGHT = 8;
+
+      // Sync CSS variables with constants
+      document.documentElement.style.setProperty("--board-columns", BOARD_WIDTH);
+      document.documentElement.style.setProperty("--board-rows", BOARD_HEIGHT);
+      const ALL_VALID_WORDS = [
+        "ACCEPT",
+        "ADAPT",
+        "ADORE",
+        "AGILE",
+        "ALIGN",
+        "ALIVE",
+        "ANGEL",
+        "AWARE",
+        "AWAKE",
+        "BEAUTY",
+        "BLISS",
+        "BLOOM",
+        "BRAVE",
+        "BRIGHT",
+        "CALM",
+        "CARE",
+        "CHARM",
+        "CLEAN",
+        "CLEAR",
+        "DANCE",
+        "DREAM",
+        "EAGER",
+        "ENERGY",
+        "ENJOY",
+        "FAITH",
+        "FAMILY",
+        "FOCUS",
+        "FRIEND",
+        "GENTLE",
+        "GIVEN",
+        "GRACE",
+        "GREAT",
+        "GREEN",
+        "GROWTH",
+        "GUIDE",
+        "HAPPY",
+        "HEAL",
+        "HEALTH",
+        "HEART",
+        "HOPE",
+        "HUMBLE",
+        "JOY",
+        "JOYFUL",
+        "KIND",
+        "LAUGH",
+        "LEARN",
+        "LIGHT",
+        "LOVE",
+        "LOYAL",
+        "LUCKY",
+        "MAGIC",
+        "NATURE",
+        "NOBLE",
+        "PEACE",
+        "POWER",
+        "PRIDE",
+        "PROUD",
+        "PURE",
+        "READY",
+        "RELAX",
+        "RENEW",
+        "REVIVE",
+        "SACRED",
+        "SAFE",
+        "SERENE",
+        "SHINE",
+        "SMILE",
+        "SPARK",
+        "SPIRIT",
+        "SPRING",
+        "STRONG",
+        "SWEET",
+        "THANK",
+        "THRIVE",
+        "TRUST",
+        "TRUTH",
+        "UNITY",
+        "UPLIFT",
+        "VALUE",
+        "VIGOR",
+        "VITAL",
+        "WARMTH",
+        "WISDOM",
+        "WONDER",
+        "WORTHY",
+        "ZEN",
+      ];
+
+      // Game State
+      let board = [];
+      let score = 0;
+      let level = 1;
+      let isGameOver = true;
+      let isPaused = false;
+      let gameLoopInterval;
+      let currentPiece;
+      let wordFindCounts = {};
+      let targetWords = [];
+      let availableLetters = "";
+      let availableLetterIndex = 0;
+      let currentPieceLetterIndex = 0;
+      let wordsFoundThisLevel = 0;
+      let isAdvancingLevel = false;
+
+      // Swipe Controls State
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchMoveX = 0;
+      let touchMoveY = 0;
+      let isTouchMoving = false;
+
+      function setupNewGame() {
+        level = 1;
+        wordsFoundThisLevel = 0;
+        isAdvancingLevel = false;
+        levelElement.textContent = level;
+        setupLevelWords();
+      }
+
+      function setupLevelWords() {
+        // Select 5 random words for current level
+        targetWords = [];
+        const wordsCopy = [...ALL_VALID_WORDS];
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * wordsCopy.length);
+          targetWords.push(wordsCopy.splice(randomIndex, 1)[0]);
+        }
+
+        // Display target words
+        targetWordsContainer.innerHTML = "";
+        targetWords.forEach((word) => {
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.className = "target-word";
+          targetWordsContainer.appendChild(span);
+        });
+
+        // Create a pool of available letters from these words
+        availableLetters = targetWords.join("");
+        availableLetterIndex = 0;
+        currentPieceLetterIndex = 0;
+        wordsFoundThisLevel = 0;
+      }
+
+      function advanceLevel() {
+        level++;
+        levelElement.textContent = level;
+
+        // Remove the top row as a reward for completing the level
+        removeTopRow();
+
+        // Setup new words for next level
+        setupLevelWords();
+
+        // Reset the level advancement flag
+        isAdvancingLevel = false;
+
+        // Show level up message (optional - you can add a visual indicator here)
+        console.log(`Level ${level} reached!`);
+      }
+
+      function removeTopRow() {
+        // Shift all rows up by one position (removing the top row)
+        for (let y = 0; y < BOARD_HEIGHT - 1; y++) {
+          for (let x = 0; x < BOARD_WIDTH; x++) {
+            board[y][x] = board[y + 1][x];
+          }
+        }
+
+        // Clear the bottom row
+        for (let x = 0; x < BOARD_WIDTH; x++) {
+          board[0][x] = null;
+        }
+
+        // Redraw the board
+        draw();
+      }
+
+      function calculateScore(word) {
+        if (word.length < 3) return 0;
+        let basePoints = 5;
+        let multiplier = 1.2;
+        let wordScore = basePoints * Math.pow(multiplier, word.length - 3);
+        return Math.round(wordScore);
+      }
+
+      function updateScore(word) {
+        wordFindCounts[word] = (wordFindCounts[word] || 0) + 1;
+        let points = calculateScore(word);
+        if (wordFindCounts[word] > 1) {
+          points = Math.round(points / 2);
+        }
+
+        score += points;
+        scoreElement.textContent = score;
+
+        // Mark word as found in target words display
+        const targetWordElements =
+          targetWordsContainer.querySelectorAll(".target-word");
+        targetWordElements.forEach((element) => {
+          if (element.textContent === word) {
+            element.classList.add("found");
+          }
+        });
+
+        const li = document.createElement("li");
+        li.className = "text-lg p-2 border-b border-gray-300";
+        li.textContent = `${word} (+${points})`;
+        foundWordsListElement.prepend(li);
+
+        // Check if this is a new word found this level
+        if (targetWords.includes(word)) {
+          wordsFoundThisLevel++;
+
+          // Check if we've found all 5 words for this level
+          if (wordsFoundThisLevel >= 5 && !isAdvancingLevel) {
+            isAdvancingLevel = true;
+            // Delay level advancement to allow word clearing animation to complete
+            setTimeout(() => {
+              advanceLevel();
+            }, 700); // Wait for word clearing animation (600ms) + buffer
+          }
+        }
+      }
+
+      function createBoard() {
+        board = Array.from({ length: BOARD_HEIGHT }, () =>
+          Array(BOARD_WIDTH).fill(null)
+        );
+      }
+
+      function spawnPiece() {
+        // Get random letter from available letters
+        const letter =
+          availableLetters[Math.floor(Math.random() * availableLetters.length)];
+
+        currentPiece = {
+          x: Math.floor(BOARD_WIDTH / 2),
+          y: 0,
+          letter: letter,
+        };
+
+        // Reset the letter cycling index for this new piece
+        currentPieceLetterIndex = 0;
+
+        if (board[currentPiece.y][currentPiece.x]) {
+          isGameOver = true;
+          clearInterval(gameLoopInterval);
+          gameOverScreen.classList.remove("hidden");
+          finalScoreElement.textContent = score;
+
+          // Wrap title in spans
+          const title = document.getElementById("game-over-title");
+          const text = title.textContent.trim();
+          title.innerHTML = text.split('').map(char => 
+            `<span>${char === ' ' ? '&nbsp;' : char}</span>`
+          ).join('');
+
+          // Animate game over screen
+          const tl = gsap.timeline();
+          
+          gsap.killTweensOf("#game-over-screen h2 span, #game-over-screen p, #restart-button");
+
+          tl.fromTo("#game-over-screen h2 span", 
+            { y: -150, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: {
+                amount: 0.4,
+                from: "random"
+              },
+              ease: "back.out(1.7)"
+            }
+          );
+
+          tl.fromTo("#game-over-screen p, #restart-button", 
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+            "-=0.2"
+          );
+        }
+      }
+
+      function draw() {
+        if (isPaused) return;
+        
+        // Use a more stable drawing approach to preserve GSAP animations
+        const children = Array.from(boardElement.children);
+        const totalBlocks = BOARD_HEIGHT * BOARD_WIDTH;
+        
+        if (children.length !== totalBlocks) {
+          boardElement.innerHTML = "";
+          for (let i = 0; i < totalBlocks; i++) {
+            const block = document.createElement("div");
+            block.classList.add("block");
+            boardElement.appendChild(block);
+          }
+        }
+
+        for (let y = 0; y < BOARD_HEIGHT; y++) {
+          for (let x = 0; x < BOARD_WIDTH; x++) {
+            const index = y * BOARD_WIDTH + x;
+            const block = boardElement.children[index];
+            const cell = board[y][x];
+            
+            if (cell) {
+              if (block.textContent !== cell.letter) {
+                 block.textContent = cell.letter;
+              }
+              if (cell.isForming) block.classList.add("forming-word");
+              else block.classList.remove("forming-word");
+              
+              if (cell.isClearing) block.classList.add("clearing");
+              else block.classList.remove("clearing");
+
+              // Fix: Force visibility for any block that has a letter and isn't actively animating in a word sequence
+              if (!cell.isForming && !cell.isClearing) {
+                gsap.set(block, { scale: 1, opacity: 1, rotationY: 0, y: 0 });
+              }
+            } else {
+              // Reset empty blocks, but spare the current active piece block to allow cycling animations to play
+              const isCurrentPieceBlock = currentPiece && x === currentPiece.x && y === currentPiece.y;
+              
+              block.textContent = "";
+              block.classList.remove("forming-word", "clearing");
+              
+              if (!isCurrentPieceBlock) {
+                gsap.set(block, { scale: 1, opacity: 1, rotationY: 0, y: 0 });
+              }
+            }
+          }
+        }
+
+        if (currentPiece && !isGameOver) {
+          const index = currentPiece.y * BOARD_WIDTH + currentPiece.x;
+          const blockElement = boardElement.children[index];
+          if (blockElement && blockElement.textContent !== currentPiece.letter) {
+            blockElement.textContent = currentPiece.letter;
+          }
+        }
+      }
+
+      function movePiece(dx, dy) {
+        if (isGameOver || isPaused) return false;
+        const newX = currentPiece.x + dx;
+        const newY = currentPiece.y + dy;
+
+        if (isValidMove(newX, newY)) {
+          currentPiece.x = newX;
+          currentPiece.y = newY;
+          return true;
+        }
+        return false;
+      }
+
+      function isValidMove(x, y) {
+        return x >= 0 && x < BOARD_WIDTH && y < BOARD_HEIGHT && !board[y][x];
+      }
+
+      function dropPiece() {
+        while (movePiece(0, 1)) {
+          /* continue dropping */
+        }
+        lockPiece();
+      }
+
+      function lockPiece() {
+        const x = currentPiece.x;
+        const y = currentPiece.y;
+        board[y][x] = { letter: currentPiece.letter };
+        
+        const index = y * BOARD_WIDTH + x;
+        const blockElement = boardElement.children[index];
+        if (blockElement) {
+          gsap.from(blockElement, {
+            y: -20,
+            duration: 0.4,
+            ease: "bounce.out"
+          });
+        }
+
+        checkForWords();
+        spawnPiece();
+      }
+
+      function checkForWords() {
+        let wordsFound = false;
+        let coordsToClear = [];
+
+        const checkDirection = (getString, getCoords) => {
+          for (
+            let i = 0;
+            i < (getString === getRowString ? BOARD_HEIGHT : BOARD_WIDTH);
+            i++
+          ) {
+            let line = getString(i);
+            targetWords.forEach((word) => {
+              let index = -1;
+              while ((index = line.indexOf(word, index + 1)) !== -1) {
+                wordsFound = true;
+                updateScore(word);
+                for (let k = 0; k < word.length; k++) {
+                  let { x, y } = getCoords(i, index + k);
+                  coordsToClear.push({ x, y });
+                }
+              }
+            });
+          }
+        };
+
+        const getRowString = (y) =>
+          board[y].map((cell) => (cell ? cell.letter : " ")).join("");
+        const getColString = (x) =>
+          board.map((row) => (row[x] ? row[x].letter : " ")).join("");
+        const getRowCoords = (y, x) => ({ x, y });
+        const getColCoords = (x, y) => ({ x, y });
+
+        checkDirection(getRowString, getRowCoords);
+        checkDirection(getColString, getColCoords);
+
+        if (wordsFound) {
+          animateAndClearWords(coordsToClear);
+        }
+      }
+
+      function animateAndClearWords(coords) {
+        const elements = coords.map(({ x, y }) => {
+          const index = y * BOARD_WIDTH + x;
+          return boardElement.children[index];
+        });
+
+        // Bubble animation: Staggered grow and disappear
+        gsap.to(elements, {
+          scale: 2.5,
+          duration: 0.3,
+          stagger: 0.1,
+          ease: "bounce.out",
+          onStart: () => {
+            coords.forEach(({ x, y }) => {
+              if (board[y][x]) board[y][x].isForming = true;
+            });
+          }
+        });
+
+        gsap.to(elements, {
+          scale: 0,
+          opacity: 0,
+          duration: 0.3,
+          delay: 0.4,
+          stagger: 0.1,
+          ease: "power2.in",
+          onComplete: () => {
+             // Reset state of elements before draw() ensures they aren't stuck at 0
+             gsap.set(elements, { scale: 1, opacity: 1 });
+             clearAndCollapse(coords);
+             draw();
+          }
+        });
+      }
+
+      function clearAndCollapse(coords) {
+        const uniqueCoords = [
+          ...new Set(coords.map((c) => `${c.x},${c.y}`)),
+        ].map((s) => {
+          const [x, y] = s.split(",");
+          return { x: parseInt(x), y: parseInt(y) };
+        });
+
+        uniqueCoords.forEach(({ x, y }) => (board[y][x] = null));
+
+        for (let x = 0; x < BOARD_WIDTH; x++) {
+          let emptyRow = BOARD_HEIGHT - 1;
+          for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
+            if (board[y][x]) {
+              [board[emptyRow][x], board[y][x]] = [
+                board[y][x],
+                board[emptyRow][x],
+              ];
+              emptyRow--;
+            }
+          }
+        }
+      }
+
+      function gameLoop() {
+        if (isPaused || isGameOver) return;
+        if (!movePiece(0, 1)) {
+          lockPiece();
+        }
+        draw();
+      }
+
+      function togglePause() {
+        isPaused = !isPaused;
+        pauseScreen.classList.toggle("hidden");
+        if (isPaused) {
+          clearInterval(gameLoopInterval);
+          // Reset and kill any pending animations on these elements
+          gsap.killTweensOf("#pause-screen h2 span, #pause-screen .btn-3d");
+          
+          // Animate pause screen text
+          gsap.fromTo("#pause-screen h2 span", 
+            { y: -250, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.5,
+              stagger: {
+                amount: 0.3,
+                from: "random"
+              },
+              ease: "back.out(1.7)"
+            }
+          );
+          gsap.fromTo("#pause-screen .btn-3d", 
+            { scale: 0.1, opacity: 0 },
+            {
+              scale: 1,
+              opacity: 1,
+              duration: 0.5,
+              delay: 0.3, // Slightly less delay for better feel
+              stagger: 0.1,
+              ease: "elastic.out(2, 0.8)"
+            }
+          );
+        } else {
+          gameLoopInterval = setInterval(gameLoop, 1000);
+        }
+      }
+
+      function cycleLetter() {
+        if (isGameOver || isPaused || !currentPiece) return;
+
+        const index = currentPiece.y * BOARD_WIDTH + currentPiece.x;
+        const blockElement = boardElement.children[index];
+        
+        if (blockElement) {
+          const tl = gsap.timeline();
+          
+          // Pop out
+          tl.to(blockElement, {
+            scale: 0.5,
+            opacity: 0,
+            duration: 0.05,
+            ease: "power2.in",
+            onComplete: () => {
+              // Cycle through all available letters for this piece
+              currentPieceLetterIndex = (currentPieceLetterIndex + 1) % availableLetters.length;
+              currentPiece.letter = availableLetters[currentPieceLetterIndex];
+              draw(); // Update text content
+            }
+          });
+
+          // Pop in
+          tl.to(blockElement, {
+            scale: 1,
+            opacity: 1,
+            duration: 0.15,
+            ease: "back.out(2)"
+          });
+        } else {
+          // Fallback if no block element found
+          currentPieceLetterIndex = (currentPieceLetterIndex + 1) % availableLetters.length;
+          currentPiece.letter = availableLetters[currentPieceLetterIndex];
+          draw();
+        }
+      }
+
+      function redrawTargetWords() {
+        targetWordsContainer.innerHTML = "";
+        targetWords.forEach((word) => {
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.className = "target-word";
+          targetWordsContainer.appendChild(span);
+        });
+      }
+
+      function quitGame() {
+        clearInterval(gameLoopInterval);
+        isPaused = false;
+        isGameOver = false;
+        
+        // Hide all screens first
+        pauseScreen.classList.add("hidden");
+        gameOverScreen.classList.add("hidden");
+        
+        // Hide game UI
+        const uiBars = [toolbar, bottomBar, targetWordsContainer];
+        gsap.killTweensOf(uiBars);
+        gsap.to(uiBars, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+             uiBars.forEach(bar => bar.style.pointerEvents = "none");
+          }
+        });
+
+        // Reset board for a clean look behind overlay
+        board = Array.from({ length: BOARD_HEIGHT }, () =>
+          Array(BOARD_WIDTH).fill(null)
+        );
+        draw();
+
+        // Reveal start screen
+        startScreen.classList.remove("hidden");
+        
+        // Reset and run intro animation
+        initStartScreen();
+      }
+
+      function startGame() {
+        isGameOver = false;
+        isPaused = false;
+        score = 0;
+        wordFindCounts = {};
+        scoreElement.textContent = "0";
+        foundWordsListElement.innerHTML = "";
+        gameOverScreen.classList.add("hidden");
+        startScreen.classList.add("hidden");
+        pauseScreen.classList.add("hidden");
+
+        // Reveal game UI with robust fromTo
+        const uiBars = [toolbar, bottomBar, targetWordsContainer];
+        gsap.killTweensOf(uiBars);
+        
+        gsap.set(uiBars, { pointerEvents: "auto" });
+        gsap.fromTo(uiBars, 
+          { opacity: 0, y: (i) => i === 1 ? 50 : (i === 0 ? -50 : 0) },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out"
+          }
+        );
+
+        setupNewGame();
+        createBoard();
+        spawnPiece();
+        draw();
+        gameLoopInterval = setInterval(gameLoop, 1000);
+      }
+
+      // Start Screen Animation Sequence
+      function initStartScreen() {
+        // Wrap instructions in spans
+        const instr = document.getElementById("start-instructions");
+        const text = instr.textContent.trim();
+        instr.innerHTML = text.split('').map(char => 
+          `<span style="display:inline-block">${char === ' ' ? '&nbsp;' : char}</span>`
+        ).join('');
+
+        const tl = gsap.timeline();
+
+        tl.fromTo("#start-screen h2 span", 
+          { y: -100, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            stagger: {
+              amount: 0.4,
+              from: "random"
+            },
+            ease: "back.out(1.7)"
+          }
+        );
+
+        tl.fromTo("#start-instructions span", 
+          { opacity: 0, scale: 0 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.2,
+            stagger: 0.02,
+            ease: "power2.out"
+          }, "-=0.2"
+        );
+
+        tl.fromTo("#start-button", 
+          { opacity: 0, scale: 0.1 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.6,
+            ease: "elastic.out(2, 0.8)"
+          }
+        );
+      }
+
+      // Event Listeners
+      window.addEventListener("load", initStartScreen);
+
+      document.addEventListener("keydown", (e) => {
+        if (isGameOver || isPaused) return;
+        if (e.key === "ArrowLeft") movePiece(-1, 0);
+        if (e.key === "ArrowRight") movePiece(1, 0);
+        if (e.key === "ArrowDown") dropPiece();
+        if (e.key === " ") {
+          e.preventDefault();
+          cycleLetter();
+        }
+        draw();
+      });
+
+      // Swipe Controls
+      // Swipe Controls
+      gameAreaElement.addEventListener("touchstart", (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchMoveX = touchStartX;
+        touchMoveY = touchStartY;
+        isTouchMoving = false;
+      }, { passive: false });
+
+      gameAreaElement.addEventListener("touchmove", (e) => {
+        e.preventDefault(); // Prevent scrolling
+        touchMoveX = e.touches[0].clientX;
+        touchMoveY = e.touches[0].clientY;
+        
+        const diffX = touchMoveX - touchStartX;
+        const diffY = touchMoveY - touchStartY;
+        const threshold = boardElement.clientWidth / BOARD_WIDTH;
+
+        // Horizontal movement
+        if (Math.abs(diffX) > threshold) {
+          movePiece(diffX > 0 ? 1 : -1, 0);
+          touchStartX = touchMoveX; // Reset start position
+          isTouchMoving = true;
+          draw();
+        }
+        
+        // Vertical movement (Swipe Down to Drop)
+        // Require a more significant swipe for drop to avoid accidental drops while moving sideways
+        if (diffY > threshold * 2 && Math.abs(diffY) > Math.abs(diffX) * 1.5) {
+             dropPiece();
+             touchStartY = touchMoveY; // Reset to prevent multiple drops in one swipe if not desired, or let it flow
+             isTouchMoving = true;
+        }
+      }, { passive: false });
+
+      gameAreaElement.addEventListener("touchend", (e) => {
+          if (!isTouchMoving) {
+              // It was a tap
+              cycleLetter();
+          }
+      });
+
+      function animateButton(el, callback) {
+        gsap.to(el, {
+          scale: 0.9,
+          duration: 0.1,
+          yoyo: true,
+          repeat: 1,
+          ease: "power1.inOut",
+          onComplete: () => {
+            if (callback) callback();
+          }
+        });
+      }
+
+      startButton.addEventListener("click", () => animateButton(startButton, startGame));
+      restartButton.addEventListener("click", () => animateButton(restartButton, startGame));
+      pauseButton.addEventListener("click", () => animateButton(pauseButton, togglePause));
+      resumeButton.addEventListener("click", () => animateButton(resumeButton, togglePause));
+      quitButton.addEventListener("click", () => animateButton(quitButton, quitGame));
+
+      wordsButton.addEventListener("click", (e) => {
+        if (e) e.preventDefault();
+        animateButton(wordsButton, () => {
+          wordsSheet.classList.add("show");
+          gsap.fromTo("#found-words-list li", 
+            { x: -20, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" }
+          );
+        });
+      });
+
+      closeSheetButton.addEventListener("click", () =>
+        wordsSheet.classList.remove("show")
+      );
+
+      // Register Service Worker
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("sw.js").then((reg) => {
+            console.log("SW registered!", reg);
+            // Check for updates
+            reg.onupdatefound = () => {
+              const installingWorker = reg.installing;
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed') {
+                  if (navigator.serviceWorker.controller) {
+                    console.log('New content available; please refresh.');
+                  }
+                }
+              };
+            };
+          }).catch((err) => {
+            console.log("SW registration failed:", err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
