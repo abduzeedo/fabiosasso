@@ -3,7 +3,7 @@
     "short_name": "LETTRIX",
     "start_url": "./index.html",
     "scope": "./",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#e7e7e7",
     "theme_color": "#e7e7e7",
     "orientation": "portrait",
