@@ -243,7 +243,7 @@
       .target-word.found {
         text-decoration: line-through;
         opacity: 0.6;
-        color: #10b981;
+        color: var(--bg-color);
       }
       /* Options Slider Styles */
       #speed-slider {
@@ -499,9 +499,11 @@
             <span>L</span><span>E</span><span>T</span><span>T</span><span>R</span
             ><span>I</span><span>X</span>
           </h2>
-          <p id="start-instructions" class="text-lg mb-6 text-center max-w-sm" style="padding: 0 20px; opacity: 0.5;">
-            Get your word game on! Use the gamepad to slide letters and the buttons to swap them. Let’s see those word-making skills!
-          </p>
+          <div id="start-instructions" class="mb-6 text-center max-w-sm" style="padding: 0 20px; opacity: 0.5;">
+            <p class="text-lg mb-2">Get your word game on!</p>
+            <p class="text-lg mb-2">Use the gamepad to slide letters and the buttons to swap them.</p>
+            <p class="text-lg">Let’s see those word-making skills!</p>
+          </div>
           <button
             id="start-button"
             class="btn-3d bg-black text-white dark:bg-white dark:text-black font-bold py-3 px-6 rounded-lg text-lg opacity-0"
@@ -886,10 +888,6 @@
           // Check if we've found all 5 words for this level
           if (wordsFoundThisLevel >= 5 && !isAdvancingLevel) {
             isAdvancingLevel = true;
-            // Delay level advancement to allow word clearing animation to complete
-            setTimeout(() => {
-              advanceLevel();
-            }, 700); // Wait for word clearing animation (600ms) + buffer
           }
         }
       }
@@ -1177,6 +1175,10 @@
             gsap.set(elements, { scale: 1, opacity: 1 });
             clearAndCollapse(coords);
             draw();
+
+            if (isAdvancingLevel) {
+              advanceLevel();
+            }
           },
         });
       }
@@ -1413,18 +1415,23 @@
 
       // Start Screen Animation Sequence
       function initStartScreen() {
-        // Wrap instructions in spans
-        const instr = document.getElementById("start-instructions");
-        const text = instr.textContent.trim();
-        instr.innerHTML = text
-          .split("")
-          .map(
-            (char) =>
-              `<span style="display:inline-block">${
-                char === " " ? "&nbsp;" : char
-              }</span>`
-          )
-          .join("");
+        // Wrap instructions in spans for each paragraph
+        const container = document.getElementById("start-instructions");
+        const paragraphs = container.querySelectorAll("p");
+        
+        paragraphs.forEach(p => {
+          const text = p.textContent.trim();
+          p.innerHTML = text
+            .split("")
+            .map(
+              (char) =>
+                `<span style="display:inline-block">${
+                  char === " " ? "&nbsp;" : char
+                }</span>`
+            )
+            .join("");
+        });
+
 
         const tl = gsap.timeline();
 
@@ -1444,17 +1451,18 @@
         );
 
         tl.fromTo(
-          "#start-instructions span",
+          "#start-instructions p span",
           { opacity: 0, scale: 0 },
           {
             opacity: 1,
             scale: 1,
             duration: 0.2,
-            stagger: 0.02,
+            stagger: 0.01, // Slightly faster stagger for more text
             ease: "power2.out",
           },
           "-=0.2"
         );
+
 
         tl.fromTo(
           "#start-button",
