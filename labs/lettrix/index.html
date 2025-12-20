@@ -10,6 +10,9 @@
     <link rel="manifest" href="manifest.json" />
     <title>LETTRIX</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script 
+  src="https://www.paypal.com/sdk/js?client-id=BAA1NXfuRiV1mtgXlbVXZMf0unjmmXPEMDodV9gs21LudBlbJx4oQRhiFoDarL923_FRFLskdwg_RYCaPs&components=hosted-buttons&enable-funding=venmo&currency=USD">
+</script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Luckiest+Guy&family=Monda:wght@400..700&&display=swap"
       rel="stylesheet"
@@ -19,7 +22,7 @@
       :root {
         --device-color: #B5AFAC;
         --board-columns: 6;
-        --board-rows: 10;
+        --board-rows: 8;
         --bg-color: #ABB1AD;
         --bg-color-sec: #eeeeee;
         --text-color: #000000;
@@ -36,7 +39,8 @@
       }
 
       body {
-      
+        user-select: none;
+        -webkit-user-select: none;
         font-family: system-ui, sans-serif;
         touch-action: manipulation;
         overflow: hidden;
@@ -46,7 +50,6 @@
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-       
       }
       .main-area{
         max-width:640px;
@@ -117,7 +120,6 @@
         0 6px 0 var(--ts-6), 
         0 7px 0 var(--ts-7), 
         0 8px 0 var(--ts-8);
-        margin-top: 24px;
       }
       .forming-word {
         font-weight: 900;
@@ -353,12 +355,12 @@
       }
     #A-button{
       position: absolute;
-      bottom: 16px;
+      bottom: 24px;
       left: 32;
     }
     #B-button{
       position: absolute;
-      top: 16px;
+      top: 24px;
      right: 0;
     }
     .directional-button{
@@ -510,6 +512,14 @@
           >
             Start Game
           </button>
+          <h3>Buy me a coffee</h3>
+          <div id="paypal-container-H9BYZL8D5HD9L"></div>
+<script>
+  paypal.HostedButtons({
+    hostedButtonId: "H9BYZL8D5HD9L",
+  }).render("#paypal-container-H9BYZL8D5HD9L")
+</script>
+
         </div>
       </div>
 
@@ -616,7 +626,7 @@
 
       // Game Constants
       const BOARD_WIDTH = 6;
-      const BOARD_HEIGHT = 10;
+      const BOARD_HEIGHT = 8;
       let INITIAL_DROP_SPEED = 2000; // Base speed in milliseconds
       const SPEED_INCREMENT_PER_LEVEL = 100; // Amount to speed up per level
 
@@ -818,6 +828,9 @@
 
         // Show level up message
         console.log(`Level ${level} reached! Current Speed: ${gameDropSpeed}ms`);
+
+        // Spawn new piece after level transition is complete
+        spawnPiece();
       }
 
       /**
@@ -1094,7 +1107,11 @@
         }
 
         checkForWords();
-        spawnPiece();
+        
+        // Delay spawning new piece if we are advancing level to avoid race conditions
+        if (!isAdvancingLevel) {
+          spawnPiece();
+        }
       }
 
       /**
