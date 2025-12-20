@@ -59,19 +59,19 @@
        
       }
       .main-area{
-          max-width:640px;
+        max-width:640px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-         margin: 0 auto;
+        margin: 0 auto;
       }
       .game-wrapper {
         font-family: "Luckiest Guy", system-ui, sans-serif;
         width: calc(100% - 20px);
         max-width: 640px;
         height: calc(100% - 256px);
-        margin: 10px;
+        margin: 0 10px 15px 10px;
         position: relative;
         overflow: hidden;
         background-color: var(--bg-color);
@@ -87,8 +87,8 @@
         justify-content: center;
         align-items: center;
         /* Padding to account for toolbar (64) and target words (48) at top */
-        padding-top: 24px;
-        padding-bottom: 0px;
+        padding-top: 20px;
+        padding-bottom: 5px;
         
       }
       .game-board {
@@ -509,7 +509,7 @@
             <span>L</span><span>E</span><span>T</span><span>T</span><span>R</span
             ><span>I</span><span>X</span>
           </h2>
-          <p id="start-instructions" class="text-xl mb-6 text-center max-w-sm">
+          <p id="start-instructions" class="text-lg mb-6 text-center max-w-sm" style="padding: 0 20px; opacity: 0.5;">
             Use the gamepad to move letters and create words
           </p>
           <button
@@ -624,8 +624,10 @@
 
       // Game Constants
       const BOARD_WIDTH = 6;
-      const BOARD_HEIGHT = 8;
+      const BOARD_HEIGHT = 10;
       let INITIAL_DROP_SPEED = 2000; // Base speed in milliseconds
+      const SPEED_INCREMENT_PER_LEVEL = 100; // Amount to speed up per level
+
 
 
       // Sync CSS variables with constants
@@ -748,16 +750,31 @@
       let isTouchMoving = false;
 
       /**
+       * Updates the drop speed based on initial setting and current level.
+       */
+      function updateDropSpeed() {
+        const levelBonus = (level - 1) * SPEED_INCREMENT_PER_LEVEL;
+        gameDropSpeed = Math.max(200, INITIAL_DROP_SPEED - levelBonus);
+
+        // Update interval if game is active
+        if (!isPaused && !isGameOver && gameLoopInterval) {
+          clearInterval(gameLoopInterval);
+          gameLoopInterval = setInterval(gameLoop, gameDropSpeed);
+        }
+      }
+
+      /**
        * Prepares a fresh game state, resetting level and words.
        */
       function setupNewGame() {
         level = 1;
-        gameDropSpeed = INITIAL_DROP_SPEED;
+        updateDropSpeed();
         wordsFoundThisLevel = 0;
         isAdvancingLevel = false;
         levelElement.textContent = level;
         setupLevelWords();
       }
+
 
       /**
        * Randomly selects 5 target words for the current level and creates a letter pool.
@@ -794,16 +811,11 @@
         level++;
         levelElement.textContent = level;
 
-        // Increase speed slightly with each level (cap at 200ms)
-        gameDropSpeed = Math.max(200, gameDropSpeed - 50);
-
-        // Reset interval with new speed if game is running
-        if (!isPaused && !isGameOver) {
-          clearInterval(gameLoopInterval);
-          gameLoopInterval = setInterval(gameLoop, gameDropSpeed);
-        }
+        // Increase speed slightly with each level
+        updateDropSpeed();
 
         // Remove the top row as a reward for completing the level
+
         removeTopRow();
 
         // Setup new words for next level
@@ -1541,6 +1553,11 @@
        * @param {Function} callback
        */
       function animateButton(el, callback) {
+        // Trigger haptic feedback for PWA
+        if (navigator.vibrate) {
+          navigator.vibrate(10);
+        }
+
         gsap.to(el, {
           scale: 0.9,
           duration: 0.1,
@@ -1636,17 +1653,9 @@
       // Speed Slider Listener
       speedSlider.addEventListener("input", (e) => {
         INITIAL_DROP_SPEED = parseInt(e.target.value);
-        // If game is running, updating initial speed won't affect current level's drop speed 
-        // until we recalculate gameDropSpeed. For immediate effect:
-        const levelBonus = (level - 1) * 50;
-        gameDropSpeed = Math.max(200, INITIAL_DROP_SPEED - levelBonus);
-        
-        // Update interval if game is active
-        if (!isPaused && !isGameOver) {
-          clearInterval(gameLoopInterval);
-          gameLoopInterval = setInterval(gameLoop, gameDropSpeed);
-        }
+        updateDropSpeed();
       });
+
 
 
       restartButton.addEventListener("click", () =>

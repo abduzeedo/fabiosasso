@@ -1,4 +1,48 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="64" fill="#e7e7e7"/>
-  <text x="50%" y="60%" font-family="Luckiest Guy, sans-serif" font-size="300" fill="#000000" text-anchor="middle" dominant-baseline="middle">L</text>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_535_639)">
+<path d="M448 0H64C28.6538 0 0 28.6538 0 64V448C0 483.346 28.6538 512 64 512H448C483.346 512 512 483.346 512 448V64C512 28.6538 483.346 0 448 0Z" fill="#B5AFAC"/>
+<g filter="url(#filter0_dddii_535_639)">
+<path d="M357 297.523L347.403 398.927L155 414C155.914 360.862 156.904 308.029 157.971 255.5C159.189 202.971 160.637 150.138 162.312 97H281.136C277.632 130.344 274.281 163.689 271.081 197.033C267.882 230.225 265.597 263.722 264.226 297.523C271.386 297.828 278.47 297.98 285.477 297.98C292.485 297.98 299.569 297.98 306.729 297.98C315.259 297.98 323.638 297.904 331.864 297.751C340.091 297.599 348.469 297.523 357 297.523Z" fill="#333534" shape-rendering="crispEdges"/>
+<path d="M357 297.523L347.403 398.927L155 414C155.914 360.862 156.904 308.029 157.971 255.5C159.189 202.971 160.637 150.138 162.312 97H281.136C277.632 130.344 274.281 163.689 271.081 197.033C267.882 230.225 265.597 263.722 264.226 297.523C271.386 297.828 278.47 297.98 285.477 297.98C292.485 297.98 299.569 297.98 306.729 297.98C315.259 297.98 323.638 297.904 331.864 297.751C340.091 297.599 348.469 297.523 357 297.523Z" stroke="black" stroke-opacity="0.8" stroke-width="2" shape-rendering="crispEdges"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_dddii_535_639" x="141.981" y="92" width="220.117" height="335.083" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-4" dy="4"/>
+<feGaussianBlur stdDeviation="4"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_535_639"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-2" dy="2"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0"/>
+<feBlend mode="normal" in2="effect1_dropShadow_535_639" result="effect2_dropShadow_535_639"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-1" dy="1"/>
+<feGaussianBlur stdDeviation="1"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0"/>
+<feBlend mode="normal" in2="effect2_dropShadow_535_639" result="effect3_dropShadow_535_639"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect3_dropShadow_535_639" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="1" operator="erode" in="SourceAlpha" result="effect4_innerShadow_535_639"/>
+<feOffset dx="-4" dy="4"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"/>
+<feBlend mode="normal" in2="shape" result="effect4_innerShadow_535_639"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="1" operator="erode" in="SourceAlpha" result="effect5_innerShadow_535_639"/>
+<feOffset dx="4" dy="-4"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"/>
+<feBlend mode="normal" in2="effect4_innerShadow_535_639" result="effect5_innerShadow_535_639"/>
+</filter>
+<clipPath id="clip0_535_639">
+<rect width="512" height="512" fill="white"/>
+</clipPath>
+</defs>
 </svg>
