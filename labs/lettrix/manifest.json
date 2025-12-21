@@ -1,15 +1,15 @@
 {
     "name": "LETTRIX",
     "short_name": "LETTRIX",
-    "start_url": "http://fabiosasso.com/labs/lettrix/index.html",
-    "scope": "http://fabiosasso.com/labs/lettrix/",
+    "start_url": "./index.html",
+    "scope": "./",
     "display": "standalone",
     "background_color": "#B5AFAC",
     "theme_color": "#B5AFAC",
     "orientation": "portrait",
     "icons": [
         {
-            "src": "/icon.svg",
+            "src": "icon.svg",
             "sizes": "512x512",
             "type": "image/svg+xml",
             "purpose": "any maskable"
