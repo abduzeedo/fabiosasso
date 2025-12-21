@@ -1,8 +1,8 @@
 {
     "name": "LETTRIX",
     "short_name": "LETTRIX",
-    "start_url": "/index.html",
-    "scope": "/",
+    "start_url": "http://fabiosasso.com/labs/lettrix/index.html",
+    "scope": "http://fabiosasso.com/labs/lettrix/",
     "display": "standalone",
     "background_color": "#B5AFAC",
     "theme_color": "#B5AFAC",
