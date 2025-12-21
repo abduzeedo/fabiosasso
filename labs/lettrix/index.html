@@ -19,7 +19,7 @@
       :root {
         --device-color: #B5AFAC;
         --board-columns: 6;
-        --board-rows: 8;
+        --board-rows: 10;
         --bg-color: #ABB1AD;
         --bg-color-sec: #eeeeee;
         --text-color: #000000;
@@ -77,11 +77,12 @@
         justify-content: center;
         align-items: center;
         /* Padding to account for toolbar (64) and target words (48) at top */
-        padding-top: 20px;
+        padding-top: 10px;
         padding-bottom: 5px;
         
       }
       .game-board {
+        position: relative;
         display: grid;
         grid-template-columns: repeat(var(--board-columns), 1fr);
         grid-template-rows: repeat(var(--board-rows), 1fr);
@@ -89,7 +90,8 @@
         aspect-ratio: var(--board-columns) / var(--board-rows);
         height: calc(100% - 112px); /* 64 (toolbar) + 48 (target words) */
         overflow: hidden;
-        border-right: 1px solid #909090;
+        border-right: 1px solid #808080;
+  
         margin-top: 0;
         background-image: linear-gradient(
           to right,
@@ -101,14 +103,17 @@
       .block { 
         display: flex;
         align-items: center;
+        align-content: center;
         justify-content: center;
         text-align: center;
         font-weight: 400;
-        font-size: clamp(1.8rem, 10vw, 2.8rem);
+        font-size: 32px;
         line-height: 1;
-        color: #DCD6D2;
-        transition: all 0.2s ease-in-out;
-        text-shadow: 
+        color: var(--text-color);
+        /* transition: all 0.2s ease-in-out; */
+        /* border-right: 1px solid #909090;
+        border-bottom: 1px solid #909090; */
+        /* text-shadow: 
         0 1px 1px var(--ts-1), 
         0 2px 0 var(--ts-2),
         0 3px 0 var(--ts-3), 
@@ -116,7 +121,7 @@
         0 5px 0 var(--ts-5),
         0 6px 0 var(--ts-6), 
         0 7px 0 var(--ts-7), 
-        0 8px 0 var(--ts-8);
+        0 8px 0 var(--ts-8); */
       }
       .forming-word {
         font-weight: 900;
@@ -336,7 +341,7 @@
         font-size: 32px;
         border-radius: 50%;
         background: #8D004C;
-        text-shadow: 0 -0.5px 0 rgba(0, 0, 0, 0.90), 0 0.5px 0 rgba(255, 255, 255, 0.5);
+        text-shadow: 0 -0.5px 0 rgba(0, 0, 0, 0.90), 0 0.5px 0 rgba(255, 255, 255, 0.3);
         color: #620135;
       }
       .select-button{
@@ -367,7 +372,7 @@
       position: absolute;
       font-size: 12px;
       font-weight: bolder;
-      text-shadow: 0 -0.5px 0 rgba(0, 0, 0, 0.90), 0 0.5px 0 rgba(255, 255, 255, 0.5);
+      text-shadow: 0 -0.5px 0 rgba(0, 0, 0, 0.90), 0 0.5px 0 rgba(255, 255, 255, 0.3);
        background: #404040;
        color: #2f2f2f;
     }
@@ -428,7 +433,7 @@
     <div class="game-wrapper">
       <!-- Toolbar -->
       <div
-        class="toolbar w-full p-4 flex justify-between items-center border-b border-gray-400 dark:border-gray-600"
+        class="toolbar w-full p-4 flex justify-between items-center"
       >
         <h1 class="text-2xl font-bold tracking-widest">LETTRIX</h1>
         <div class="flex items-center gap-4">
@@ -509,7 +514,7 @@
           >
             Start Game
           </button> 
-          <div class="mt-8 text-center" style="margin-top: 48px;">
+          <div id="support-creator" class="mt-8 text-center opacity-0" style="margin-top: 48px;">
           <h3>Support the creator</h3>
           <p><a href="https://abdz.gumroad.com/coffee" target="_blank" class="underline">Buy me a coffee</a></p>
           </div>
@@ -619,7 +624,7 @@
 
       // Game Constants
       const BOARD_WIDTH = 6;
-      const BOARD_HEIGHT = 8;
+      const BOARD_HEIGHT = 10;
       let INITIAL_DROP_SPEED = 2000; // Base speed in milliseconds
       const SPEED_INCREMENT_PER_LEVEL = 100; // Amount to speed up per level
 
@@ -751,9 +756,10 @@
         const levelBonus = (level - 1) * SPEED_INCREMENT_PER_LEVEL;
         gameDropSpeed = Math.max(200, INITIAL_DROP_SPEED - levelBonus);
 
-        // Update interval if game is active
-        if (!isPaused && !isGameOver && gameLoopInterval) {
-          clearInterval(gameLoopInterval);
+        if (!isPaused && !isGameOver) {
+          if (gameLoopInterval !== null) {
+            clearInterval(gameLoopInterval);
+          }
           gameLoopInterval = setInterval(gameLoop, gameDropSpeed);
         }
       }
@@ -1240,6 +1246,7 @@
         pauseScreen.classList.toggle("hidden");
         if (isPaused) {
           clearInterval(gameLoopInterval);
+          gameLoopInterval = null;
           // Reset and kill any pending animations on these elements
           gsap.killTweensOf("#pause-screen h2 span, #pause-screen .btn-3d");
 
@@ -1352,6 +1359,7 @@
        */
       function quitGame() {
         clearInterval(gameLoopInterval);
+        gameLoopInterval = null;
         isPaused = false;
         isGameOver = false;
 
@@ -1420,31 +1428,19 @@
         createBoard();
         spawnPiece();
         draw();
-        gameLoopInterval = setInterval(gameLoop, gameDropSpeed);
+        // Removed redundant setInterval: updateDropSpeed (via setupNewGame) already starts it.
       }
 
       // Start Screen Animation Sequence
       function initStartScreen() {
-        // Wrap instructions in spans for each paragraph
-        const container = document.getElementById("start-instructions");
-        const paragraphs = container.querySelectorAll("p");
-        
-        paragraphs.forEach(p => {
-          const text = p.textContent.trim();
-          p.innerHTML = text
-            .split("")
-            .map(
-              (char) =>
-                `<span style="display:inline-block">${
-                  char === " " ? "&nbsp;" : char
-                }</span>`
-            )
-            .join("");
-        });
-
+        // Reset instructions opacity for clean fade-in
+        gsap.set("#start-instructions", { opacity: 1 });
+        gsap.set("#start-instructions p", { opacity: 0 });
+        gsap.set("#support-creator", { opacity: 0 });
 
         const tl = gsap.timeline();
 
+        // 1. Lettrix Title (random letter animation)
         tl.fromTo(
           "#start-screen h2 span",
           { y: -100, opacity: 0 },
@@ -1460,20 +1456,21 @@
           }
         );
 
+        // 2. Paragraph by paragraph fade-in
         tl.fromTo(
-          "#start-instructions p span",
-          { opacity: 0, scale: 0 },
+          "#start-instructions p",
+          { opacity: 0, y: 10 },
           {
-            opacity: 1,
-            scale: 1,
-            duration: 0.2,
-            stagger: 0.01, // Slightly faster stagger for more text
+            opacity: 0.8,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.4,
             ease: "power2.out",
           },
-          "-=0.2"
+          "+=0.2"
         );
 
-
+        // 3. Start Button
         tl.fromTo(
           "#start-button",
           { opacity: 0, scale: 0.1 },
@@ -1482,7 +1479,21 @@
             scale: 1,
             duration: 0.6,
             ease: "elastic.out(2, 0.8)",
-          }
+          },
+          "-=0.2"
+        );
+
+        // 4. Support Creator
+        tl.fromTo(
+          "#support-creator",
+          { opacity: 0, y: 10 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.2"
         );
       }
 
