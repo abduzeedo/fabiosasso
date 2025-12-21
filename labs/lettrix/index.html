@@ -22,7 +22,7 @@
       :root {
         --device-color: #B5AFAC;
         --board-columns: 6;
-        --board-rows: 10;
+        --board-rows: 8;
         --bg-color: #ABB1AD;
         --bg-color-sec: #eeeeee;
         --text-color: #000000;
@@ -72,7 +72,7 @@
         font-family: "Luckiest Guy", system-ui, sans-serif;
         width: calc(100% - 20px);
         max-width: 640px;
-        height: calc(100dvh - 256px);
+        height: calc(100% - 256px);
         margin: 0 10px 15px 10px;
         position: relative;
         overflow: hidden;
@@ -100,7 +100,7 @@
         grid-template-rows: repeat(var(--board-rows), 1fr);
         width: min(360px, 95%);
         aspect-ratio: var(--board-columns) / var(--board-rows);
-        height: calc(100dvh - 112px); /* 64 (toolbar) + 48 (target words) */
+        height: calc(100% - 112px); /* 64 (toolbar) + 48 (target words) */
         overflow: hidden;
         border-right: 1px solid #808080;
   
@@ -636,7 +636,7 @@
 
       // Game Constants
       const BOARD_WIDTH = 6;
-      const BOARD_HEIGHT = 10;
+      const BOARD_HEIGHT = 8;
       let INITIAL_DROP_SPEED = 2000; // Base speed in milliseconds
       const SPEED_INCREMENT_PER_LEVEL = 100; // Amount to speed up per level
 
@@ -1109,13 +1109,13 @@
 
         const index = y * BOARD_WIDTH + x;
         const blockElement = boardElement.children[index];
-        if (blockElement) {
-          gsap.from(blockElement, {
-            y: -20,
-            duration: 0.4,
-            ease: "bounce.out",
-          });
-        }
+        // if (blockElement) {
+        //   gsap.from(blockElement, {
+        //     y: -20,
+        //     duration: 0.4,
+        //     ease: "bounce.out",
+        //   });
+        // }
 
         checkForWords();
         
