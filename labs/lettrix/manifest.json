@@ -1,15 +1,15 @@
 {
     "name": "LETTRIX",
     "short_name": "LETTRIX",
-    "start_url": "./index.html",
-    "scope": "./",
-    "display": "fullscreen",
+    "start_url": "/index.html",
+    "scope": "/",
+    "display": "standalone",
     "background_color": "#B5AFAC",
     "theme_color": "#B5AFAC",
     "orientation": "portrait",
     "icons": [
         {
-            "src": "icon.svg",
+            "src": "/icon.svg",
             "sizes": "512x512",
             "type": "image/svg+xml",
             "purpose": "any maskable"
