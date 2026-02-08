@@ -1,0 +1,15 @@
+{
+  "name": "css-visual-editor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:gh": "GITHUB_PAGES=true REPO_NAME=$REPO_NAME vite build"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
