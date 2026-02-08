@@ -40,6 +40,15 @@ function getWindowHeight(){
   }
 
 function animateSite() {
+    var quote = document.querySelector("blockquote");
+    var quoteWords = splitWords(quote);
+    if (!quoteWords.length && quote) {
+        quoteWords = Array.prototype.slice.call(quote.querySelectorAll(".split-word"));
+    }
+    if (quote) {
+        gsap.set(quote, { opacity: 1 });
+    }
+
     gsap.fromTo(".intro li",
         {
             y: window.innerHeight,
@@ -89,16 +98,30 @@ function animateSite() {
         duration:0.6
 
     })
-    gsap.fromTo("blockquote", {
-        y: 66,
-        opacity: 0
-    }, {
-        y: 0,
-        opacity: 1,
-        ease: "elastic.out(1, 0.5)",
-        delay: 1.66,
-        duration:  0.6
-    })
+    if (quoteWords.length) {
+        gsap.fromTo(quoteWords, {
+            y: 24,
+            opacity: 0
+        }, {
+            y: 0,
+            opacity: 1,
+            ease: "power3.out",
+            delay: 1.55,
+            duration: 0.7,
+            stagger: 0.04
+        })
+    } else {
+        gsap.fromTo("blockquote", {
+            y: 66,
+            opacity: 0
+        }, {
+            y: 0,
+            opacity: 1,
+            ease: "elastic.out(1, 0.5)",
+            delay: 1.66,
+            duration:  0.6
+        })
+    }
 
     gsap.fromTo(".body",{
         y: 66,
@@ -148,4 +171,49 @@ function animateSite() {
         delay: 1.2,
         duration:.8
     })
+}
+
+function splitWords(element) {
+    if (!element) {
+        return [];
+    }
+
+    if (element.getAttribute("data-split") === "words") {
+        return Array.prototype.slice.call(element.querySelectorAll(".split-word"));
+    }
+
+    element.setAttribute("data-split", "words");
+    var words = [];
+    var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+    var nodes = [];
+    var node;
+
+    while ((node = walker.nextNode())) {
+        nodes.push(node);
+    }
+
+    nodes.forEach(function(textNode) {
+        var value = textNode.nodeValue;
+        if (!value) {
+            return;
+        }
+
+        var parts = value.match(/\\S+\\s*/g);
+        if (!parts) {
+            return;
+        }
+
+        var fragment = document.createDocumentFragment();
+        parts.forEach(function(part) {
+            var span = document.createElement("span");
+            span.className = "split-word";
+            span.textContent = part;
+            fragment.appendChild(span);
+            words.push(span);
+        });
+
+        textNode.parentNode.replaceChild(fragment, textNode);
+    });
+
+    return words;
 }

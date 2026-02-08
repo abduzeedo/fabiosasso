@@ -122,6 +122,11 @@ blockquote {
   margin-top: 25vh;
   font-family: "brandon-grotesque", "Avenir", sans-serif;
 }
+
+.split-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
 p {
   margin-bottom: 16px;
 }
