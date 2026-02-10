@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Starburst Fan - Square Dual-Sided</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            /* Strictly square dimensions */
+            --card-size: 400px;
+            --num-cards: 6;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            /* Stronger perspective for a more cinematic feel */
+            perspective: 2500px;
+        }
+
+        /* The central pivot point */
+        .scene {
+            width: 0;
+            height: 0;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-container {
+            position: absolute;
+            width: var(--card-size);
+            height: var(--card-size);
+            /* Pivot from the left edge so the image "fans out" from center */
+            left: 0;
+            top: calc(var(--card-size) / -2);
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* The actual visual faces */
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Use the same image on both sides */
+        .card-front {
+            background: #000;
+            z-index: 2;
+        }
+
+        .card-back {
+            background: #000;
+            /* Rotate and mirror so it looks correct from the back */
+            transform: rotateY(180deg);
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            filter: saturate(1.1) brightness(0.85);
+            transition: filter 0.4s ease;
+        }
+
+        /* Expansion effect when hovering the center */
+        .scene:hover .card-container {
+            /* Pushes the "leaves" away from the center spine slightly */
+            transform: translateX(40px) !important;
+        }
+
+        .card-container:hover {
+            z-index: 100;
+        }
+
+        .card-container:hover img {
+            filter: saturate(1.3) brightness(1.1);
+        }
+
+        /* Pop card forward on hover and flip slightly */
+        .card-container:hover .card-inner {
+            transform: translateZ(150px) rotateY(-15deg);
+        }
+
+        .ui-overlay {
+            position: fixed;
+            bottom: 40px;
+            text-align: center;
+            pointer-events: none;
+            width: 100%;
+            z-index: 200;
+        }
+
+        .hint {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            opacity: 0.4;
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ui-overlay">
+        <div class="hint">Scroll to rotate • Edge-pinned Fan Effect</div>
+    </div>
+
+    <div class="scene" id="scene">
+        <!-- Cards will be injected here -->
+    </div>
+
+    <script>
+        const scene = document.getElementById('scene');
+        const numCards = 6;
+        let currentRotation = 0;
+
+        const images = [
+            'https://images.unsplash.com/photo-1688920556232-321bd176d0b4?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1577907796119-7118da053fab?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1577907796622-6d770c91433a?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1726942371143-3afca583a72f?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1585413912796-8667825fc26d?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1584808388974-45f11f4789f3?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1577907795554-9930d00be942?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1518005020250-68a046864682?q=80&w=2670&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1580679630578-3d7950e2b23a?q=80&w=2670&auto=format&fit=crop'
+        ];
+
+        // Store initial transforms to maintain them during hover interactions
+        const cardElements = [];
+
+        for (let i = 0; i < numCards; i++) {
+            const card = document.createElement('div');
+            card.className = 'card-container';
+
+            const angle = i * (360 / numCards);
+            const initialTransform = `rotateY(${angle}deg)`;
+            card.style.transform = initialTransform;
+            card.dataset.baseTransform = initialTransform;
+
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-face card-front">
+                        <img src="${images[i]}" alt="Asset Front ${i + 1}">
+                        <div class="absolute bottom-0 left-0 p-6 w-full bg-gradient-to-t from-black/80 to-transparent">
+                            <span class="text-[10px] font-black tracking-widest text-white/50 uppercase">SQ // 0${i + 1}</span>
+                        </div>
+                    </div>
+                    <div class="card-face card-back">
+                        <img src="${images[i]}" alt="Asset Back ${i + 1}" style="transform: scaleX(-1);">
+                        <div class="absolute top-0 left-0 p-6 w-full bg-gradient-to-b from-black/80 to-transparent">
+                            <span class="text-[10px] font-black tracking-widest text-white/50 uppercase">BACK // 0${i + 1}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            scene.appendChild(card);
+            cardElements.push(card);
+        }
+
+        let targetX = -10;
+        let targetY = 0;
+
+        window.addEventListener('wheel', (e) => {
+            targetY += e.deltaY * 0.1;
+            updateTransform();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            const xNorm = (e.clientX / window.innerWidth) - 0.5;
+            const yNorm = (e.clientY / window.innerHeight) - 0.5;
+            updateTransform(xNorm, yNorm);
+        });
+
+        function updateTransform(mx = 0, my = 0) {
+            scene.style.transform = `rotateY(${targetY + (mx * 25)}deg) rotateX(${targetX + (my * -25)}deg)`;
+        }
+
+        updateTransform();
+    </script>
+</body>
+
+</html>
