@@ -14,14 +14,14 @@
         }
 
         body {
-            background-color: #000;
-            color: white;
+            background-color: #FFF;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             overflow: hidden;
+            touch-action: none;
             /* Stronger perspective for a more cinematic feel */
             perspective: 2500px;
         }
@@ -32,7 +32,7 @@
             height: 0;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            /* Transition removed for smooth constant frame updates via requestAnimationFrame */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -66,7 +66,7 @@
             backface-visibility: hidden;
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -94,7 +94,7 @@
         /* Expansion effect when hovering the center */
         .scene:hover .card-container {
             /* Pushes the "leaves" away from the center spine slightly */
-            transform: translateX(40px) !important;
+            /* transform: translateX(40px) !important; */
         }
 
         .card-container:hover {
@@ -107,7 +107,7 @@
 
         /* Pop card forward on hover and flip slightly */
         .card-container:hover .card-inner {
-            transform: translateZ(150px) rotateY(-15deg);
+            /* transform: translateZ(150px) rotateY(-15deg); */
         }
 
         .ui-overlay {
@@ -119,12 +119,28 @@
             z-index: 200;
         }
 
+        .header {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
         .hint {
             font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 6px;
             opacity: 0.4;
             font-weight: 800;
+            justify-content: space-between;
+            display: flex;
+            margin: 0 20px;
         }
     </style>
 </head>
@@ -132,7 +148,8 @@
 <body>
 
     <div class="ui-overlay">
-        <div class="hint">Scroll to rotate • Edge-pinned Fan Effect</div>
+        <div class="header"><span>Abduzeedo</span><span>Vibe Experiments</span><span>2026</span></div>
+        <div class="hint"><span>Scroll to rotate</span><span>Edge-pinned Fan Effect</span></div>
     </div>
 
     <div class="scene" id="scene">
@@ -172,14 +189,14 @@
                 <div class="card-inner">
                     <div class="card-face card-front">
                         <img src="${images[i]}" alt="Asset Front ${i + 1}">
-                        <div class="absolute bottom-0 left-0 p-6 w-full bg-gradient-to-t from-black/80 to-transparent">
-                            <span class="text-[10px] font-black tracking-widest text-white/50 uppercase">SQ // 0${i + 1}</span>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <span class="text-[10px] font-black tracking-widest text-white/50 uppercase"></span>
                         </div>
                     </div>
                     <div class="card-face card-back">
                         <img src="${images[i]}" alt="Asset Back ${i + 1}" style="transform: scaleX(-1);">
-                        <div class="absolute top-0 left-0 p-6 w-full bg-gradient-to-b from-black/80 to-transparent">
-                            <span class="text-[10px] font-black tracking-widest text-white/50 uppercase">BACK // 0${i + 1}</span>
+                        <div class="absolute top-0 left-0 p-6 w-full">
+                            <span class="text-[10px] font-black tracking-widest text-white/50 uppercase"></span>
                         </div>
                     </div>
                 </div>
@@ -189,24 +206,87 @@
         }
 
         let targetX = -10;
-        let targetY = 0;
+        let rotationY = 0;
+        let scrollSpeed = 0;
+        let baseSpeed = 0.15; // Slow constant rotation
+
+        // Mouse interaction tracking
+        let mouseX = 0;
+        let mouseY = 0;
+        let lerpMouseX = 0;
+        let lerpMouseY = 0;
+
+        // Touch tracking
+        let lastTouchY = 0;
+        let isTouching = false;
 
         window.addEventListener('wheel', (e) => {
-            targetY += e.deltaY * 0.1;
-            updateTransform();
+            // Boost rotation speed on scroll
+            scrollSpeed += e.deltaY * 0.05;
         });
 
         window.addEventListener('mousemove', (e) => {
-            const xNorm = (e.clientX / window.innerWidth) - 0.5;
-            const yNorm = (e.clientY / window.innerHeight) - 0.5;
-            updateTransform(xNorm, yNorm);
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
         });
 
-        function updateTransform(mx = 0, my = 0) {
-            scene.style.transform = `rotateY(${targetY + (mx * 25)}deg) rotateX(${targetX + (my * -25)}deg)`;
+        // Touch Events
+        window.addEventListener('touchstart', (e) => {
+            isTouching = true;
+            lastTouchY = e.touches[0].clientY;
+
+            // Update perspective on initial touch
+            updateTouchPosition(e.touches[0]);
+        }, { passive: false });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isTouching) return;
+
+            const touch = e.touches[0];
+            const deltaY = touch.clientY - lastTouchY;
+
+            // Boost speed based on vertical swipe (inverted to match scroll feel)
+            scrollSpeed -= deltaY * 0.2;
+            lastTouchY = touch.clientY;
+
+            // Update perspective based on touch position
+            updateTouchPosition(touch);
+
+            e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener('touchend', () => {
+            isTouching = false;
+        });
+
+        function updateTouchPosition(touch) {
+            mouseX = (touch.clientX / window.innerWidth) - 0.5;
+            mouseY = (touch.clientY / window.innerHeight) - 0.5;
         }
 
-        updateTransform();
+        function animate() {
+            // Apply base speed + scroll boost
+            rotationY += baseSpeed + scrollSpeed;
+
+            // Decay scroll boost back to base speed
+            // Faster decay for swipe boost to make it feel more tactile
+            scrollSpeed *= 0.95;
+            if (Math.abs(scrollSpeed) < 0.001) scrollSpeed = 0;
+
+            // Smooth mouse/touch interpolation
+            lerpMouseX += (mouseX - lerpMouseX) * 0.1;
+            lerpMouseY += (mouseY - lerpMouseY) * 0.1;
+
+            updateTransform(lerpMouseX, lerpMouseY);
+            requestAnimationFrame(animate);
+        }
+
+        function updateTransform(mx = 0, my = 0) {
+            scene.style.transform = `rotateY(${rotationY + (mx * 25)}deg) rotateX(${targetX + (my * -25)}deg)`;
+        }
+
+        // Start the animation loop
+        animate();
     </script>
 </body>
 
