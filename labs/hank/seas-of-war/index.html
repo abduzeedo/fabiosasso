@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seas of War - 3D Battleship</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            touch-action: none;
+            /* Prevent browser scrolling/zooming gestures */
+        }
+
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+
+        /* HUD Styling */
+        #hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* Let clicks pass through to the canvas */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .fleet-status {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        #turn-indicator {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 900;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px rgba(0, 150, 255, 0.8);
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .fade-in-out {
+            animation: fadeInOut 2s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            border: 2px solid #444;
+            display: none;
+            pointer-events: auto;
+            /* Re-enable clicks for the modal */
+        }
+
+        #game-over h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            color: #ffaa00;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #crosshair {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            display: none;
+            transition: border-color 0.2s;
+        }
+
+        #crosshair::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .target-valid {
+            border-color: #00ff00 !important;
+        }
+
+        .target-invalid {
+            border-color: #ff0000 !important;
+        }
+
+        /* New LLM UI Elements */
+        #transmission-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            background: rgba(0, 15, 30, 0.85);
+            border: 1px solid #0055ff;
+            border-left: 4px solid #0055ff;
+            color: #88ccff;
+            padding: 15px 25px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            display: none;
+            box-shadow: 0 0 15px rgba(0, 85, 255, 0.3);
+            z-index: 10;
+        }
+
+        #transmission-title {
+            color: #ffaa00;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        #tactical-advice-btn {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 40, 80, 0.8);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 12px 20px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+
+        #tactical-advice-btn:hover {
+            background: rgba(0, 80, 120, 0.9);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+        }
+
+        #tactical-advice-btn:disabled {
+            color: #666;
+            border-color: #666;
+            cursor: not-allowed;
+            background: rgba(20, 20, 20, 0.8);
+            box-shadow: none;
+        }
+
+        /* Setup Overlay */
+        #setup-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 15, 30, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            pointer-events: auto;
+        }
+
+        #setup-overlay h1 {
+            color: #00ffcc;
+            font-size: 3.5rem;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #setup-ship-name {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .setup-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .setup-btn {
+            background: rgba(0, 85, 255, 0.6);
+            color: white;
+            border: 2px solid #0055ff;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        .setup-btn:hover {
+            background: #0055ff;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 85, 255, 0.5);
+        }
+
+        .setup-btn-confirm {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+        }
+
+        .setup-btn-confirm:hover {
+            background: #33ffdd;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.6);
+        }
+
+        /* Controls Hint UI */
+        #controls-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            background: rgba(0, 15, 30, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            color: #aaa;
+            font-size: 0.9rem;
+            text-align: right;
+            pointer-events: none;
+            border: 1px solid #333;
+        }
+
+        #controls-hint b {
+            color: #fff;
+        }
+
+        #controls-hint span {
+            color: #00ffcc;
+            font-weight: bold;
+        }
+    </style>
+    <!-- Include Three.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+
+<body>
+
+    <div id="game-container"></div>
+    <div id="crosshair"></div>
+
+    <div id="hud">
+        <div class="header">
+            <div class="fleet-status" style="color: #66ccff;">BLUE FLEET: <span id="player-ships-left">5</span>/5</div>
+            <div class="fleet-status" style="color: #ff6666;">RED FLEET: <span id="enemy-ships-left">5</span>/5</div>
+        </div>
+        <div id="turn-indicator">Your Turn</div>
+
+        <!-- New LLM UI -->
+        <div id="transmission-panel">
+            <div id="transmission-title">Intercepted Enemy Transmission</div>
+            <div id="transmission-text">Decrypting...</div>
+        </div>
+
+        <button id="tactical-advice-btn" onclick="requestTacticalAdvice()">✨ Get Tactical Advice</button>
+
+        <div id="game-over">
+            <h1 id="win-message">Victory!</h1>
+            <p>The seas are yours.</p>
+            <button onclick="window.location.reload()">Restart Game</button>
+        </div>
+
+        <!-- Setup Overlay -->
+        <div id="setup-overlay">
+            <h1>SELECT YOUR FLAGSHIP</h1>
+            <div style="color: #ccc; margin-bottom: 20px;">The rest of your fleet will fight autonomously. If your
+                flagship sinks, you lose!</div>
+            <div id="setup-ship-name">U.S.S. CARRIER</div>
+            <div class="setup-controls">
+                <button class="setup-btn" onclick="setupCycle(-1)">◀ Prev Ship</button>
+                <button class="setup-btn setup-btn-confirm" onclick="confirmFlagship()">COMMAND THIS SHIP</button>
+                <button class="setup-btn" onclick="setupCycle(1)">Next Ship ▶</button>
+            </div>
+        </div>
+
+        <div id="controls-hint">
+            <b>TACTICAL CONTROLS</b><br><br>
+            Right-Click + Drag: <span>Orbit Camera</span><br>
+            Scroll Wheel: <span>Zoom</span><br>
+            WASD: <span>Move Flagship</span><br>
+            Left Click: <span>Fire Cannons</span>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * SEAS OF WAR - 3D Battleship
+         * Architecture: Three.js
+         */
+
+        // --- 1. GAME STATE & CONSTANTS ---
+        const GameState = {
+            STATUS: 'SETUP', // 'SETUP', 'PLAYING', 'GAME_OVER'
+            PLAYER_SHIPS: 5,
+            ENEMY_SHIPS: 5,
+            GRID_SIZE: 20,
+            CELL_SIZE: 1.5,
+            FLAGSHIP: null
+        };
+
+        const SHIP_LENGTHS = [5, 4, 3, 3, 2];
+        const SHIP_NAMES = ['Carrier', 'Battleship', 'Cruiser', 'Submarine', 'Destroyer'];
+
+        // --- GEMINI API INTEGRATION ---
+        const GeminiService = {
+            // To enable dynamic AI responses locally, paste your Gemini API key here:
+            apiKey: "",
+
+            async generateText(prompt, retries = 5) {
+                // LOCAL FALLBACK: If no API key is provided, return simulated offline responses
+                if (!this.apiKey || this.apiKey.trim() === "") {
+                    await new Promise(res => setTimeout(res, 800)); // Simulate processing delay
+
+                    if (prompt.includes("missed")) return "Ha! You shoot like a blindfolded sailor!";
+                    if (prompt.includes("surprised")) return "Direct hit?! Impossible! My armor was supposed to be impenetrable!";
+                    if (prompt.includes("gloating")) return "Boom! Another hole in your pathetic fleet!";
+                    if (prompt.includes("cursing")) return "No!! My beautiful ship! I will hunt you down for this!";
+                    if (prompt.includes("recommendation")) return "Offline Tactical AI: Satellite uplink offline. Suggest firing near previous hits or scattering shots in open water.";
+
+                    return "Static... connection lost. (Add API key for dynamic AI responses)";
+                }
+
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${this.apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: { parts: [{ text: "You are an AI playing a battleship game. Keep responses concise, flavorful, and in character. Limit to 1-2 short sentences." }] }
+                };
+
+                let delay = 1000;
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        const data = await response.json();
+                        return data.candidates[0].content.parts[0].text.trim();
+                    } catch (error) {
+                        if (i === retries - 1) return "Static... connection lost. The enemy is jamming our signals.";
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2; // Exponential backoff
+                    }
+                }
+            },
+
+            async generateTaunt(eventContext) {
+                const panel = document.getElementById('transmission-panel');
+                const textEl = document.getElementById('transmission-text');
+
+                panel.style.display = 'block';
+                textEl.innerText = "Decrypting incoming enemy transmission...";
+
+                let prompt = "";
+                if (eventContext === 'player_miss') {
+                    prompt = "The human player just shot at my grid and completely missed. Give me a short, arrogant taunt mocking their terrible aim.";
+                } else if (eventContext === 'player_hit') {
+                    prompt = "The human player just landed a direct hit on one of my battleships. Give an angry, surprised reaction as the enemy admiral.";
+                } else if (eventContext === 'enemy_hit') {
+                    prompt = "I (the enemy admiral) just landed a direct hit on the human player's ship. Give a short, gloating villainous remark.";
+                } else if (eventContext === 'enemy_sunk') {
+                    prompt = "The human player just completely sank one of my ships. Give a dramatic, furious reaction cursing their luck and promising revenge.";
+                }
+
+                const response = await this.generateText(prompt);
+
+                // Typewriter effect
+                textEl.innerText = "";
+                let i = 0;
+                const typeWriter = setInterval(() => {
+                    textEl.innerHTML += response.charAt(i);
+                    i++;
+                    if (i >= response.length) {
+                        clearInterval(typeWriter);
+                        setTimeout(() => { panel.style.display = 'none'; }, 5000); // Hide after 5 seconds
+                    }
+                }, 30);
+            }
+        };
+
+        // --- AUDIO ENGINE (Synthesized Sound Effects) ---
+        const AudioEngine = {
+            ctx: null,
+            initialized: false,
+            init: function () {
+                if (this.initialized) {
+                    // Resume context if browser suspended it
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
+                    return;
+                }
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                this.initialized = true;
+                this.startAmbient();
+            },
+            playTone: function (freq, type, duration, vol, dropOff = true) {
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                if (dropOff) osc.frequency.exponentialRampToValueAtTime(freq * 0.1, this.ctx.currentTime + duration);
+
+                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            },
+            playNoise: function (duration, vol, type) {
+                if (!this.ctx) return;
+                const bufferSize = this.ctx.sampleRate * duration;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = type === 'hit' ? 'lowpass' : 'highpass';
+                filter.frequency.value = type === 'hit' ? 800 : 5000;
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                noise.start();
+            },
+            playFire: function () {
+                if (!this.initialized) return;
+                this.playTone(150, 'square', 0.6, 0.2);
+                this.playNoise(0.5, 0.4, 'hit');
+            },
+            playHit: function () {
+                if (!this.initialized) return;
+                this.playTone(100, 'sawtooth', 1.0, 0.4);
+                this.playNoise(1.2, 0.8, 'hit');
+            },
+            playMiss: function () {
+                if (!this.initialized) return;
+                this.playNoise(0.8, 0.4, 'miss');
+                this.playTone(400, 'sine', 0.4, 0.1, false); // subtle splash bloop
+            },
+            startAmbient: function () {
+                if (!this.ctx) return;
+                const bufferSize = this.ctx.sampleRate * 2;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+                noise.loop = true;
+
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 300; // Deep ocean rumble
+
+                const gain = this.ctx.createGain();
+                gain.gain.value = 0.05; // Very subtle ambient sound
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                noise.start();
+            }
+        };
+
+        // --- 2. THREE.JS SETUP ---
+        let scene, camera, renderer, controls;
+        let waterMaterial, clock;
+        let projectiles = [];
+        let particles = [];
+        let interactionPlane;
+        let raycaster, mouse;
+        let hoverMarker;
+        let selectedShip = null;
+        let selectionIndicator; // New UI Element for selected ship
+        let currentMouseWorldPos = null;
+
+        let setupIndex = 0;
+        let setupShips = [];
+
+        // Unified Board tracking matrix (0 = empty, 1 = ship, 2 = miss, 3 = hit, 4 = island)
+        let globalGridData = Array(GameState.GRID_SIZE).fill().map(() => Array(GameState.GRID_SIZE).fill(0));
+        let allShips = [];
+
+        // DOM Elements
+        const turnIndicator = document.getElementById('turn-indicator');
+        const crosshair = document.getElementById('crosshair');
+
+        window.onload = function () {
+            initEngine();
+            buildEnvironment();
+            buildGrids();
+            setupFleets();
+            setupInteraction();
+
+            animate();
+        };
+
+        function initEngine() {
+            const container = document.getElementById('game-container');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); // Sky blue
+            scene.fog = new THREE.FogExp2(0x87CEEB, 0.015);
+
+            // Camera setup for a good tactical view
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 18, 25);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            clock = new THREE.Clock();
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Camera Orbit Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            // Map to Right Mouse Button so it doesn't conflict with Left Click firing
+            controls.mouseButtons = {
+                LEFT: null,
+                MIDDLE: THREE.MOUSE.DOLLY,
+                RIGHT: THREE.MOUSE.ROTATE
+            };
+            controls.enablePan = true;
+            controls.maxPolarAngle = Math.PI / 2 - 0.05; // Don't let camera go under water
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0xffffee, 0.8);
+            sunLight.position.set(-20, 30, -10);
+            sunLight.castShadow = true;
+            sunLight.shadow.camera.left = -30;
+            sunLight.shadow.camera.right = 30;
+            sunLight.shadow.camera.top = 30;
+            sunLight.shadow.camera.bottom = -30;
+            scene.add(sunLight);
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        // --- 3. ENVIRONMENT & SHADERS ---
+        function buildEnvironment() {
+            // Gerstner Wave Water Shader - Enhanced for Realism
+            const waterVertexShader = `
+        uniform float time;
+        varying vec3 vWorldPosition;
+
+        // Gerstner Wave function
+        vec3 gerstnerWave(vec3 p, vec2 dir, float steepness, float wavelength, float speed) {
+            float k = 2.0 * 3.14159 / wavelength;
+            float c = sqrt(9.8 / k);
+            vec2 d = normalize(dir);
+            float f = k * (dot(d, p.xz) - c * time * speed);
+            float a = steepness / k;
+            
+            return vec3(
+                d.x * (a * cos(f)),
+                a * sin(f),
+                d.y * (a * cos(f))
+            );
+        }
+
+        void main() {
+            vec3 p = position;
+            // Apply complex multiple waves for a choppy, alive ocean
+            p += gerstnerWave(position, vec2(1.0, 0.5), 0.06, 4.0, 0.8);
+            p += gerstnerWave(position, vec2(0.5, -0.8), 0.05, 2.5, 1.1);
+            p += gerstnerWave(position, vec2(-0.2, 0.9), 0.04, 1.5, 1.4);
+            p += gerstnerWave(position, vec2(0.8, 0.1), 0.02, 0.8, 1.8); // High frequency detail
+            
+            vec4 worldPosition = modelMatrix * vec4(p, 1.0);
+            vWorldPosition = worldPosition.xyz;
+            gl_Position = projectionMatrix * viewMatrix * worldPosition;
+        }
+    `;
+
+            const waterFragmentShader = `
+        uniform vec3 waterColor;
+        uniform vec3 foamColor;
+        uniform vec3 sunPos;
+        varying vec3 vWorldPosition;
+
+        void main() {
+            // Compute real normal dynamically for realistic lighting
+            vec3 dx = dFdx(vWorldPosition);
+            vec3 dz = dFdy(vWorldPosition);
+            vec3 normal = normalize(cross(dx, dz));
+            if (normal.y < 0.0) normal *= -1.0;
+
+            // View and Light directions
+            vec3 viewDir = normalize(cameraPosition - vWorldPosition);
+            vec3 lightDir = normalize(sunPos - vWorldPosition);
+            vec3 halfVector = normalize(lightDir + viewDir);
+
+            // Specular Highlight (Sun reflection)
+            float NdotH = max(0.0, dot(normal, halfVector));
+            float specular = pow(NdotH, 80.0) * 1.5;
+
+            // Fresnel effect (edges look more reflective/lighter)
+            float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 4.0);
+            
+            // Height based foam/color variation
+            float heightFactor = smoothstep(-0.2, 0.5, vWorldPosition.y);
+            
+            // Combine Albedo with Lighting
+            vec3 albedo = mix(waterColor, foamColor, heightFactor);
+            vec3 finalColor = albedo + (vec3(1.0, 0.9, 0.8) * specular) + (vec3(0.6, 0.8, 1.0) * fresnel * 0.4);
+            
+            gl_FragColor = vec4(finalColor, 0.9);
+        }
+    `;
+
+            waterMaterial = new THREE.ShaderMaterial({
+                vertexShader: waterVertexShader,
+                fragmentShader: waterFragmentShader,
+                uniforms: {
+                    time: { value: 0 },
+                    waterColor: { value: new THREE.Color(0x003355) }, // Darker, deeper blue
+                    foamColor: { value: new THREE.Color(0x66aaff) },
+                    sunPos: { value: new THREE.Vector3(-20, 30, -10) }
+                },
+                transparent: true,
+                side: THREE.DoubleSide,
+                extensions: {
+                    derivatives: true // Required for accurate standard derivatives in fragment shader
+                }
+            });
+
+            // Increased segments for better wave resolution and normal map generation
+            const waterGeometry = new THREE.PlaneGeometry(200, 200, 256, 256);
+            waterGeometry.rotateX(-Math.PI / 2);
+            const water = new THREE.Mesh(waterGeometry, waterMaterial);
+            water.position.y = -0.2; // Slightly below grid 0
+            scene.add(water);
+
+            // Build Islands (Obstacles)
+            const islandGeo = new THREE.DodecahedronGeometry(GameState.CELL_SIZE * 0.8, 1);
+            const islandMat = new THREE.MeshStandardMaterial({ color: 0x3b5323, roughness: 0.9, flatShading: true });
+
+            for (let i = 0; i < 18; i++) {
+                let x = Math.floor(Math.random() * GameState.GRID_SIZE);
+                let y = Math.floor(Math.random() * GameState.GRID_SIZE);
+
+                // Don't clutter the exact edges where ships spawn
+                if (x > 2 && x < GameState.GRID_SIZE - 3 && globalGridData[x][y] === 0) {
+                    globalGridData[x][y] = 4; // 4 = Island
+                    let island = new THREE.Mesh(islandGeo, islandMat);
+
+                    // Temporary manual calculation to place islands before helper functions load
+                    let halfSize = (GameState.GRID_SIZE * GameState.CELL_SIZE) / 2;
+                    let posX = -halfSize + (x * GameState.CELL_SIZE) + (GameState.CELL_SIZE / 2);
+                    let posZ = -halfSize + (y * GameState.CELL_SIZE) + (GameState.CELL_SIZE / 2);
+
+                    island.position.set(posX, -0.2, posZ);
+                    island.rotation.y = Math.random() * Math.PI;
+                    island.rotation.x = (Math.random() - 0.5) * 0.2;
+                    island.scale.set(1, 0.6 + Math.random(), 1);
+                    island.castShadow = true;
+                    island.receiveShadow = true;
+                    scene.add(island);
+                }
+            }
+        }
+
+        function buildGrids() {
+            // Helper to draw a tactical grid (Now just one large grid)
+            const drawGrid = (color) => {
+                const size = GameState.GRID_SIZE * GameState.CELL_SIZE;
+                const gridHelper = new THREE.GridHelper(size, GameState.GRID_SIZE, color, color);
+                gridHelper.position.set(0, 0.1, 0); // Centered
+                gridHelper.material.opacity = 0.2;
+                gridHelper.material.transparent = true;
+                scene.add(gridHelper);
+
+                // Grid border
+                const borderGeo = new THREE.EdgesGeometry(new THREE.PlaneGeometry(size, size));
+                const borderMat = new THREE.LineBasicMaterial({ color: color, linewidth: 2 });
+                const border = new THREE.LineSegments(borderGeo, borderMat);
+                border.position.set(0, 0.1, 0);
+                border.rotation.x = -Math.PI / 2;
+                scene.add(border);
+            };
+
+            drawGrid(0x88ccff); // Unified grid color
+
+            // Invisible plane over the grid for raycasting interaction
+            const planeGeo = new THREE.PlaneGeometry(GameState.GRID_SIZE * GameState.CELL_SIZE, GameState.GRID_SIZE * GameState.CELL_SIZE);
+            const planeMat = new THREE.MeshBasicMaterial({ visible: false });
+            interactionPlane = new THREE.Mesh(planeGeo, planeMat);
+            interactionPlane.rotation.x = -Math.PI / 2;
+            interactionPlane.position.set(0, 0, 0);
+            scene.add(interactionPlane);
+
+            // Hover marker (shows which cell the mouse is over)
+            const markerGeo = new THREE.PlaneGeometry(GameState.CELL_SIZE * 0.9, GameState.CELL_SIZE * 0.9);
+            const markerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 });
+            hoverMarker = new THREE.Mesh(markerGeo, markerMat);
+            hoverMarker.rotation.x = -Math.PI / 2;
+            hoverMarker.position.y = 0.15;
+            hoverMarker.visible = false;
+            scene.add(hoverMarker);
+
+            // Selection Indicator (Orbital Ring for Active Ship)
+            const ringGeo = new THREE.TorusGeometry(GameState.CELL_SIZE * 1.2, 0.08, 8, 32);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0x00ffcc, transparent: true, opacity: 0.8 });
+            selectionIndicator = new THREE.Mesh(ringGeo, ringMat);
+            selectionIndicator.rotation.x = -Math.PI / 2;
+            selectionIndicator.visible = false;
+            scene.add(selectionIndicator);
+        }
+
+        // --- 4. ENTITIES (SHIPS) ---
+        class Ship {
+            constructor(team, length, startX, startY, isHorizontal, name) {
+                this.team = team;
+                this.length = length;
+                this.health = length;
+                this.name = name || "Ship";
+                this.isSunk = false;
+                this.cells = []; // Grid coordinates occupied
+                this.meshGroup = new THREE.Group();
+                this.turrets = []; // Store turrets for active mouse tracking
+
+                // Real-time AI timers
+                this.reloadTimer = Math.random() * 5; // Random initial firing stagger
+                this.moveTimer = Math.random() * 3;   // Random initial movement stagger
+
+                const startWorldPos = getGridWorldPos(startX, startY);
+
+                // Build generic geometric ship
+                this.buildMesh(isHorizontal);
+
+                // Position ship in world
+                const centerOffset = ((length - 1) * GameState.CELL_SIZE) / 2;
+                if (isHorizontal) {
+                    this.meshGroup.position.set(startWorldPos.x + centerOffset, 0.5, startWorldPos.z);
+                } else {
+                    this.meshGroup.position.set(startWorldPos.x, 0.5, startWorldPos.z + centerOffset);
+                    this.meshGroup.rotation.y = -Math.PI / 2;
+                }
+
+                // Setup the Target Position for smooth Gliding Animation
+                this.targetPosition = this.meshGroup.position.clone();
+
+                scene.add(this.meshGroup);
+
+                // Register coordinates
+                for (let i = 0; i < length; i++) {
+                    const cx = isHorizontal ? startX + i : startX;
+                    const cy = isHorizontal ? startY : startY + i;
+                    this.cells.push({ x: cx, y: cy });
+                }
+            }
+
+            buildMesh(isHorizontal) {
+                // High-Quality PBR Materials
+                const hullColor = this.team === 'PLAYER' ? 0x2c3e50 : 0x8b0000;
+                const deckColor = 0x555555;
+
+                const hullMat = new THREE.MeshStandardMaterial({
+                    color: hullColor, metalness: 0.7, roughness: 0.3
+                });
+                const deckMat = new THREE.MeshStandardMaterial({
+                    color: deckColor, metalness: 0.4, roughness: 0.7
+                });
+
+                // 1. Main Hull
+                const hullGeo = new THREE.BoxGeometry(this.length * GameState.CELL_SIZE * 0.8, 0.5, GameState.CELL_SIZE * 0.6);
+                const hull = new THREE.Mesh(hullGeo, hullMat);
+                hull.position.y = 0.1;
+                hull.castShadow = true;
+                hull.receiveShadow = true;
+                this.meshGroup.add(hull);
+
+                // Save references for selection highlights
+                this.hullMaterial = hullMat;
+                this.meshGroup.userData.ship = this;
+
+                // 2. Pointy Bow (Front of ship)
+                const bowGeo = new THREE.CylinderGeometry(0, GameState.CELL_SIZE * 0.3, GameState.CELL_SIZE * 0.8, 3);
+                const bow = new THREE.Mesh(bowGeo, hullMat);
+                bow.rotation.z = -Math.PI / 2;
+                bow.rotation.y = -Math.PI / 2;
+                bow.position.set((this.length * GameState.CELL_SIZE * 0.4) + (GameState.CELL_SIZE * 0.4), 0.1, 0);
+                bow.castShadow = true;
+                this.meshGroup.add(bow);
+
+                // 3. Superstructure / Bridge
+                const bridgeGeo = new THREE.BoxGeometry(GameState.CELL_SIZE * 1.2, 0.6, GameState.CELL_SIZE * 0.4);
+                const bridge = new THREE.Mesh(bridgeGeo, deckMat);
+                bridge.position.set(-GameState.CELL_SIZE * 0.3 * (this.length > 3 ? 1 : 0), 0.6, 0);
+                bridge.castShadow = true;
+                this.meshGroup.add(bridge);
+
+                // 4. Smokestacks & Details
+                const stackGeo = new THREE.CylinderGeometry(0.12, 0.15, 0.8, 8);
+                const stackMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.8, roughness: 0.2 });
+
+                const stack1 = new THREE.Mesh(stackGeo, stackMat);
+                stack1.position.set(-GameState.CELL_SIZE * 0.2, 1.0, 0);
+                stack1.castShadow = true;
+                this.meshGroup.add(stack1);
+
+                if (this.length > 3) {
+                    const stack2 = new THREE.Mesh(stackGeo, stackMat);
+                    stack2.position.set(-GameState.CELL_SIZE * 0.8, 1.0, 0);
+                    stack2.castShadow = true;
+                    this.meshGroup.add(stack2);
+                }
+
+                // 5. Gun Turrets
+                const turretGeo = new THREE.CylinderGeometry(0.2, 0.25, 0.2, 8);
+                const barrelGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.6, 8);
+                barrelGeo.rotateX(Math.PI / 2); // Make the barrel point along the Z axis natively
+
+                const turretMat = new THREE.MeshStandardMaterial({ color: 0x444444, metalness: 0.6, roughness: 0.4 });
+
+                const createTurret = (xPos) => {
+                    const turretGroup = new THREE.Group();
+                    const base = new THREE.Mesh(turretGeo, turretMat);
+                    base.position.y = 0.4;
+                    base.castShadow = true;
+                    const barrel = new THREE.Mesh(barrelGeo, turretMat);
+                    barrel.position.set(0, 0.45, 0.3); // Offset along Z
+                    barrel.castShadow = true;
+                    turretGroup.add(base);
+                    turretGroup.add(barrel);
+
+                    // Adjust base rotation so barrel points forward (along X axis) initially
+                    turretGroup.rotation.y = -Math.PI / 2;
+                    turretGroup.position.set(xPos, 0, 0);
+
+                    this.turrets.push(turretGroup); // Store reference for tracking
+                    return turretGroup;
+                };
+
+                // Add turrets based on ship size
+                this.meshGroup.add(createTurret(this.length * GameState.CELL_SIZE * 0.25)); // Front turret
+                if (this.length > 2) {
+                    const backTurret = createTurret(-this.length * GameState.CELL_SIZE * 0.35);
+                    backTurret.rotation.y = Math.PI; // Face backwards
+                    this.meshGroup.add(backTurret);
+                }
+            }
+
+            takeHit() {
+                this.health--;
+                if (this.health <= 0) {
+                    this.sink();
+                }
+            }
+
+            sink() {
+                this.isSunk = true;
+                this.meshGroup.visible = true; // Reveal sunk enemy ship
+
+                // Sink animation state variables added to meshGroup
+                this.meshGroup.userData.sinking = true;
+                this.meshGroup.userData.sinkSpeed = 0.01 + Math.random() * 0.01;
+                this.meshGroup.userData.sinkRotate = (Math.random() - 0.5) * 0.02;
+
+                if (this.team === 'PLAYER') {
+                    GameState.PLAYER_SHIPS--;
+                    document.getElementById('player-ships-left').innerText = GameState.PLAYER_SHIPS;
+                } else {
+                    GameState.ENEMY_SHIPS--;
+                    document.getElementById('enemy-ships-left').innerText = GameState.ENEMY_SHIPS;
+                    GeminiService.generateTaunt('enemy_sunk'); // Trigger LLM Admiral reaction
+                }
+
+                checkGameOver();
+            }
+        }
+
+        function setupFleets() {
+            // Player on the left half, Enemy on the right half
+            placeFleet('PLAYER', 0, Math.floor(GameState.GRID_SIZE / 2) - 2);
+            placeFleet('ENEMY', Math.floor(GameState.GRID_SIZE / 2) + 1, GameState.GRID_SIZE - 1);
+
+            initSetupPhase();
+        }
+
+        function initSetupPhase() {
+            setupShips = allShips.filter(s => s.team === 'PLAYER');
+            setupIndex = 0;
+            GameState.PHASE = 'SETUP';
+            GameState.TURN = 'SETUP';
+            updateSetupUI();
+        }
+
+        function setupCycle(dir) {
+            setupIndex = (setupIndex + dir + setupShips.length) % setupShips.length;
+            updateSetupUI();
+            AudioEngine.playTone(400, 'sine', 0.1, 0.1, false);
+        }
+
+        function updateSetupUI() {
+            let ship = setupShips[setupIndex];
+            document.getElementById('setup-ship-name').innerText = ship.name;
+            selectShip(ship);
+
+            // Move camera to look at the currently inspected ship
+            if (controls) {
+                controls.target.copy(ship.meshGroup.position);
+            }
+        }
+
+        function confirmFlagship() {
+            GameState.FLAGSHIP = setupShips[setupIndex];
+            GameState.FLAGSHIP.isFlagship = true;
+            GameState.FLAGSHIP.lastFired = 0;
+            GameState.FLAGSHIP.lastMoved = 0;
+
+            document.getElementById('setup-overlay').style.display = 'none';
+            GameState.STATUS = 'PLAYING';
+
+            // Reset camera target to center
+            controls.target.set(0, 0, 0);
+
+            showTurnMessage("BATTLE COMMENCED", "#66ccff");
+            AudioEngine.playTone(600, 'square', 0.5, 0.3);
+        }
+
+        function placeFleet(team, minX, maxX) {
+            for (let i = 0; i < SHIP_LENGTHS.length; i++) {
+                let length = SHIP_LENGTHS[i];
+                let name = team === 'PLAYER' ? 'U.S.S. ' + SHIP_NAMES[i] : 'R.N.S. ' + SHIP_NAMES[i];
+
+                let placed = false;
+                while (!placed) {
+                    let isHorizontal = Math.random() > 0.5;
+                    let rangeX = maxX - minX + 1;
+
+                    // Randomly select within allowed boundaries
+                    let x = minX + Math.floor(Math.random() * (rangeX - (isHorizontal ? length : 0)));
+                    let y = Math.floor(Math.random() * (GameState.GRID_SIZE - (isHorizontal ? 0 : length)));
+
+                    // Check overlap against ships AND islands (which use code 4)
+                    let canPlace = true;
+                    for (let i = 0; i < length; i++) {
+                        let cx = isHorizontal ? x + i : x;
+                        let cy = isHorizontal ? y : y + i;
+                        if (globalGridData[cx][cy] !== 0) {
+                            canPlace = false;
+                            break;
+                        }
+                    }
+
+                    if (canPlace) {
+                        // Mark grid
+                        for (let j = 0; j < length; j++) {
+                            let cx = isHorizontal ? x + j : x;
+                            let cy = isHorizontal ? y : y + j;
+                            globalGridData[cx][cy] = 1; // 1 = ship
+                        }
+                        allShips.push(new Ship(team, length, x, y, isHorizontal, name));
+                        placed = true;
+                    }
+                }
+            }
+        }
+
+        // --- 5. INTERACTION & GAME LOGIC ---
+        function setupInteraction() {
+            window.addEventListener('pointermove', onPointerMove, false);
+            window.addEventListener('pointerdown', onPointerDown, false);
+        }
+
+        function getGridCoords(intersectPoint) {
+            // Plane is centered at (0,0)
+            let halfSize = (GameState.GRID_SIZE * GameState.CELL_SIZE) / 2;
+
+            // Shift so (0,0) is top left
+            let x = Math.floor((intersectPoint.x + halfSize) / GameState.CELL_SIZE);
+            let y = Math.floor((intersectPoint.z + halfSize) / GameState.CELL_SIZE);
+
+            if (x >= 0 && x < GameState.GRID_SIZE && y >= 0 && y < GameState.GRID_SIZE) {
+                return { x, y };
+            }
+            return null;
+        }
+
+        function getGridWorldPos(gridX, gridY) {
+            let halfSize = (GameState.GRID_SIZE * GameState.CELL_SIZE) / 2;
+            return new THREE.Vector3(
+                -halfSize + (gridX * GameState.CELL_SIZE) + (GameState.CELL_SIZE / 2),
+                0,
+                -halfSize + (gridY * GameState.CELL_SIZE) + (GameState.CELL_SIZE / 2)
+            );
+        }
+
+        function onPointerMove(event) {
+            if (GameState.STATUS !== 'PLAYING') {
+                crosshair.style.display = 'none';
+                hoverMarker.visible = false;
+                return;
+            }
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+
+            // Store exact mouse world position for the turrets to aim at
+            const planeIntersects = raycaster.intersectObject(interactionPlane);
+            if (planeIntersects.length > 0) {
+                currentMouseWorldPos = planeIntersects[0].point;
+            } else {
+                currentMouseWorldPos = null;
+            }
+
+            // Normal firing grid code
+            crosshair.style.display = 'block';
+            crosshair.style.left = event.clientX + 'px';
+            crosshair.style.top = event.clientY + 'px';
+
+            if (planeIntersects.length > 0) {
+                const coords = getGridCoords(planeIntersects[0].point);
+                if (coords) {
+                    let cellVal = globalGridData[coords.x][coords.y];
+                    let isPlayerShip = allShips.some(s => s.team === 'PLAYER' && !s.isSunk && s.cells.some(c => c.x === coords.x && c.y === coords.y));
+
+                    // Invalid target only if it's your own ship
+                    if (isPlayerShip) {
+                        crosshair.className = 'target-invalid';
+                        hoverMarker.material.color.setHex(0xff0000);
+                    } else {
+                        crosshair.className = 'target-valid';
+                        hoverMarker.material.color.setHex(0x00ff00);
+                    }
+
+                    const worldPos = getGridWorldPos(coords.x, coords.y);
+                    hoverMarker.position.set(worldPos.x, 0.15, worldPos.z);
+                    hoverMarker.visible = true;
+                } else {
+                    hoverMarker.visible = false;
+                    crosshair.className = '';
+                }
+            } else {
+                hoverMarker.visible = false;
+                crosshair.className = '';
+            }
+        }
+
+        function onPointerDown(event) {
+            // Initialize audio on first user interaction
+            AudioEngine.init();
+
+            // Only allow primary button (left click/touch)
+            if (GameState.STATUS !== 'PLAYING' || (event.pointerType === 'mouse' && event.button !== 0)) return;
+
+            let now = performance.now();
+            // Enforce Flagship reload cooldown (0.5 seconds for faster bullets)
+            if (GameState.FLAGSHIP && now - GameState.FLAGSHIP.lastFired < 500) {
+                return;
+            }
+
+            // Update mouse coords immediately on click to prevent stale raycasts
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            // Check the global grid for firing
+            const gridIntersects = raycaster.intersectObject(interactionPlane);
+
+            if (gridIntersects.length > 0) {
+                const coords = getGridCoords(gridIntersects[0].point);
+
+                if (coords) {
+                    let isPlayerShip = allShips.some(s => s.team === 'PLAYER' && !s.isSunk && s.cells.some(c => c.x === coords.x && c.y === coords.y));
+
+                    // Allow firing anywhere except on your own ships
+                    if (!isPlayerShip) {
+                        GameState.FLAGSHIP.lastFired = now;
+                        hoverMarker.visible = false;
+
+                        // Play Fire Sound
+                        AudioEngine.playFire();
+
+                        // Dynamic Start Position: Shoot from the flagship!
+                        let firingShip = GameState.FLAGSHIP && !GameState.FLAGSHIP.isSunk ? GameState.FLAGSHIP : allShips.find(s => s.team === 'PLAYER' && !s.isSunk);
+                        let startPos = firingShip ? firingShip.meshGroup.position.clone() : new THREE.Vector3(0, 10, 0);
+                        startPos.y += 1.5; // Fire from above the ship deck
+
+                        // Target the exact 3D point the user clicked on for the bullet visual
+                        const targetPos = gridIntersects[0].point.clone();
+
+                        fireProjectile(startPos, targetPos, () => {
+                            resolveShot('ENEMY', coords.x, coords.y, globalGridData);
+                        });
+                    }
+                }
+            }
+        }
+
+        // --- NEW LOGIC: SHIP MOVEMENT ---
+        function selectShip(ship) {
+            if (selectedShip && !selectedShip.isSunk) {
+                selectedShip.hullMaterial.emissive.setHex(0x000000); // Remove highlight
+            }
+            selectedShip = ship;
+            if (selectedShip) {
+                selectedShip.hullMaterial.emissive.setHex(0x005533); // Glow green
+                AudioEngine.playTone(600, 'sine', 0.1, 0.1, false);
+            }
+        }
+
+        // --- NEW LOGIC: SHIP SELECTION MENU ---
+        function toggleShipMenu() {
+            if (GameState.TURN !== 'PLAYER' || GameState.PHASE !== 'IDLE') return;
+
+            const menu = document.getElementById('ship-selection-menu');
+            isShipMenuOpen = !isShipMenuOpen;
+
+            if (isShipMenuOpen) {
+                playerAliveShips = allShips.filter(s => s.team === 'PLAYER' && !s.isSunk);
+                if (playerAliveShips.length === 0) return;
+
+                // Default to current selection if alive
+                if (selectedShip && !selectedShip.isSunk) {
+                    menuShipIndex = playerAliveShips.indexOf(selectedShip);
+                    if (menuShipIndex === -1) menuShipIndex = 0;
+                } else {
+                    menuShipIndex = 0;
+                }
+
+                updateShipMenuUI();
+                menu.style.display = 'block';
+                selectShip(playerAliveShips[menuShipIndex]);
+
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+
+        function cycleShip(dir) {
+            if (playerAliveShips.length === 0) return;
+            menuShipIndex += dir;
+            if (menuShipIndex < 0) menuShipIndex = playerAliveShips.length - 1;
+            if (menuShipIndex >= playerAliveShips.length) menuShipIndex = 0;
+
+            selectShip(playerAliveShips[menuShipIndex]);
+            updateShipMenuUI();
+            AudioEngine.playTone(400, 'sine', 0.1, 0.1, false);
+        }
+
+        function updateShipMenuUI() {
+            const nameEl = document.getElementById('ship-selection-name');
+            const statusEl = document.getElementById('ship-selection-status');
+            let ship = playerAliveShips[menuShipIndex];
+            if (ship) {
+                nameEl.innerText = ship.name;
+                statusEl.innerText = `Health: ${ship.health}/${ship.length} | Guns: ${ship.turrets.length}`;
+            }
+        }
+
+        function tryMoveShip(ship, dx, dy, gridData) {
+            if (ship.isSunk) return false;
+
+            // 1. Check if new position is valid
+            let valid = true;
+            for (let c of ship.cells) {
+                let nx = c.x + dx;
+                let ny = c.y + dy;
+
+                // Bounds check
+                if (nx < 0 || nx >= GameState.GRID_SIZE || ny < 0 || ny >= GameState.GRID_SIZE) {
+                    valid = false; break;
+                }
+
+                // Overlap check (Make sure we aren't colliding with another ship or island)
+                let cellValue = gridData[nx][ny];
+                if (cellValue === 1 || cellValue === 3 || cellValue === 4) {
+                    // Ensure this overlapping cell isn't just one of our own ship's current cells
+                    if (!ship.cells.some(own => own.x === nx && own.y === ny)) {
+                        valid = false; break;
+                    }
+                }
+            }
+
+            if (!valid) return false;
+
+            // 2. Extract cell states (preserve hits) & Clear old positions
+            let cellStates = [];
+            for (let i = 0; i < ship.cells.length; i++) {
+                let c = ship.cells[i];
+                cellStates.push(gridData[c.x][c.y]);
+                gridData[c.x][c.y] = 0;
+            }
+
+            // 3. Update internal coordinates & Write new state to grid
+            for (let i = 0; i < ship.cells.length; i++) {
+                ship.cells[i].x += dx;
+                ship.cells[i].y += dy;
+                // Keep damage state if the segment was hit
+                gridData[ship.cells[i].x][ship.cells[i].y] = cellStates[i] === 3 ? 3 : 1;
+            }
+
+            // 4. Update Target World Position for Gliding Animation
+            ship.targetPosition.x += dx * GameState.CELL_SIZE;
+            ship.targetPosition.z += dy * GameState.CELL_SIZE;
+
+            return true;
+        }
+
+        // Listen for WASD / Arrow Keys to move selected ship
+        document.addEventListener('keydown', (e) => {
+            if (GameState.STATUS !== 'PLAYING') return;
+
+            let now = performance.now();
+            // Enforce Movement Cooldown to prevent spamming
+            if (GameState.FLAGSHIP && now - GameState.FLAGSHIP.lastMoved < 300) return;
+
+            let dx = 0, dy = 0;
+
+            if (e.key === 'w' || e.key === 'ArrowUp') dy = -1;
+            if (e.key === 'a' || e.key === 'ArrowLeft') dx = -1;
+            if (e.key === 'd' || e.key === 'ArrowRight') dx = 1;
+            if (e.key === 's' || e.key === 'ArrowDown') dy = 1;
+
+            if ((dx !== 0 || dy !== 0) && GameState.FLAGSHIP && !GameState.FLAGSHIP.isSunk) {
+                if (tryMoveShip(GameState.FLAGSHIP, dx, dy, globalGridData)) {
+                    GameState.FLAGSHIP.lastMoved = now;
+                    AudioEngine.playNoise(0.2, 0.1, 'miss'); // Splash sound for moving
+                }
+            }
+        });
+
+        // --- 6. PROJECTILES & COMBAT ---
+        function fireProjectile(startPos, targetPos, onHitCallback) {
+            // Bullet Geometry (Cylinder)
+            const geo = new THREE.CylinderGeometry(0.1, 0.1, 1.2, 8);
+            geo.rotateX(Math.PI / 2); // Align forward along Z axis for aiming
+            const mat = new THREE.MeshBasicMaterial({ color: 0xffaa00 }); // Glowing orange/yellow
+            const shell = new THREE.Mesh(geo, mat);
+            scene.add(shell);
+
+            // Add trail
+            const trailGeo = new THREE.BufferGeometry();
+            const trailMat = new THREE.LineBasicMaterial({ color: 0xff5500, transparent: true, opacity: 0.6 });
+            const trailPositions = new Float32Array(30); // 10 points
+            trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+            const trail = new THREE.Line(trailGeo, trailMat);
+            scene.add(trail);
+
+            projectiles.push({
+                mesh: shell,
+                trail: trail,
+                start: startPos,
+                target: targetPos,
+                progress: 0,
+                speed: 4.0, // Very fast bullet speed
+                height: 1.0, // Low, flat trajectory arc
+                callback: onHitCallback,
+                history: []
+            });
+        }
+
+        function resolveShot(targetTeam, x, y, gridData) {
+            const hitWorldPos = getGridWorldPos(x, y);
+
+            // Check Hit or Miss
+            if (gridData[x][y] === 1) {
+                // HIT
+                gridData[x][y] = 3;
+                createVFX(hitWorldPos, 'HIT');
+                AudioEngine.playHit();
+
+                // Find which ship was hit
+                let hitShip = allShips.find(s => s.team === targetTeam && s.cells.some(c => c.x === x && c.y === y));
+
+                if (hitShip) {
+                    // Attach the red peg directly to the moving ship!
+                    placeMarker(hitWorldPos, 0xff0000, hitShip.meshGroup);
+
+                    hitShip.takeHit();
+                    // Trigger LLM Reaction if not sunk (sink handles its own taunt)
+                    if (!hitShip.isSunk && targetTeam === 'ENEMY') GeminiService.generateTaunt('player_hit');
+                    if (!hitShip.isSunk && targetTeam === 'PLAYER' && hitShip === GameState.FLAGSHIP) GeminiService.generateTaunt('enemy_hit');
+                }
+
+            } else if (gridData[x][y] === 3) {
+                // ALREADY HIT (Re-trigger VFX for visual fun)
+                createVFX(hitWorldPos, 'HIT');
+                AudioEngine.playHit();
+
+            } else {
+                // MISS (Water=0, Already Missed=2, Island=4)
+                if (gridData[x][y] === 0) gridData[x][y] = 2; // Keep islands as islands structurally
+
+                createVFX(hitWorldPos, 'MISS');
+                placeMarker(hitWorldPos, 0xffffff, scene);
+                AudioEngine.playMiss();
+
+                // Prevent taunt spam on misses
+                if (targetTeam === 'ENEMY' && Math.random() > 0.7) GeminiService.generateTaunt('player_miss');
+            }
+        }
+
+        function placeMarker(pos, color, parent) {
+            const geo = new THREE.CylinderGeometry(0.2, 0.2, 0.8, 8);
+            const mat = new THREE.MeshPhongMaterial({ color: color });
+            const peg = new THREE.Mesh(geo, mat);
+
+            if (parent === scene) {
+                peg.position.set(pos.x, 0.4, pos.z);
+                scene.add(peg);
+            } else {
+                // Convert world position to the moving ship's local coordinates
+                const localPos = parent.worldToLocal(pos.clone());
+                peg.position.copy(localPos);
+                peg.position.y = 0.8; // Stick up out of the ship's deck
+                parent.add(peg);
+            }
+        }
+
+        // --- 7. REAL-TIME FLEET AI ---
+        function updateRealTimeAI(dt) {
+            if (GameState.STATUS !== 'PLAYING') return;
+
+            allShips.forEach(ship => {
+                // Skip sunk ships and the player-controlled flagship
+                if (ship.isSunk || ship.isFlagship) return;
+
+                ship.reloadTimer -= dt;
+                ship.moveTimer -= dt;
+
+                // AI Evasive Maneuvers (Faster and more frequent)
+                if (ship.moveTimer <= 0) {
+                    ship.moveTimer = 1.0 + Math.random() * 2.5; // Move every 1-3.5 seconds
+                    if (Math.random() < 0.7) { // 70% chance to move
+                        let directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+                        directions.sort(() => Math.random() - 0.5);
+                        for (let dir of directions) {
+                            if (tryMoveShip(ship, dir[0], dir[1], globalGridData)) break;
+                        }
+                    }
+                }
+
+                // AI Firing (Faster and smarter)
+                if (ship.reloadTimer <= 0) {
+                    ship.reloadTimer = 2.0 + Math.random() * 3.0; // Fire every 2-5 seconds
+                    let targetTeam = ship.team === 'PLAYER' ? 'ENEMY' : 'PLAYER';
+
+                    // AI Targeting
+                    let validMoves = [];
+                    let priorityMoves = [];
+                    let radarMoves = [];
+
+                    for (let x = 0; x < GameState.GRID_SIZE; x++) {
+                        for (let y = 0; y < GameState.GRID_SIZE; y++) {
+                            let cell = globalGridData[x][y];
+
+                            // Track actual target ship locations for occasional "radar" hits
+                            let isTargetShip = allShips.some(s => s.team === targetTeam && !s.isSunk && s.cells.some(c => c.x === x && c.y === y));
+                            if (isTargetShip && cell < 2) {
+                                radarMoves.push({ x, y });
+                            }
+
+                            if (cell < 2) {
+                                // Ensure AI doesn't shoot its own ships
+                                let isOwnShip = allShips.some(s => s.team === ship.team && !s.isSunk && s.cells.some(c => c.x === x && c.y === y));
+                                if (!isOwnShip) {
+                                    validMoves.push({ x, y });
+
+                                    // Check for adjacent hits (hunt mode)
+                                    let isAdjacentToHit = false;
+                                    if (x > 0 && globalGridData[x - 1][y] === 3) isAdjacentToHit = true;
+                                    if (x < GameState.GRID_SIZE - 1 && globalGridData[x + 1][y] === 3) isAdjacentToHit = true;
+                                    if (y > 0 && globalGridData[x][y - 1] === 3) isAdjacentToHit = true;
+                                    if (y < GameState.GRID_SIZE - 1 && globalGridData[x][y + 1] === 3) isAdjacentToHit = true;
+
+                                    if (isAdjacentToHit) {
+                                        priorityMoves.push({ x, y });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (validMoves.length > 0) {
+                        let move;
+
+                        // 15% chance for a perfect radar hit, or 70% chance to target adjacent to a known hit
+                        if (Math.random() < 0.15 && radarMoves.length > 0) {
+                            move = radarMoves[Math.floor(Math.random() * radarMoves.length)];
+                        } else if (Math.random() < 0.70 && priorityMoves.length > 0) {
+                            move = priorityMoves[Math.floor(Math.random() * priorityMoves.length)];
+                        } else {
+                            move = validMoves[Math.floor(Math.random() * validMoves.length)];
+                        }
+
+                        let startPos = ship.meshGroup.position.clone();
+                        startPos.y += 1.5;
+                        const targetPos = getGridWorldPos(move.x, move.y);
+
+                        // Only play sound occasionally to avoid audio clipping overload
+                        if (Math.random() > 0.5) AudioEngine.playFire();
+
+                        fireProjectile(startPos, targetPos, () => {
+                            resolveShot(targetTeam, move.x, move.y, globalGridData);
+                        });
+                    }
+                }
+            });
+        }
+
+        // --- 8. VFX (PARTICLES) ---
+        function createVFX(position, type) {
+            const particleCount = type === 'HIT' ? 40 : 20;
+            const color = type === 'HIT' ? 0xff4400 : 0xddddff;
+
+            const geo = new THREE.BufferGeometry();
+            const posArray = new Float32Array(particleCount * 3);
+            const velArray = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                posArray[i * 3] = position.x;
+                posArray[i * 3 + 1] = position.y;
+                posArray[i * 3 + 2] = position.z;
+
+                // Spherical random velocity
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                const speed = (Math.random() * 0.2) + (type === 'HIT' ? 0.2 : 0.05);
+
+                velArray.push(
+                    Math.sin(phi) * Math.cos(theta) * speed,
+                    Math.abs(Math.cos(phi) * speed) + (type === 'MISS' ? 0.3 : 0), // Miss goes up mostly
+                    Math.sin(phi) * Math.sin(theta) * speed
+                );
+            }
+
+            geo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            // Simple custom material for particles
+            const mat = new THREE.PointsMaterial({
+                size: type === 'HIT' ? 0.4 : 0.3,
+                color: color,
+                transparent: true,
+                opacity: 1.0,
+                blending: THREE.AdditiveBlending
+            });
+
+            const pointCloud = new THREE.Points(geo, mat);
+            scene.add(pointCloud);
+
+            particles.push({
+                mesh: pointCloud,
+                velocities: velArray,
+                life: 1.0,
+                type: type
+            });
+
+            // Optional: Add a quick flash light for Hits
+            if (type === 'HIT') {
+                const flash = new THREE.PointLight(0xff4400, 5, 10);
+                flash.position.copy(position);
+                flash.position.y += 1;
+                scene.add(flash);
+                setTimeout(() => scene.remove(flash), 150);
+            }
+        }
+
+        // --- 9. UI & GAME LOOP ---
+        function showTurnMessage(text, color) {
+            turnIndicator.innerText = text;
+            turnIndicator.style.color = color;
+            turnIndicator.classList.remove('fade-in-out');
+            void turnIndicator.offsetWidth; // trigger reflow
+            turnIndicator.classList.add('fade-in-out');
+        }
+
+        function checkGameOver() {
+            if (GameState.PLAYER_SHIPS === 0 || GameState.ENEMY_SHIPS === 0 || (GameState.FLAGSHIP && GameState.FLAGSHIP.isSunk)) {
+                GameState.STATUS = 'GAME_OVER';
+                const modal = document.getElementById('game-over');
+                const msg = document.getElementById('win-message');
+
+                if (GameState.ENEMY_SHIPS === 0) {
+                    msg.innerText = "VICTORY!";
+                    msg.style.color = "#00ff00";
+                } else {
+                    msg.innerText = "DEFEAT!";
+                    msg.style.color = "#ff0000";
+                    if (GameState.FLAGSHIP && GameState.FLAGSHIP.isSunk) {
+                        document.querySelector('#game-over p').innerText = "Your flagship was destroyed!";
+                    }
+                }
+
+                modal.style.display = 'block';
+            }
+        }
+
+        // --- LLM TACTICAL ADVICE (New Feature) ---
+        async function requestTacticalAdvice() {
+            if (GameState.STATUS !== 'PLAYING') return;
+
+            const btn = document.getElementById('tactical-advice-btn');
+            btn.disabled = true;
+            btn.innerText = "✨ Uplinking to Tactical Satellite...";
+
+            // Convert Global Grid to a string representation for the LLM
+            let boardRepresentation = "Grid Coordinates: X(0-19) Columns, Y(0-19) Rows.\n";
+            for (let y = 0; y < GameState.GRID_SIZE; y++) {
+                let rowStr = `Row Y=${y}: `;
+                for (let x = 0; x < GameState.GRID_SIZE; x++) {
+                    let cell = globalGridData[x][y];
+                    let isPlayerShip = allShips.some(s => s.team === 'PLAYER' && !s.isSunk && s.cells.some(c => c.x === x && c.y === y));
+
+                    if (isPlayerShip) rowStr += "[P] "; // Player Ship
+                    else if (cell === 4) rowStr += "[I] "; // Island
+                    else if (cell === 2) rowStr += "[M] "; // Miss
+                    else if (cell === 3) rowStr += "[H] "; // Hit
+                    else rowStr += "[?] "; // Unknown water or enemy
+                }
+                boardRepresentation += rowStr + "\n";
+            }
+
+            const prompt = `You are an expert military tactician helping a player win a game of Battleship. 
+    Here is the current radar map of the global grid. 
+    [?] = Unknown water or enemy ship
+    [I] = Island obstacle
+    [P] = Friendly Player Ship
+    [M] = Previous Miss
+    [H] = Previous Hit on a ship
+    
+    ${boardRepresentation}
+    
+    Analyze the board (look for [H] marks that might indicate an unsunk ship nearby, or open [?] areas). 
+    Give me a 1-sentence recommendation on where to strike next using X and Y coordinates (e.g., X=15, Y=4). Explain your strategic reasoning briefly. Do NOT target [P] or [I] coordinates.`;
+
+            const advice = await GeminiService.generateText(prompt);
+
+            // Show advice in the transmission panel using a friendly Tactical AI persona
+            const panel = document.getElementById('transmission-panel');
+            const titleEl = document.getElementById('transmission-title');
+            const textEl = document.getElementById('transmission-text');
+
+            panel.style.borderColor = "#00ffcc";
+            titleEl.innerText = "✨ Tactical AI Uplink";
+            titleEl.style.color = "#00ffcc";
+            panel.style.display = 'block';
+
+            textEl.innerText = "";
+            let i = 0;
+            const typeWriter = setInterval(() => {
+                textEl.innerHTML += advice.charAt(i);
+                i++;
+                if (i >= advice.length) {
+                    clearInterval(typeWriter);
+                    setTimeout(() => {
+                        panel.style.display = 'none';
+                        panel.style.borderColor = "#0055ff";
+                        titleEl.style.color = "#ffaa00";
+                    }, 8000);
+                }
+            }, 20);
+
+            btn.innerText = "✨ Get Tactical Advice";
+            btn.disabled = false;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Memory Cleanup helper
+        function disposeMesh(mesh) {
+            scene.remove(mesh);
+            if (mesh.geometry) mesh.geometry.dispose();
+            if (mesh.material) {
+                if (Array.isArray(mesh.material)) {
+                    mesh.material.forEach(m => m.dispose());
+                } else {
+                    mesh.material.dispose();
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const dt = clock.getDelta();
+
+            if (controls) controls.update(); // Update Orbit Camera
+
+            if (GameState.STATUS === 'PLAYING') {
+                updateRealTimeAI(dt);
+            }
+
+            // 1. Update Water Shader
+            if (waterMaterial) {
+                waterMaterial.uniforms.time.value += dt;
+            }
+
+            // Active Turret Tracking - Point cannons at mouse!
+            if (selectedShip && !selectedShip.isSunk && currentMouseWorldPos && GameState.STATUS === 'PLAYING') {
+                selectedShip.turrets.forEach(turret => {
+                    // Convert target to local space of the Ship
+                    let localTarget = selectedShip.meshGroup.worldToLocal(currentMouseWorldPos.clone());
+
+                    // Calculate angle (Z is "up/down" on the plane, X is "left/right")
+                    let dx = localTarget.x - turret.position.x;
+                    let dz = localTarget.z - turret.position.z;
+                    let targetAngle = Math.atan2(-dz, dx);
+
+                    // Smoothly swivel turrets
+                    let diff = targetAngle - turret.rotation.y;
+                    diff = Math.atan2(Math.sin(diff), Math.cos(diff)); // normalize
+                    turret.rotation.y += diff * dt * 5;
+                });
+            }
+
+            // Smooth Gliding Movement for alive ships
+            allShips.forEach(ship => {
+                if (!ship.isSunk) {
+                    // Lerp (Linear Interpolation) translates the ship smoothly to the target cell over a few frames
+                    ship.meshGroup.position.lerp(ship.targetPosition, dt * 5);
+                }
+            });
+
+            // Spin and Position the Selection Ring
+            if (selectedShip && !selectedShip.isSunk && selectionIndicator) {
+                selectionIndicator.visible = true;
+                selectionIndicator.position.copy(selectedShip.meshGroup.position);
+                selectionIndicator.position.y = 0.15; // Hover slightly above water
+                selectionIndicator.rotation.z -= dt * 2.0; // Spin animation
+            } else if (selectionIndicator) {
+                selectionIndicator.visible = false;
+            }
+
+            // 2. Update Projectiles
+            for (let i = projectiles.length - 1; i >= 0; i--) {
+                let p = projectiles[i];
+                p.progress += dt * p.speed;
+
+                if (p.progress >= 1) {
+                    // Hit!
+                    p.callback();
+                    disposeMesh(p.mesh);
+                    disposeMesh(p.trail);
+                    projectiles.splice(i, 1);
+                } else {
+                    // Parabolic Trajectory calculation ( y = 4h(t - t^2) )
+                    let x = THREE.MathUtils.lerp(p.start.x, p.target.x, p.progress);
+                    let z = THREE.MathUtils.lerp(p.start.z, p.target.z, p.progress);
+                    let y = p.start.y + (p.height * 4 * (p.progress - p.progress * p.progress));
+
+                    p.mesh.position.set(x, y, z);
+
+                    // Aim the bullet forward along its trajectory arc
+                    let nextP = p.progress + 0.05;
+                    let nx = THREE.MathUtils.lerp(p.start.x, p.target.x, nextP);
+                    let nz = THREE.MathUtils.lerp(p.start.z, p.target.z, nextP);
+                    let ny = p.start.y + (p.height * 4 * (nextP - nextP * nextP));
+
+                    if (nx !== x || ny !== y || nz !== z) {
+                        p.mesh.lookAt(nx, ny, nz);
+                    }
+
+                    // Update Trail History
+                    p.history.push(new THREE.Vector3(x, y, z));
+                    if (p.history.length > 10) p.history.shift();
+
+                    const positions = p.trail.geometry.attributes.position.array;
+                    for (let j = 0; j < p.history.length; j++) {
+                        positions[j * 3] = p.history[j].x;
+                        positions[j * 3 + 1] = p.history[j].y;
+                        positions[j * 3 + 2] = p.history[j].z;
+                    }
+                    p.trail.geometry.attributes.position.needsUpdate = true;
+                }
+            }
+
+            // 3. Update Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.life -= dt * 1.5;
+
+                if (p.life <= 0) {
+                    disposeMesh(p.mesh);
+                    particles.splice(i, 1);
+                } else {
+                    const positions = p.mesh.geometry.attributes.position.array;
+                    for (let j = 0; j < positions.length / 3; j++) {
+                        // Apply velocity
+                        positions[j * 3] += p.velocities[j * 3] * dt * 60;
+                        positions[j * 3 + 1] += p.velocities[j * 3 + 1] * dt * 60;
+                        positions[j * 3 + 2] += p.velocities[j * 3 + 2] * dt * 60;
+
+                        // Gravity
+                        p.velocities[j * 3 + 1] -= 0.01 * dt * 60;
+                    }
+                    p.mesh.geometry.attributes.position.needsUpdate = true;
+                    p.mesh.material.opacity = p.life;
+                }
+            }
+
+            // 4. Update Sinking Ships
+            allShips.forEach(ship => {
+                if (ship.isSunk && ship.meshGroup.userData.sinking) {
+                    ship.meshGroup.position.y -= ship.meshGroup.userData.sinkSpeed;
+                    ship.meshGroup.rotation.z += ship.meshGroup.userData.sinkRotate;
+                    ship.meshGroup.rotation.x += ship.meshGroup.userData.sinkRotate;
+
+                    if (ship.meshGroup.position.y < -5) {
+                        ship.meshGroup.userData.sinking = false; // Stop updating once out of view
+                    }
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+    </script>
+
+</body>
+
+</html>
