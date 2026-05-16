@@ -252,14 +252,18 @@ h1 {
     .anniversary {
         font-size: 1rem;
         letter-spacing: 0.3em;
-        margin-bottom: 2rem;
     }
 
     .description {
-        font-size: 0.75rem;
+        font-size: 0.70rem;
         line-height: 1.4;
         max-width: 100%;
         margin: 48px 0;
+    }
+
+    .date,
+    .location {
+        font-size: 0.85rem;
     }
 
 
