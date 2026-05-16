@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parasite Survival</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <section>
+        <div class="video-container">
+            <iframe id="vimeo-player" src="https://player.vimeo.com/video/13914592?background=1" frameborder="0"
+                allow="autoplay; fullscreen" allowfullscreen></iframe>
+            <div class="video-overlay"></div>
+            <button id="unmute-button" class="unmute-toggle" aria-label="Toggle Sound">
+                <svg class="icon-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 5L6 9H2v6h4l5 4V5zM22 9l-6 6M16 9l6 6" />
+                </svg>
+                <svg class="icon-unmute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display:none;">
+                    <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
+                </svg>
+            </button>
+        </div>
+        <main>
+
+            <h1>parasite survival</h1>
+            <h2 class="anniversary">25th anniversary</h2>
+
+            <p class="description">
+                O bodyboarding em Salinas era expressão de sobrevivência;
+                a adversidade moldava nossa arte. Sem smartphones, nossa tecnologia era o instinto: uma única câmera,
+                dois videocassetes e um PC com Sound Blaster e entrada AV na placa Radeon. O resultado foi o primeiro
+                vídeo do Sul — e talvez do Brasil, mas, acima de tudo, uma grande confraternização de amigos. Vinte e
+                cinco anos depois, este registro raw celebra a essência e o estilo que nos definiram para sempre.
+            </p>
+
+            <div class="details">
+                <div class="date">Maio de 2001</div>
+                <div class="location">SALINAS</div>
+            </div>
+
+        </main>
+    </section>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    <script>
+        const iframe = document.querySelector('#vimeo-player');
+        const player = new Vimeo.Player(iframe);
+        const unmuteButton = document.querySelector('#unmute-button');
+        const iconMute = document.querySelector('.icon-mute');
+        const iconUnmute = document.querySelector('.icon-unmute');
+
+        let isMuted = true;
+
+        unmuteButton.addEventListener('click', () => {
+            isMuted = !isMuted;
+            player.setMuted(isMuted).then(() => {
+                if (isMuted) {
+                    iconMute.style.display = 'block';
+                    iconUnmute.style.display = 'none';
+                    unmuteButton.classList.remove('is-active');
+                } else {
+                    iconMute.style.display = 'none';
+                    iconUnmute.style.display = 'block';
+                    unmuteButton.classList.add('is-active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

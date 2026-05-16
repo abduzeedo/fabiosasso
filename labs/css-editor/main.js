@@ -300,13 +300,24 @@ const setTool = (tool) => {
 };
 
 const renderElements = () => {
-  dom.scene.innerHTML = "";
   dom.scene.style.backgroundColor = state.view.background;
   dom.scene.style.backgroundImage = (state.view.grid && state.view.mode !== "preview")
     ? "radial-gradient(#dfe4f0 1px, transparent 1px)"
     : "none";
   dom.scene.style.backgroundSize = "20px 20px";
   dom.scene.style.perspective = `${state.view.perspective}px`;
+
+  if (state.code.htmlEdited && state.view.mode === "preview") {
+    // If HTML was edited, we trust the code editor
+    // We need to strip the outer <div id="scene"> if it exists
+    let html = state.code.html;
+    const match = html.match(/<div id="scene"[^>]*>([\s\S]*)<\/div>/i);
+    if (match) html = match[1];
+    dom.scene.innerHTML = html;
+    return;
+  }
+
+  dom.scene.innerHTML = "";
 
   const drawTree = (items, container) => {
     items.forEach((el) => {
@@ -1267,6 +1278,7 @@ const initEditors = () => {
     dom.htmlWarning.classList.add("show");
     state.code.html = cm.html.getValue();
     saveState();
+    if (state.view.mode === "preview") render();
   });
 
   cm.css.on("change", (it, change) => {
@@ -1389,6 +1401,292 @@ const safeAddEventListener = (id, event, handler) => {
   }
 };
 
+const presets = {
+  starburst: {
+    name: "3D Starburst Fan",
+    elements: [],
+    css: `
+#scene {
+  perspective: 2500px;
+  background: #FFF;
+}
+.card-container {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  left: 0;
+  top: -200px;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.card-front { background: #000; z-index: 2; }
+.card-back { background: #000; transform: rotateY(180deg); }
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  filter: saturate(1.1) brightness(0.85);
+  transition: filter 0.4s ease;
+}
+.ui-overlay {
+  position: fixed;
+  bottom: 40px;
+  text-align: center;
+  pointer-events: none;
+  width: 100%;
+  z-index: 200;
+}
+.header {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.hint {
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.4;
+  font-weight: 800;
+  justify-content: space-between;
+  display: flex;
+  margin: 0 20px;
+}
+`,
+    js: `
+const scene = document.getElementById('scene');
+const numCards = 6;
+let rotationY = 0;
+let scrollSpeed = 0;
+let baseSpeed = 0.15;
+let mouseX = 0; let mouseY = 0;
+let lerpMouseX = 0; let lerpMouseY = 0;
+
+const images = [
+  'https://images.unsplash.com/photo-1688920556232-321bd176d0b4?q=80&w=2670&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1577907796119-7118da053fab?q=80&w=2670&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1577907796622-6d770c91433a?q=80&w=2670&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1726942371143-3afca583a72f?q=80&w=2670&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1585413912796-8667825fc26d?q=80&w=2670&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1584808388974-45f11f4789f3?q=80&w=2670&auto=format&fit=crop'
+];
+
+scene.innerHTML = '<div class="ui-overlay"><div class="header"><span>Abduzeedo</span><span>Vibe Experiments</span><span>2026</span></div><div class="hint"><span>Scroll to rotate</span><span>Edge-pinned Fan Effect</span></div></div>';
+
+for (let i = 0; i < numCards; i++) {
+  const card = document.createElement('div');
+  card.className = 'card-container';
+  const angle = i * (360 / numCards);
+  card.style.transform = "rotateY(" + angle + "deg)";
+  card.innerHTML = \`
+    <div class="card-inner">
+      <div class="card-face card-front"><img src="\${images[i]}"></div>
+      <div class="card-face card-back"><img src="\${images[i]}" style="transform: scaleX(-1);"></div>
+    </div>\`;
+  scene.appendChild(card);
+}
+
+window.addEventListener('wheel', (e) => { scrollSpeed += e.deltaY * 0.05; });
+window.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth) - 0.5;
+  mouseY = (e.clientY / window.innerHeight) - 0.5;
+});
+
+function animate() {
+  rotationY += baseSpeed + scrollSpeed;
+  scrollSpeed *= 0.95;
+  lerpMouseX += (mouseX - lerpMouseX) * 0.1;
+  lerpMouseY += (mouseY - lerpMouseY) * 0.1;
+  scene.style.transform = "rotateY(" + (rotationY + (lerpMouseX * 25)) + "deg) rotateX(" + (-10 + (lerpMouseY * -25)) + "deg)";
+  requestAnimationFrame(animate);
+}
+animate();
+`,
+    html: `<div class="ui-overlay">
+  <div class="header"><span>Abduzeedo</span><span>Vibe Experiments</span><span>2026</span></div>
+  <div class="hint"><span>Scroll to rotate</span><span>Edge-pinned Fan Effect</span></div>
+</div>`
+  },
+  carousel: {
+    name: "3D Carousel",
+    elements: [],
+    css: `
+#scene {
+  perspective: 1200px;
+  background: #f0f0f0;
+}
+.carousel-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+.carousel-item {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px;
+  margin-top: -100px;
+  background: #fff;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  backface-visibility: hidden;
+}
+`,
+    js: `
+const scene = document.getElementById('scene');
+const numItems = 8;
+const radius = 400;
+let rotationY = 0;
+
+scene.innerHTML = '<div class="carousel-container"></div>';
+const container = scene.querySelector('.carousel-container');
+
+for (let i = 0; i < numItems; i++) {
+  const item = document.createElement('div');
+  item.className = 'carousel-item';
+  const angle = i * (360 / numItems);
+  item.style.transform = "rotateY(" + angle + "deg) translateZ(" + radius + "px)";
+  item.textContent = "Item " + (i + 1);
+  item.style.background = "hsl(" + angle + ", 70%, 80%)";
+  container.appendChild(item);
+}
+
+function animate() {
+  rotationY += 0.5;
+  container.style.transform = "rotateY(" + rotationY + "deg)";
+  requestAnimationFrame(animate);
+}
+animate();
+`,
+    html: `<div class="carousel-container"></div>`
+  },
+  cube: {
+    name: "3D Cube",
+    elements: [],
+    css: `
+#scene {
+  perspective: 1000px;
+}
+.cube {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  margin-left: -100px;
+  margin-top: -100px;
+  transform-style: preserve-3d;
+}
+.face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.9);
+}
+.front  { transform: rotateY(  0deg) translateZ(100px); }
+.back   { transform: rotateY(180deg) translateZ(100px); }
+.right  { transform: rotateY( 90deg) translateZ(100px); }
+.left   { transform: rotateY(-90deg) translateZ(100px); }
+.top    { transform: rotateX( 90deg) translateZ(100px); }
+.bottom { transform: rotateX(-90deg) translateZ(100px); }
+`,
+    js: `
+const scene = document.getElementById('scene');
+scene.innerHTML = \`
+  <div class="cube">
+    <div class="face front">1</div>
+    <div class="face back">2</div>
+    <div class="face right">3</div>
+    <div class="face left">4</div>
+    <div class="face top">5</div>
+    <div class="face bottom">6</div>
+  </div>\`;
+
+const cube = scene.querySelector('.cube');
+let rotX = 0; let rotY = 0;
+
+function animate() {
+  rotX += 1; rotY += 1.5;
+  cube.style.transform = "rotateX(" + rotX + "deg) rotateY(" + rotY + "deg)";
+  requestAnimationFrame(animate);
+}
+animate();
+`,
+    html: `<div class="cube">
+  <div class="face front">1</div>
+  <div class="face back">2</div>
+  <div class="face right">3</div>
+  <div class="face left">4</div>
+  <div class="face top">5</div>
+  <div class="face bottom">6</div>
+</div>`
+  }
+};
+
+const initPresets = () => {
+  document.querySelectorAll(".preset-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const presetId = item.dataset.preset;
+      const preset = presets[presetId];
+      if (!preset) return;
+
+      pushHistory();
+      state.elements = preset.elements || [];
+      state.code.userCss = preset.css || "";
+      state.code.userJs = preset.js || "";
+      state.code.html = preset.html || "";
+      state.code.htmlEdited = true;
+
+      if (cm.html) cm.html.setValue(state.code.html);
+      if (cm.css) cm.css.setValue(markers.css + "\n" + state.code.userCss);
+      if (cm.js) cm.js.setValue(markers.js + "\n" + state.code.userJs);
+
+      state.view.mode = "preview";
+      render();
+    });
+  });
+};
+
 const initTopActions = () => {
   safeAddEventListener("undoBtn", "click", undo);
   safeAddEventListener("redoBtn", "click", redo);
@@ -1465,6 +1763,7 @@ const init = () => {
       initKeyboard();
       initEditors();
       initTopActions();
+      initPresets();
 
       setTimeout(() => {
         render();

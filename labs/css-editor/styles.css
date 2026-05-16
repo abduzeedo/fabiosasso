@@ -26,11 +26,12 @@ body {
 #app {
   height: 100vh;
   display: grid;
-  grid-template-rows: 56px 1fr;
+  grid-template-rows: 56px 1fr 280px;
   grid-template-columns: 64px 1fr;
   grid-template-areas:
     "topbar topbar"
-    "tools main";
+    "tools main"
+    "tools code";
 }
 
 .topbar {
@@ -93,10 +94,57 @@ body {
 .workspace {
   grid-area: main;
   display: grid;
-  grid-template-columns: 240px 1fr 260px;
+  grid-template-columns: 200px 180px 1fr 240px;
   gap: 12px;
   padding: 12px;
   overflow: hidden;
+}
+
+.presets-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.presets-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preset-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.preset-item:hover {
+  background: var(--panel-2);
+  border-color: var(--accent);
+}
+
+.preset-item span {
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.preset-preview {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 4px;
+  background: var(--panel-2);
 }
 
 .visual-canvas {
@@ -324,17 +372,11 @@ body {
 }
 
 .code-panel {
-  display: none;
   grid-area: code;
   background: var(--panel);
   border-top: 1px solid var(--border);
   display: flex;
-  /* This was flex, changing to none above */
   flex-direction: column;
-}
-
-.code-panel {
-  display: none;
 }
 
 .code-header {
