@@ -256,10 +256,10 @@ h1 {
     }
 
     .description {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         line-height: 1.4;
         max-width: 100%;
-        margin: 5em 0;
+        margin: 48px 0;
     }
 
 
